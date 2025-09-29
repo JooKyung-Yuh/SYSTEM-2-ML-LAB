@@ -24,11 +24,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    // Generate JWT token
+    // Generate JWT token with expiration time
     const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
+      {
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        iat: Math.floor(Date.now() / 1000) // issued at time
+      },
       JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '30m' } // 30 minutes
     );
 
     // Set cookie
@@ -41,7 +46,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 86400, // 24 hours
+      maxAge: 1800, // 30 minutes (30 * 60 seconds)
     });
 
     return response;

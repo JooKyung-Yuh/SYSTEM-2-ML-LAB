@@ -7,13 +7,22 @@ export interface AuthUser {
   userId: string;
   email: string;
   role: string;
+  iat?: number; // issued at time
+  exp?: number; // expiration time
 }
 
 export function verifyToken(token: string): AuthUser | null {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as AuthUser;
+
+    // Check if token is expired (JWT library should handle this, but double-check)
+    if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
+      return null;
+    }
+
     return decoded;
-  } catch {
+  } catch (error) {
+    // Token is invalid or expired
     return null;
   }
 }

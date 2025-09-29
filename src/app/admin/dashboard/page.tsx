@@ -29,14 +29,17 @@ export default function DashboardPage() {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
+        setLoading(false);
       } else {
-        router.push('/admin/login');
+        // Not authenticated, redirect immediately
+        router.replace('/admin/login');
+        return;
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      router.push('/admin/login');
-    } finally {
-      setLoading(false);
+      // Authentication failed, redirect immediately
+      router.replace('/admin/login');
+      return;
     }
   }, [router]);
 
@@ -45,8 +48,14 @@ export default function DashboardPage() {
     document.body.classList.add('admin-page');
     checkAuth();
 
+    // Set up interval to check auth status every 5 minutes
+    const authCheckInterval = setInterval(() => {
+      checkAuth();
+    }, 5 * 60 * 1000); // 5 minutes
+
     return () => {
       document.body.classList.remove('admin-page');
+      clearInterval(authCheckInterval);
     };
   }, [checkAuth]);
 
@@ -59,17 +68,13 @@ export default function DashboardPage() {
     }
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className={styles.loadingContainer}>
         <div className={styles.spinner}></div>
-        <p>Loading...</p>
+        <p>Authenticating...</p>
       </div>
     );
-  }
-
-  if (!user) {
-    return null;
   }
 
   return (

@@ -16,10 +16,26 @@ export default function LoginPage() {
     // Add admin class to body to isolate CSS
     document.body.classList.add('admin-page');
 
+    // Check if user is already logged in
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/auth/me');
+        if (response.ok) {
+          // User is already logged in, redirect to dashboard
+          router.push('/admin/dashboard');
+        }
+      } catch (error) {
+        // User is not logged in, stay on login page
+        console.log('User not authenticated');
+      }
+    };
+
+    checkAuth();
+
     return () => {
       document.body.classList.remove('admin-page');
     };
-  }, []);
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
