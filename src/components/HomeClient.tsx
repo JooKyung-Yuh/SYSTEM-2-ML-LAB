@@ -27,14 +27,26 @@ interface HomeClientProps {
 
 export default function HomeClient({ newsItems }: HomeClientProps) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Check if mobile screen
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
     // Delay animation to ensure all components are mounted and carousel is loaded
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 350); // Wait 350ms for carousel to initialize
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   return (
@@ -80,23 +92,31 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
               willChange: 'opacity, transform'
             }}
           >
-            <div className="banner-pad">
+            <div className="banner-pad" style={{ padding: isMobile ? '0 1rem' : '0 2rem' }}>
               <div className="inner" style={{ lineHeight: 1.5 }}>
                 <h1 style={{
                   fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
                   fontWeight: 300,
                   color: '#ffffff',
                   margin: '0 0 0.5em 0',
-                  lineHeight: 1.2
+                  lineHeight: isMobile ? 1.3 : 1.2
                 }}>
-                  WELCOME TO KU SYSTEM 2 ML LAB
+                  {isMobile ? (
+                    <>
+                      WELCOME TO<br />
+                      KU SYSTEM 2 ML LAB
+                    </>
+                  ) : (
+                    'WELCOME TO KU SYSTEM 2 ML LAB'
+                  )}
                 </h1>
                 <span style={{
                   fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
                   fontWeight: 300,
                   color: '#ffffff',
                   display: 'block',
-                  marginTop: '0.5rem'
+                  marginTop: isMobile ? '1rem' : '0.5rem',
+                  padding: isMobile ? '0 0.5rem' : '0'
                 }}>
                   Korea University School of Electrical Engineering
                 </span>
@@ -106,7 +126,9 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
                   color: '#ffffff',
                   display: 'block',
                   marginTop: '1rem',
-                  opacity: 0.9
+                  opacity: 0.9,
+                  padding: isMobile ? '0 0.5rem' : '0',
+                  lineHeight: isMobile ? 1.4 : 1.2
                 }}>
                   Advancing AI through Meta-Learning, System 2 Deep Learning, and LLM Reasoning
                 </span>
