@@ -32,7 +32,7 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
     // Delay animation to ensure all components are mounted and carousel is loaded
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 200); // Wait 200ms for carousel to initialize
+    }, 350); // Wait 350ms for carousel to initialize
 
     return () => clearTimeout(timer);
   }, []);
