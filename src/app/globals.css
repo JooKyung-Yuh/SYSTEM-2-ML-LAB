@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Admin pages CSS isolation */
+body.admin-page {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+    color: #374151 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+body.admin-page h1,
+body.admin-page h2,
+body.admin-page h3,
+body.admin-page h4,
+body.admin-page h5,
+body.admin-page h6 {
+    font-family: inherit !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body.admin-page a {
+    color: #3b82f6 !important;
+    text-decoration: none !important;
+    border-bottom: none !important;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+body.admin-page a:hover {
+    color: #2563eb !important;
+    text-decoration: underline !important;
+    border-bottom: none !important;
+}
+
+/* Admin page layout adjustments */
+body.admin-page main {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Main site styles */
+html,
+body:not(.admin-page) {
+    font-family: "Lato", Helvetica, sans-serif;
+    font-size: 16pt;
+    font-weight: 300;
+    line-height: 1.5;
+    color: #444444;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+}
+
+
+/* Loading state */
+
+body.is-loading:not(.admin-page) * {
+    animation: none !important;
+    transition: none !important;
+}
+
+
+/* Typography */
+
+body:not(.admin-page) h1,
+body:not(.admin-page) h2,
+body:not(.admin-page) h3,
+body:not(.admin-page) h4,
+body:not(.admin-page) h5,
+body:not(.admin-page) h6 {
+    color: #444444;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 1em 0;
+}
+
+body:not(.admin-page) h1 {
+    font-size: 3.5em;
+    font-weight: 300;
+}
+
+body:not(.admin-page) h4 {
+    font-size: 1.1em;
+}
+
+
+/* Links */
+
+body:not(.admin-page) a {
+    color: #e5474b;
+    text-decoration: none;
+    border-bottom: dotted 1px rgba(255, 255, 255, 0.25);
+    transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+}
+
+body:not(.admin-page) a:hover {
+    border-bottom-color: transparent;
+    color: #e5474b !important;
+}
+
+
+/* Responsive breakpoints */
+
+@media screen and (max-width: 1680px) {
+    html,
+    body:not(.admin-page) {
+        font-size: 14pt;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    html,
+    body:not(.admin-page) {
+        font-size: 13pt;
+    }
+}
+
+/* Mobile navigation - hidden by default */
+.mobile-menu-toggle {
+    display: none !important;
+}
+
+@media screen and (max-width: 980px) {
+    html,
+    body:not(.admin-page) {
+        font-size: 12pt;
+    }
+    body:not(.admin-page) h1 {
+        font-size: 2.5em;
+    }
+    /* Mobile navigation */
+    #nav {
+        display: none !important;
+    }
+    .mobile-menu-toggle {
+        display: block !important;
+    }
+}
+
+@media screen and (max-width: 736px) {
+    html,
+    body:not(.admin-page) {
+        font-size: 11pt;
+    }
+    body:not(.admin-page) h1 {
+        font-size: 2em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    html,
+    body:not(.admin-page) {
+        font-size: 10pt;
+    }
+    body:not(.admin-page) h1 {
+        font-size: 1.75em;
+    }
 }

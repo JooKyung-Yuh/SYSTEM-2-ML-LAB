@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NewsItem {
+  id          String      @id @default(cuid())
+  date        String
+  title       String
+  description String
+  links       NewsLink[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  order       Int         @default(0)
+}
+
+model NewsLink {
+  id         String   @id @default(cuid())
+  text       String
+  url        String
+  newsItemId String
+  newsItem   NewsItem @relation(fields: [newsItemId], references: [id], onDelete: Cascade)
+}
+
+model Page {
+  id        String    @id @default(cuid())
+  slug      String    @unique
+  title     String
+  content   String?
+  sections  Section[]
+  published Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Section {
+  id      String @id @default(cuid())
+  title   String
+  content String
+  order   Int    @default(0)
+  pageId  String
+  page    Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+}
+
+model Person {
+  id          String  @id @default(cuid())
+  name        String
+  title       String?
+  email       String? @unique
+  phone       String?
+  image       String?
+  bio         String?
+  category    String  // "faculty", "student", "alumni"
+  order       Int     @default(0)
+  published   Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Publication {
+  id        String   @id @default(cuid())
+  title     String
+  authors   String
+  venue     String
+  year      Int
+  url       String?
+  pdfUrl    String?
+  category  String   // "conference", "journal", "workshop"
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([title, authors, venue], name: "title_authors_venue")
+}
+
+model Course {
+  id          String  @id @default(cuid())
+  code        String  @unique
+  title       String
+  description String?
+  semester    String
+  year        Int
+  instructor  String
+  credits     Int?
+  syllabus    String?
+  published   Boolean @default(true)
+  order       Int     @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GalleryItem {
+  id          String  @id @default(cuid())
+  title       String  @unique
+  description String?
+  imageUrl    String
+  category    String?
+  order       Int     @default(0)
+  published   Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
