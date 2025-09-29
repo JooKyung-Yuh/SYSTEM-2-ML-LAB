@@ -148,25 +148,29 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
                 <h4 className={styles.newsTitle}>{item.title}</h4>
                 <p className={styles.newsDescription}>
                   {item.description}
-                  {item.links && item.links.length > 0 && (
-                    <>
-                      {' ('}
-                      {item.links.map((link, index) => (
-                        <span key={index}>
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.newsLink}
-                          >
-                            {link.text}
-                          </a>
-                          {index < item.links.length - 1 && ', '}
-                        </span>
-                      ))}
-                      {')'}
-                    </>
-                  )}
+                  {(() => {
+                    const links = item.links ?? [];
+                    if (links.length === 0) return null;
+                    return (
+                      <>
+                        {' ('}
+                        {links.map((link, index) => (
+                          <span key={index}>
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={styles.newsLink}
+                            >
+                              {link.text}
+                            </a>
+                            {index < links.length - 1 && ', '}
+                          </span>
+                        ))}
+                        {')'}
+                      </>
+                    );
+                  })()}
                 </p>
               </div>
             </div>
