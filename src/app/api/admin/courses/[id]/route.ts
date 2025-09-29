@@ -3,14 +3,15 @@ import prisma from '@/lib/prisma';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const data = await request.json();
     const { code, title, description, semester, year, instructor, credits, syllabus, order, published } = data;
 
     const course = await prisma.course.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         code,
         title,
@@ -34,11 +35,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     await prisma.course.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
     return NextResponse.json({ success: true });

@@ -3,20 +3,21 @@ import prisma from '@/lib/prisma';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const body = await request.json();
     const { date, title, description, links } = body;
 
     // Delete existing links
     await prisma.newsLink.deleteMany({
-      where: { newsItemId: params.id },
+      where: { newsItemId: id },
     });
 
     // Update news item with new links
     const newsItem = await prisma.newsItem.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         date,
         title,
@@ -39,11 +40,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     await prisma.newsItem.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'News deleted successfully' });

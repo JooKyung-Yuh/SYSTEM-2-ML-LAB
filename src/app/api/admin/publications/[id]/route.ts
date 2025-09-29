@@ -3,14 +3,15 @@ import prisma from '@/lib/prisma';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     const data = await request.json();
     const { title, authors, venue, year, url, pdfUrl, category, order, published } = data;
 
     const publication = await prisma.publication.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         authors,
@@ -33,11 +34,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await context.params;
     await prisma.publication.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
     return NextResponse.json({ success: true });
