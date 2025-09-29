@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styles from './Manager.module.css';
 
 interface Page {
@@ -29,11 +29,7 @@ export default function PagesManager() {
   const [editingSection, setEditingSection] = useState<Section | null>(null);
   const [showNewSectionForm, setShowNewSectionForm] = useState(false);
 
-  useEffect(() => {
-    fetchPages();
-  }, []);
-
-  const fetchPages = async () => {
+  const fetchPages = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/pages');
       if (response.ok) {
@@ -48,7 +44,11 @@ export default function PagesManager() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedPage]);
+
+  useEffect(() => {
+    fetchPages();
+  }, [fetchPages]);
 
   const handleSectionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -21,9 +21,17 @@ interface NewsItem {
   updatedAt: Date;
 }
 
+// Minimal typings for jQuery + OwlCarousel to avoid using `any`
+type OwlCarouselOptions = Record<string, unknown>;
+type OwlCarouselFn = (options?: OwlCarouselOptions | string) => void;
+type JQueryInstance = {
+  owlCarousel: OwlCarouselFn;
+};
+type JQueryLike = (el: Element | null) => JQueryInstance;
+
 declare global {
   interface Window {
-    $: any;
+    $?: JQueryLike & { fn?: { owlCarousel?: OwlCarouselFn } };
   }
 }
 
@@ -35,6 +43,7 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const node = carouselRef.current;
     const loadScript = (src: string) => {
       return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -66,7 +75,7 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
         }
 
         // Load Owl Carousel
-        if (!window.$.fn || !window.$.fn.owlCarousel) {
+        if (!window.$?.fn || !window.$.fn.owlCarousel) {
           await loadScript('/owl.carousel.min.js');
         }
 
@@ -76,10 +85,10 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
 
         // Wait a bit for everything to load and DOM to be ready
         const initTimer = setTimeout(() => {
-          if (carouselRef.current && window.$ && window.$.fn.owlCarousel) {
+          if (node && window.$ && window.$.fn?.owlCarousel) {
             // Ensure the container is visible before initializing
             requestAnimationFrame(() => {
-              window.$(carouselRef.current).owlCarousel({
+              window.$!(node).owlCarousel({
                 loop: true,
                 margin: 20,
                 autoplay: true,
@@ -136,8 +145,8 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
     initCarousel();
 
     return () => {
-      if (carouselRef.current && window.$ && window.$.fn.owlCarousel) {
-        window.$(carouselRef.current).owlCarousel('destroy');
+      if (node && window.$ && window.$.fn?.owlCarousel) {
+        window.$!(node).owlCarousel('destroy');
       }
     };
   }, []);

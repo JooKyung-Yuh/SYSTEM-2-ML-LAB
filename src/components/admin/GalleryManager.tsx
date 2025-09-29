@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import styles from './Manager.module.css';
 
 interface GalleryItem {
@@ -157,10 +158,13 @@ export default function GalleryManager() {
             <div key={item.id} className={styles.galleryCard}>
               <div className={styles.imageContainer}>
                 {item.imageUrl ? (
-                  <img
+                  <Image
                     src={item.imageUrl}
                     alt={item.title}
                     className={styles.galleryImage}
+                    width={300}
+                    height={200}
+                    unoptimized
                   />
                 ) : (
                   <div className={styles.imagePlaceholder}>

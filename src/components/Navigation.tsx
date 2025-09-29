@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -62,19 +63,18 @@ const Navigation = () => {
             color: textColor
           }}
         >
-          <img
+          <Image
             className="logo-image"
             src={isHomePage ? "/images/ku_logo_white.png" : "/images/ku_logo_black.png"}
             alt="KU Logo"
+            width={42}
+            height={42}
+            unoptimized
             style={{
               width: 'clamp(32px, 5vw, 42px)',
               height: 'clamp(32px, 5vw, 42px)',
               objectFit: 'contain',
               marginRight: '12px'
-            }}
-            onError={(e) => {
-              // Fallback if image not found
-              e.currentTarget.style.display = 'none';
             }}
           />
           <div style={{

@@ -109,7 +109,7 @@ export default function About() {
               Our Mission
             </h2>
             <p style={{ marginBottom: '1rem' }}>
-              Our lab at Korea University's School of Electrical Engineering is dedicated to advancing
+              Our lab at Korea University&apos;s School of Electrical Engineering is dedicated to advancing
               the frontiers of artificial intelligence through innovative research in System 2 deep learning
               and large language model reasoning.
             </p>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
 import NewsManager from '@/components/admin/NewsManager';
@@ -23,17 +23,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('news');
   const router = useRouter();
 
-  useEffect(() => {
-    // Add admin class to body to isolate CSS
-    document.body.classList.add('admin-page');
-    checkAuth();
-
-    return () => {
-      document.body.classList.remove('admin-page');
-    };
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/me');
       if (response.ok) {
@@ -48,7 +38,17 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    // Add admin class to body to isolate CSS
+    document.body.classList.add('admin-page');
+    checkAuth();
+
+    return () => {
+      document.body.classList.remove('admin-page');
+    };
+  }, [checkAuth]);
 
   const handleLogout = async () => {
     try {

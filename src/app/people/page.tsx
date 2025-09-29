@@ -21,8 +21,8 @@ export default function People() {
       interests: ["LLM Reasoning", "Meta-Learning", "Transfer Learning"]
     },
     {
-      name: "Master's Student",
-      title: "Master's Student",
+      name: "Master&apos;s Student",
+      title: "Master&apos;s Student",
       email: "master@korea.ac.kr",
       category: "Graduate Students",
       bio: "Working on AutoML and hyperparameter optimization for deep learning models",
@@ -204,7 +204,7 @@ export default function People() {
             fontSize: '1rem',
             color: '#333'
           }}>
-            <strong>Open Positions:</strong> PhD and Master's students, Postdoctoral researchers
+            <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers
           </p>
           <p style={{
             fontSize: '1rem',
