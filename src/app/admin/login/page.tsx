@@ -102,7 +102,7 @@ export default function LoginPage() {
 
         <div className={styles.footer}>
           <p className={styles.footerText}>
-            For demo purposes: admin@mllab.korea.ac.kr / admin123
+            {/* For demo purposes: admin@mllab.korea.ac.kr / admin123 */}
           </p>
         </div>
       </div>
