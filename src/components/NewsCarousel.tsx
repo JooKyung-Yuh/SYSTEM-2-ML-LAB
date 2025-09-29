@@ -1,25 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { NewsItem as DataNewsItem } from '@/data/news';
 import styles from './NewsCarousel.module.css';
-
-interface NewsLink {
-  id: string;
-  text: string;
-  url: string;
-  newsItemId: string;
-}
-
-interface NewsItem {
-  id: string;
-  date: string;
-  title: string;
-  description: string;
-  links: NewsLink[];
-  order: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 // Minimal typings for jQuery + OwlCarousel to avoid using `any`
 type OwlCarouselOptions = Record<string, unknown>;
@@ -36,7 +19,7 @@ declare global {
 }
 
 interface NewsCarouselProps {
-  newsItems: NewsItem[];
+  newsItems: DataNewsItem[];
 }
 
 export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
