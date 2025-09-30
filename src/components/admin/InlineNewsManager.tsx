@@ -3,31 +3,61 @@
 import { useState, useEffect } from 'react';
 import styles from './InlineNewsManager.module.css';
 
+interface NewsLink {
+  id?: string;
+  text: string;
+  url: string;
+}
+
 interface NewsItem {
   id: string;
   date: string;
   title: string;
   description: string;
   order: number;
-  published: boolean;
-  links: Array<{
-    id: string;
-    text: string;
-    url: string;
-  }>;
+  links: NewsLink[];
 }
 
 export default function InlineNewsManager() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editingData, setEditingData] = useState<Partial<NewsItem>>({});
+  const [editingData, setEditingData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
+  const [originalData, setOriginalData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [insertAfterIndex, setInsertAfterIndex] = useState<number | null>(null);
 
   useEffect(() => {
     fetchNewsItems();
   }, []);
+
+  const handleEscapeKey = () => {
+    const hasChanges = JSON.stringify(editingData) !== JSON.stringify(originalData);
+
+    if (hasChanges) {
+      const shouldSave = window.confirm('변경사항이 있습니다. 저장하시겠습니까?');
+      if (shouldSave) {
+        handleSave();
+      } else {
+        handleCancel();
+      }
+    } else {
+      handleCancel();
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && editingId) {
+        handleEscapeKey();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [editingId, editingData, originalData]);
 
   const fetchNewsItems = async () => {
     try {
@@ -44,24 +74,47 @@ export default function InlineNewsManager() {
   };
 
   const handleEdit = (item: NewsItem) => {
+    const itemData = { ...item, links: [...(item.links || [])] };
     setEditingId(item.id);
-    setEditingData({ ...item });
+    setEditingData(itemData);
+    setOriginalData(itemData);
+    setInsertAfterIndex(null);
   };
 
   const handleSave = async () => {
     if (!editingId || !editingData) return;
 
     try {
+      // Clean up links data - remove id field for new links
+      const cleanedLinks = (editingData.links || []).map(link => ({
+        text: link.text,
+        url: link.url
+      }));
+
       const response = await fetch(`/api/admin/news/${editingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingData)
+        body: JSON.stringify({
+          ...editingData,
+          links: cleanedLinks
+        })
       });
 
       if (response.ok) {
-        await fetchNewsItems();
+        const updatedData = await response.json();
+
+        // 성능 개선: fetchNewsItems 대신 즉시 상태 업데이트
+        const updatedItems = newsItems.map(item =>
+          item.id === editingId ? updatedData : item
+        );
+        // order로 다시 정렬
+        updatedItems.sort((a, b) => a.order - b.order);
+        setNewsItems(updatedItems);
+
         setEditingId(null);
         setEditingData({});
+        setOriginalData({});
+        setInsertAfterIndex(null);
       }
     } catch (error) {
       console.error('Failed to save news item:', error);
@@ -71,6 +124,34 @@ export default function InlineNewsManager() {
   const handleCancel = () => {
     setEditingId(null);
     setEditingData({});
+    setOriginalData({});
+    setInsertAfterIndex(null);
+  };
+
+  const addLink = () => {
+    const currentLinks = editingData.links || [];
+    setEditingData({
+      ...editingData,
+      links: [...currentLinks, { text: '', url: '' }]
+    });
+  };
+
+  const updateLink = (index: number, field: 'text' | 'url', value: string) => {
+    const currentLinks = [...(editingData.links || [])];
+    currentLinks[index] = { ...currentLinks[index], [field]: value };
+    setEditingData({
+      ...editingData,
+      links: currentLinks
+    });
+  };
+
+  const removeLink = (index: number) => {
+    const currentLinks = [...(editingData.links || [])];
+    currentLinks.splice(index, 1);
+    setEditingData({
+      ...editingData,
+      links: currentLinks
+    });
   };
 
   const handleDelete = async (itemId: string) => {
@@ -82,15 +163,31 @@ export default function InlineNewsManager() {
       });
 
       if (response.ok) {
-        fetchNewsItems();
+        // 성능 개선: fetchNewsItems 대신 즉시 상태 업데이트
+        const filteredItems = newsItems.filter(item => item.id !== itemId);
+        setNewsItems(filteredItems);
       }
     } catch (error) {
       console.error('Failed to delete news item:', error);
     }
   };
 
-  const handleAddNew = async () => {
-    const newItem = {
+  const handleAddNew = async (afterIndex?: number) => {
+    // Calculate the new order based on position
+    let newOrder;
+    if (afterIndex === undefined || afterIndex === newsItems.length - 1) {
+      // Adding at the end
+      newOrder = (newsItems[newsItems.length - 1]?.order || 0) + 1;
+    } else {
+      // Adding between items
+      const currentOrder = newsItems[afterIndex]?.order || 0;
+      const nextOrder = newsItems[afterIndex + 1]?.order || currentOrder + 2;
+      newOrder = currentOrder + (nextOrder - currentOrder) / 2;
+    }
+
+    const optimisticId = `temp-${Date.now()}`;
+    const optimisticItem = {
+      id: optimisticId,
       date: new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -98,26 +195,93 @@ export default function InlineNewsManager() {
       }),
       title: 'New Announcement',
       description: 'Click to edit description',
-      order: newsItems.length + 1,
-      published: true
+      order: newOrder,
+      links: []
     };
 
-    try {
-      const response = await fetch('/api/admin/news', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newItem)
+    // 낙관적 업데이트: 즉시 UI에 반영
+    const optimisticItems = [...newsItems];
+    if (afterIndex === undefined || afterIndex === newsItems.length - 1) {
+      optimisticItems.push(optimisticItem);
+    } else {
+      optimisticItems.splice(afterIndex + 1, 0, optimisticItem);
+    }
+    optimisticItems.sort((a, b) => a.order - b.order);
+
+    // 모든 상태를 한 번에 업데이트
+    setNewsItems(optimisticItems);
+    const itemData = { ...optimisticItem, links: [] };
+    setEditingId(optimisticId);
+    setEditingData(itemData);
+    setOriginalData(itemData);
+    setInsertAfterIndex(afterIndex);
+
+    // 다음 렌더 사이클에서 스크롤 (더 빠름)
+    requestAnimationFrame(() => {
+      const element = document.querySelector(`[data-news-id="${optimisticId}"]`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
+    // 백그라운드에서 실제 API 호출 (비동기, 블로킹 없음)
+    fetch('/api/admin/news', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: optimisticItem.date,
+        title: optimisticItem.title,
+        description: optimisticItem.description,
+        order: optimisticItem.order,
+        links: []
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(`HTTP ${response.status}`);
+    })
+    .then(newData => {
+      // 임시 ID를 실제 ID로 교체
+      setNewsItems(currentItems =>
+        currentItems.map(item =>
+          item.id === optimisticId ? newData : item
+        )
+      );
+
+      // 편집 중인 항목이 이것이면 ID 업데이트
+      setEditingId(currentId => currentId === optimisticId ? newData.id : currentId);
+      setEditingData(currentData => {
+        if (currentData.id === optimisticId) {
+          return { ...newData, links: [...(newData.links || [])] };
+        }
+        return currentData;
+      });
+      setOriginalData(currentData => {
+        if (currentData.id === optimisticId) {
+          return { ...newData, links: [...(newData.links || [])] };
+        }
+        return currentData;
       });
 
-      if (response.ok) {
-        await fetchNewsItems();
-        const newData = await response.json();
-        setEditingId(newData.id);
-        setEditingData({ ...newData });
-      }
-    } catch (error) {
+      // DOM ID도 업데이트될 때까지 대기
+      setTimeout(() => {
+        const element = document.querySelector(`[data-news-id="${newData.id}"]`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    })
+    .catch(error => {
       console.error('Failed to create news item:', error);
-    }
+      // 실패시 롤백
+      setNewsItems(newsItems);
+      setEditingId(null);
+      setEditingData({});
+      setOriginalData({});
+      setInsertAfterIndex(null);
+    });
   };
 
   if (loading) {
@@ -131,20 +295,24 @@ export default function InlineNewsManager() {
 
   return (
     <div className={`${styles.container} inline-editor`}>
+      {/* Background Overlay */}
+      {editingId && <div className={styles.overlay} onClick={handleEscapeKey} />}
+
       <div className={styles.header}>
         <h1>News & Announcements</h1>
-        <p>Click on any news item to edit, hover to see controls</p>
+        <p>Click on any news item to edit, hover to see controls. Press ESC to exit editing.</p>
       </div>
 
       <div className={styles.newsGrid}>
         {newsItems.map((item, index) => (
           <div
             key={item.id}
+            data-news-id={item.id}
             className={`${styles.newsItem} ${editingId === item.id ? styles.editing : ''}`}
             onMouseEnter={() => setHoveredId(item.id)}
             onMouseLeave={() => setHoveredId(null)}
           >
-            {/* iOS-style Controls */}
+            {/* Controls */}
             {(hoveredId === item.id || editingId === item.id) && (
               <div className={styles.controls}>
                 {editingId === item.id ? (
@@ -157,12 +325,20 @@ export default function InlineNewsManager() {
                     </button>
                   </>
                 ) : (
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    ✕
-                  </button>
+                  <>
+                    <button
+                      className={styles.editBtn}
+                      onClick={() => handleEdit(item)}
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      ✕
+                    </button>
+                  </>
                 )}
               </div>
             )}
@@ -193,6 +369,46 @@ export default function InlineNewsManager() {
                       placeholder="Description"
                       rows={3}
                     />
+
+                    {/* Links Editing */}
+                    <div className={styles.linksSection}>
+                      <div className={styles.linksSectionHeader}>
+                        <label className={styles.linksLabel}>Links</label>
+                        <button
+                          type="button"
+                          onClick={addLink}
+                          className={styles.addLinkBtn}
+                        >
+                          + Add Link
+                        </button>
+                      </div>
+
+                      {(editingData.links || []).map((link, index) => (
+                        <div key={index} className={styles.linkRow}>
+                          <input
+                            type="text"
+                            value={link.text}
+                            onChange={(e) => updateLink(index, 'text', e.target.value)}
+                            className={styles.linkText}
+                            placeholder="Link text"
+                          />
+                          <input
+                            type="url"
+                            value={link.url}
+                            onChange={(e) => updateLink(index, 'url', e.target.value)}
+                            className={styles.linkUrl}
+                            placeholder="https://..."
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeLink(index)}
+                            className={styles.removeLinkBtn}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </>
                 ) : (
                   <>
@@ -240,13 +456,17 @@ export default function InlineNewsManager() {
             </div>
 
             {/* Add Button Between Items */}
-            {(hoveredId === item.id && index < newsItems.length - 1) && (
+            {(hoveredId === item.id && !editingId) && (
               <div className={styles.addBetween}>
                 <button
                   className={styles.addBtn}
-                  onClick={handleAddNew}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log('Add After button clicked for index:', index);
+                    handleAddNew(index);
+                  }}
                 >
-                  + Add News
+                  + Add After
                 </button>
               </div>
             )}
@@ -254,17 +474,23 @@ export default function InlineNewsManager() {
         ))}
 
         {/* Add New Item at End */}
-        <div className={styles.addNewContainer}>
-          <button
-            className={styles.addNewBtn}
-            onClick={handleAddNew}
-          >
-            <div className={styles.addNewContent}>
-              <div className={styles.addIcon}>+</div>
-              <span>Add New Announcement</span>
-            </div>
-          </button>
-        </div>
+        {!editingId && (
+          <div className={styles.addNewContainer}>
+            <button
+              className={styles.addNewBtn}
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('Add New Announcement button clicked');
+                handleAddNew();
+              }}
+            >
+              <div className={styles.addNewContent}>
+                <div className={styles.addIcon}>+</div>
+                <span>Add New Announcement</span>
+              </div>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

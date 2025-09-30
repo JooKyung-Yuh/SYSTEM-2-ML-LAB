@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
 import InlineNewsManager from '@/components/admin/InlineNewsManager';
-import PagesManager from '@/components/admin/PagesManager';
+import InlineAboutEditor from '@/components/admin/InlineAboutEditor';
 import PeopleManager from '@/components/admin/PeopleManager';
 import PublicationsManager from '@/components/admin/PublicationsManager';
 import CoursesManager from '@/components/admin/CoursesManager';
@@ -87,16 +87,16 @@ export default function DashboardPage() {
                 onClick={() => setActiveTab('news')}
               >
                 <i className="fas fa-newspaper"></i>
-                News & Announcements
+                News
               </button>
             </li>
             <li>
               <button
-                className={`${styles.navButton} ${activeTab === 'pages' ? styles.active : ''}`}
-                onClick={() => setActiveTab('pages')}
+                className={`${styles.navButton} ${activeTab === 'about' ? styles.active : ''}`}
+                onClick={() => setActiveTab('about')}
               >
-                <i className="fas fa-file-alt"></i>
-                Pages
+                <i className="fas fa-info-circle"></i>
+                About Us
               </button>
             </li>
             <li>
@@ -140,7 +140,7 @@ export default function DashboardPage() {
 
         <main className={styles.content}>
           {activeTab === 'news' && <InlineNewsManager />}
-          {activeTab === 'pages' && <PagesManager />}
+          {activeTab === 'about' && <InlineAboutEditor />}
           {activeTab === 'people' && <PeopleManager />}
           {activeTab === 'publications' && <PublicationsManager />}
           {activeTab === 'courses' && <CoursesManager />}

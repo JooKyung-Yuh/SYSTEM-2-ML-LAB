@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
+
     const { id } = await context.params;
     const page = await prisma.page.findUnique({
       where: { id },
@@ -32,6 +35,8 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
+
     const { id } = await context.params;
     const data = await request.json();
     const { slug, title, content, published } = data;
@@ -45,7 +50,9 @@ export async function PUT(
         published
       },
       include: {
-        sections: true
+        sections: {
+          orderBy: { order: 'asc' }
+        }
       }
     });
 
@@ -61,6 +68,8 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
+
     const { id } = await context.params;
     await prisma.page.delete({
       where: { id }

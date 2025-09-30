@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const pages = await prisma.page.findMany({
       include: {
         sections: {
@@ -21,6 +24,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const data = await request.json();
     const { slug, title, content, published } = data;
 
@@ -32,7 +37,9 @@ export async function POST(request: NextRequest) {
         published: published ?? true
       },
       include: {
-        sections: true
+        sections: {
+          orderBy: { order: 'asc' }
+        }
       }
     });
 
