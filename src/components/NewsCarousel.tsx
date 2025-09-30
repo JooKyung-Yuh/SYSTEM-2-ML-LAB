@@ -107,11 +107,6 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
                     items: 4,
                     margin: 20,
                     slideBy: 1
-                  },
-                  1600: {
-                    items: 5,
-                    margin: 25,
-                    slideBy: 1
                   }
                 }
               });

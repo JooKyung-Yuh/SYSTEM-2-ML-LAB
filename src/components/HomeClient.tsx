@@ -50,107 +50,120 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
   }, []);
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh' }}>
-      <section
+    <div style={{
+      position: 'relative',
+      height: '100vh',
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column'
+    }}>
+      {/* Background Image */}
+      <div
         id="banner-bg"
         style={{
           background: "url('/images/hero-bg.jpg')",
           backgroundSize: 'cover',
-          height: '100vh',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
-          zIndex: 9999,
-          position: 'fixed',
+          position: 'absolute',
           top: 0,
           left: 0,
-          width: '100%'
+          width: '100%',
+          height: '100%',
+          zIndex: 1
+        }}
+      />
+
+      {/* Overlay */}
+      <div
+        style={{
+          background: 'rgba(0, 0, 0, 0.1)',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 2
+        }}
+      />
+
+      {/* Banner Content */}
+      <section
+        id="banner"
+        style={{
+          color: '#ffffff',
+          textAlign: 'center',
+          position: 'relative',
+          flex: '1',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 3,
+          opacity: isLoaded ? 1 : 0,
+          transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
+          willChange: 'opacity, transform'
         }}
       >
-        <section
-          className="banner-bg2"
-          style={{
-            background: 'rgba(0, 0, 0, 0.1)',
-            zIndex: 10000,
-            height: '100%',
-            display: 'flex',
-            flexDirection: 'column'
-          }}
-        >
-          <section
-            id="banner"
-            style={{
+        <div className="banner-pad" style={{ padding: isMobile ? '0 1rem' : '0 2rem' }}>
+          <div className="inner" style={{ lineHeight: 1.5 }}>
+            <h1 style={{
+              fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
+              fontWeight: 300,
               color: '#ffffff',
-              textAlign: 'center',
-              position: 'relative',
-              flex: '1',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: isLoaded ? 1 : 0,
-              transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
-              willChange: 'opacity, transform'
-            }}
-          >
-            <div className="banner-pad" style={{ padding: isMobile ? '0 1rem' : '0 2rem' }}>
-              <div className="inner" style={{ lineHeight: 1.5 }}>
-                <h1 style={{
-                  fontSize: 'clamp(1.8rem, 4vw, 3.5rem)',
-                  fontWeight: 300,
-                  color: '#ffffff',
-                  margin: '0 0 0.5em 0',
-                  lineHeight: isMobile ? 1.3 : 1.2
-                }}>
-                  {isMobile ? (
-                    <>
-                      WELCOME TO<br />
-                      KU SYSTEM 2 ML LAB
-                    </>
-                  ) : (
-                    'WELCOME TO KU SYSTEM 2 ML LAB'
-                  )}
-                </h1>
-                <span style={{
-                  fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
-                  fontWeight: 300,
-                  color: '#ffffff',
-                  display: 'block',
-                  marginTop: isMobile ? '1rem' : '0.5rem',
-                  padding: isMobile ? '0 0.5rem' : '0'
-                }}>
-                  Korea University School of Electrical Engineering
-                </span>
-                <span style={{
-                  fontSize: 'clamp(0.8rem, 1.8vw, 1rem)',
-                  fontWeight: 300,
-                  color: '#ffffff',
-                  display: 'block',
-                  marginTop: '1rem',
-                  opacity: 0.9,
-                  padding: isMobile ? '0 0.5rem' : '0',
-                  lineHeight: isMobile ? 1.4 : 1.2
-                }}>
-                  Advancing AI through Meta-Learning, System 2 Deep Learning, and LLM Reasoning
-                </span>
-              </div>
-            </div>
-          </section>
-
-          <div id="main-content" style={{
-            position: 'sticky',
-            bottom: 0,
-            padding: '0 clamp(1rem, 3vw, 2rem) clamp(2rem, 4vh, 3rem)',
-            marginBottom: '2rem',
-            zIndex: 1000,
-            opacity: isLoaded ? 1 : 0,
-            transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
-            transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
-            willChange: 'opacity, transform'
-          }}>
-            <NewsCarousel newsItems={newsItems} />
+              margin: '0 0 0.5em 0',
+              lineHeight: isMobile ? 1.3 : 1.2
+            }}>
+              {isMobile ? (
+                <>
+                  WELCOME TO<br />
+                  KU SYSTEM 2 ML LAB
+                </>
+              ) : (
+                'WELCOME TO KU SYSTEM 2 ML LAB'
+              )}
+            </h1>
+            <span style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+              fontWeight: 300,
+              color: '#ffffff',
+              display: 'block',
+              marginTop: isMobile ? '1rem' : '0.5rem',
+              padding: isMobile ? '0 0.5rem' : '0'
+            }}>
+              Korea University School of Electrical Engineering
+            </span>
+            <span style={{
+              fontSize: 'clamp(0.8rem, 1.8vw, 1rem)',
+              fontWeight: 300,
+              color: '#ffffff',
+              display: 'block',
+              marginTop: '1rem',
+              opacity: 0.9,
+              padding: isMobile ? '0 0.5rem' : '0',
+              lineHeight: isMobile ? 1.4 : 1.2
+            }}>
+              Advancing AI through Meta-Learning, System 2 Deep Learning, and LLM Reasoning
+            </span>
           </div>
-        </section>
+        </div>
       </section>
+
+      {/* News Cards - Fixed at bottom */}
+      <div
+        id="main-content"
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          flexShrink: 0,
+          opacity: isLoaded ? 1 : 0,
+          transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
+          willChange: 'opacity, transform'
+        }}
+      >
+        <NewsCarousel newsItems={newsItems} />
+      </div>
     </div>
   );
 }
