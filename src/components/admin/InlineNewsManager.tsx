@@ -25,7 +25,6 @@ export default function InlineNewsManager() {
   const [editingData, setEditingData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
   const [originalData, setOriginalData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [insertAfterIndex, setInsertAfterIndex] = useState<number | null>(null);
 
   useEffect(() => {
     fetchNewsItems();
@@ -57,7 +56,7 @@ export default function InlineNewsManager() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [editingId, editingData, originalData]);
+  }, [editingId, editingData, originalData, handleEscapeKey]);
 
   const fetchNewsItems = async () => {
     try {
@@ -78,7 +77,6 @@ export default function InlineNewsManager() {
     setEditingId(item.id);
     setEditingData(itemData);
     setOriginalData(itemData);
-    setInsertAfterIndex(null);
   };
 
   const handleSave = async () => {
@@ -114,8 +112,7 @@ export default function InlineNewsManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
-        setInsertAfterIndex(null);
-      }
+          }
     } catch (error) {
       console.error('Failed to save news item:', error);
     }
@@ -125,7 +122,6 @@ export default function InlineNewsManager() {
     setEditingId(null);
     setEditingData({});
     setOriginalData({});
-    setInsertAfterIndex(null);
   };
 
   const addLink = () => {
@@ -214,7 +210,6 @@ export default function InlineNewsManager() {
     setEditingId(optimisticId);
     setEditingData(itemData);
     setOriginalData(itemData);
-    setInsertAfterIndex(afterIndex);
 
     // 다음 렌더 사이클에서 스크롤 (더 빠름)
     requestAnimationFrame(() => {
@@ -280,8 +275,7 @@ export default function InlineNewsManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
-      setInsertAfterIndex(null);
-    });
+      });
   };
 
   if (loading) {

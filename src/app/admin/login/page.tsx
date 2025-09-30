@@ -27,7 +27,7 @@ export default function LoginPage() {
           console.log('Login page: User already authenticated, redirecting');
           router.replace('/admin/dashboard');
         }
-      } catch (error) {
+      } catch {
         // User is not logged in, stay on login page - this is expected
       }
     };
@@ -37,7 +37,7 @@ export default function LoginPage() {
     return () => {
       document.body.classList.remove('admin-page');
     };
-  }, []); // No dependencies - only run once on mount
+  }, [router]); // Include router dependency
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

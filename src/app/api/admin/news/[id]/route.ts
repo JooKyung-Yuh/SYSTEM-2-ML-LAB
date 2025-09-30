@@ -4,22 +4,23 @@ import { requireAuth } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAuth(request);
+    const { id } = await params;
 
     const data = await request.json();
-    const { title, description, date, order, published, links } = data;
+    const { title, description, date, order, links } = data;
 
     // First, delete existing links
     await prisma.newsLink.deleteMany({
-      where: { newsItemId: params.id },
+      where: { newsItemId: id },
     });
 
     // Update the news item with new data and links
     const newsItem = await prisma.newsItem.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title,
         description,
@@ -46,19 +47,20 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAuth(request);
+    const { id } = await params;
 
     // Delete links first (due to foreign key constraint)
     await prisma.newsLink.deleteMany({
-      where: { newsItemId: params.id },
+      where: { newsItemId: id },
     });
 
     // Delete the news item
     await prisma.newsItem.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });

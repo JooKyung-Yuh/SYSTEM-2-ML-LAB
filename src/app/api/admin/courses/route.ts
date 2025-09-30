@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const courses = await prisma.course.findMany({
       orderBy: [
         { year: 'desc' },
@@ -21,6 +24,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const data = await request.json();
     const { code, title, description, semester, year, instructor, credits, syllabus, order, published } = data;
 

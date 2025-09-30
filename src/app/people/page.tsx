@@ -256,7 +256,7 @@ export default function People() {
             fontSize: '1rem',
             color: '#333'
           }}>
-            <strong>Open Positions:</strong> PhD and Master's students, Postdoctoral researchers
+            <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers
           </p>
           <p style={{
             fontSize: '1rem',

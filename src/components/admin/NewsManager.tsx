@@ -259,7 +259,9 @@ export default function NewsManager() {
                         variant="danger"
                         size="sm"
                         icon={<i className="fas fa-trash"></i>}
-                      />
+                      >
+                        Remove
+                      </AdminButton>
                     )}
                   </div>
                 ))}

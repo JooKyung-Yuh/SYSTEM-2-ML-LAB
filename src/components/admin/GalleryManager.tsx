@@ -256,8 +256,8 @@ export default function GalleryManager() {
               <div className={styles.formGroup}>
                 <label>Image *</label>
                 <ImageUpload
-                  currentImage={currentImage}
-                  onImageChange={setCurrentImage}
+                  value={currentImage}
+                  onChange={setCurrentImage}
                   label="Upload gallery image"
                 />
               </div>

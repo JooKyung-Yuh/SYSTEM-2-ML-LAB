@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const people = await prisma.person.findMany({
       orderBy: [
         { category: 'asc' },
@@ -20,6 +23,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth(request);
+
     const data = await request.json();
     const { name, title, email, phone, website, bio, category, order, published, image } = data;
 

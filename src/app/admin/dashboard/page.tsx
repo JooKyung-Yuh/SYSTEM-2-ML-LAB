@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
 import InlineNewsManager from '@/components/admin/InlineNewsManager';
 import InlineAboutEditor from '@/components/admin/InlineAboutEditor';
-import PeopleManager from '@/components/admin/PeopleManager';
+import InlinePeopleManager from '@/components/admin/InlinePeopleManager';
 import PublicationsManager from '@/components/admin/PublicationsManager';
 import CoursesManager from '@/components/admin/CoursesManager';
 import GalleryManager from '@/components/admin/GalleryManager';
@@ -141,7 +141,7 @@ export default function DashboardPage() {
         <main className={styles.content}>
           {activeTab === 'news' && <InlineNewsManager />}
           {activeTab === 'about' && <InlineAboutEditor />}
-          {activeTab === 'people' && <PeopleManager />}
+          {activeTab === 'people' && <InlinePeopleManager />}
           {activeTab === 'publications' && <PublicationsManager />}
           {activeTab === 'courses' && <CoursesManager />}
           {activeTab === 'gallery' && <GalleryManager />}

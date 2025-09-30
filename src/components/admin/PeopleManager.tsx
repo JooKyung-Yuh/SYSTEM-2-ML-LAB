@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import styles from './Manager.module.css';
-import AdminSection from './ui/AdminSection';
-import AdminCard from './ui/AdminCard';
 import AdminButton from './ui/AdminButton';
 import ImageUpload from './ui/ImageUpload';
 

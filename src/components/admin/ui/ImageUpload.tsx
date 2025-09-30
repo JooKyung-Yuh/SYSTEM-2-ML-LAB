@@ -5,7 +5,7 @@ import AdminButton from './AdminButton';
 import styles from './ImageUpload.module.css';
 
 interface ImageUploadProps {
-  value?: string;
+  value?: string | null;
   onChange: (imageUrl: string | null) => void;
   label?: string;
   accept?: string;

@@ -23,7 +23,7 @@ export default function InlineAboutEditor() {
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingType, setEditingType] = useState<'page' | 'section' | null>(null);
-  const [editingData, setEditingData] = useState<any>({});
+  const [editingData, setEditingData] = useState<Partial<PageData & PageSection> & { content?: string | null }>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function InlineAboutEditor() {
       const response = await fetch('/api/admin/pages');
       if (response.ok) {
         const pages = await response.json();
-        let aboutPage = pages.find((p: any) => p.slug === 'about');
+        let aboutPage = pages.find((p: PageData) => p.slug === 'about');
 
         if (!aboutPage) {
           // Create about page if it doesn't exist
@@ -66,10 +66,10 @@ export default function InlineAboutEditor() {
     }
   };
 
-  const handleEdit = (id: string, type: 'page' | 'section', data: any) => {
+  const handleEdit = (id: string, type: 'page' | 'section', data: PageData | PageSection) => {
     setEditingId(id);
     setEditingType(type);
-    setEditingData({ ...data });
+    setEditingData({ ...data } as Partial<PageData & PageSection> & { content?: string | null });
   };
 
   const handleSave = async () => {

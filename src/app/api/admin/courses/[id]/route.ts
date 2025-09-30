@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
+
     const { id } = await context.params;
     const data = await request.json();
     const { code, title, description, semester, year, instructor, credits, syllabus, order, published } = data;
@@ -38,6 +41,8 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
+
     const { id } = await context.params;
     await prisma.course.delete({
       where: { id }
