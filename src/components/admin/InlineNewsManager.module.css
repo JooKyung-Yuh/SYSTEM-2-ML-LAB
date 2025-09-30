@@ -1,0 +1,422 @@
+.container {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  padding: 2rem;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('/images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  font-family: 'Georgia', serif;
+}
+
+.header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.newsGrid {
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.newsItem {
+  position: relative;
+  height: auto;
+  transition: all 0.3s ease;
+}
+
+.newsItem.editing {
+  transform: scale(1.02);
+  z-index: 10;
+}
+
+/* Controls - iOS Style */
+.controls {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  z-index: 20;
+  display: flex;
+  gap: 0.5rem;
+  animation: fadeInScale 0.2s ease-out;
+}
+
+.controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.deleteBtn {
+  background: rgba(255, 59, 48, 0.9) !important;
+}
+
+.deleteBtn:hover {
+  background: rgba(255, 59, 48, 1) !important;
+  transform: scale(1.1);
+}
+
+.saveBtn {
+  background: rgba(52, 199, 89, 0.9) !important;
+}
+
+.saveBtn:hover {
+  background: rgba(52, 199, 89, 1) !important;
+  transform: scale(1.1);
+}
+
+.cancelBtn {
+  background: rgba(255, 149, 0, 0.9) !important;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 149, 0, 1) !important;
+  transform: scale(1.1);
+}
+
+/* News Content - Same as Homepage */
+.slideEntryBg {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-height: 250px;
+  max-height: 300px;
+  display: flex;
+  align-items: stretch;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+
+.slideEntryBg:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+}
+
+.editing .slideEntryBg {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(52, 199, 89, 0.8);
+  cursor: default;
+}
+
+.slideEntry {
+  text-align: center;
+  color: white;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.newsDate {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.newsTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0.75rem 0;
+  color: white;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.newsDescription {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.newsLink {
+  color: #4fc3f7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.newsLink:hover {
+  color: #29b6f6;
+  text-decoration: underline;
+}
+
+/* Edit Inputs */
+.editDate,
+.editTitle,
+.editDescription {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  color: white;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.editDate {
+  font-size: 0.8rem;
+  font-weight: 300;
+}
+
+.editTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.editDescription {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.editDate::placeholder,
+.editTitle::placeholder,
+.editDescription::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.editDate:focus,
+.editTitle:focus,
+.editDescription:focus {
+  outline: none;
+  border-color: rgba(52, 199, 89, 0.8);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Add Between Items */
+.addBetween {
+  position: absolute;
+  bottom: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  animation: fadeInUp 0.2s ease-out;
+}
+
+.addBtn {
+  background: rgba(0, 122, 255, 0.9);
+  border: 2px solid white;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.addBtn:hover {
+  background: rgba(0, 122, 255, 1);
+  transform: scale(1.05);
+}
+
+/* Add New Container */
+.addNewContainer {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.addNewBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 3rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(15px);
+  min-width: 300px;
+}
+
+.addNewBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.addNewContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: white;
+}
+
+.addIcon {
+  font-size: 3rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.addNewContent span {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  gap: 1rem;
+  color: white;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  .newsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .slideEntryBg {
+    padding: 1.25rem;
+    min-height: 220px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .header p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .newsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0;
+  }
+
+  .slideEntryBg {
+    padding: 1rem;
+    min-height: 200px;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .controls {
+    gap: 0.25rem;
+  }
+
+  .controls button {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+}

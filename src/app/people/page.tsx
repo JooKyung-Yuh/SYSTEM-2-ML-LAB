@@ -1,34 +1,43 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import styles from './people.module.css';
+
+interface Person {
+  id: string;
+  name: string;
+  title: string | null;
+  email: string | null;
+  phone: string | null;
+  website: string | null;
+  image: string | null;
+  bio: string | null;
+  category: string;
+  order: number;
+  published: boolean;
+}
+
 export default function People() {
-  const people = [
-    {
-      name: "Hae Beom Lee",
-      title: "Assistant Professor & Lab Director",
-      email: "haebeomlee@korea.ac.kr",
-      website: "https://haebeom-lee.github.io/",
-      category: "Faculty",
-      bio: "Assistant Professor at Korea University's School of Electrical Engineering. Former postdoctoral researcher at KAIST and Mila (Université de Montréal), working with Prof. Juho Lee and Prof. Yoshua Bengio. Ph.D. from KAIST under Prof. Sung Ju Hwang.",
-      interests: ["Large Language Model Reasoning", "System 2 Deep Learning", "Meta-Learning", "AutoML", "Bayesian Inference"],
-      awards: ["Google PhD Fellowship (2021)", "Global PhD Fellowship (2019-2021)", "Outstanding Reviewer ICML (2020, 2022)"]
-    },
-    {
-      name: "PhD Student",
-      title: "PhD Candidate",
-      email: "phd@korea.ac.kr",
-      category: "Graduate Students",
-      bio: "Researching large language model reasoning and meta-learning approaches for complex problem solving",
-      interests: ["LLM Reasoning", "Meta-Learning", "Transfer Learning"]
-    },
-    {
-      name: "Master&apos;s Student",
-      title: "Master&apos;s Student",
-      email: "master@korea.ac.kr",
-      category: "Graduate Students",
-      bio: "Working on AutoML and hyperparameter optimization for deep learning models",
-      interests: ["AutoML", "Hyperparameter Optimization", "Deep Learning"]
+  const [people, setPeople] = useState<Person[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPeople();
+  }, []);
+
+  const fetchPeople = async () => {
+    try {
+      const response = await fetch('/api/people');
+      if (response.ok) {
+        const data = await response.json();
+        setPeople(data.filter((person: Person) => person.published));
+      }
+    } catch (error) {
+      console.error('Failed to fetch people:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const groupedPeople = people.reduce((acc, person) => {
     if (!acc[person.category]) {
@@ -36,9 +45,23 @@ export default function People() {
     }
     acc[person.category].push(person);
     return acc;
-  }, {} as Record<string, typeof people>);
+  }, {} as Record<string, Person[]>);
 
-  const categoryOrder = ["Faculty", "Researchers", "Graduate Students"];
+  const categoryOrder = ["faculty", "student", "alumni"];
+  const categoryLabels: Record<string, string> = {
+    faculty: "Faculty",
+    student: "Students",
+    alumni: "Alumni"
+  };
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>Loading team members...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -93,81 +116,110 @@ export default function People() {
                 marginBottom: '2rem',
                 fontFamily: 'Georgia, serif'
               }}>
-                {category}
+                {categoryLabels[category] || category}
               </h2>
 
-              {members.map((person, index) => (
-                <div key={index} style={{
+              {members
+                .sort((a, b) => a.order - b.order)
+                .map((person) => (
+                <div key={person.id} style={{
                   marginBottom: '2.5rem',
                   paddingBottom: '2rem',
-                  borderBottom: index < members.length - 1 ? '1px solid #eee' : 'none'
+                  borderBottom: '1px solid #eee',
+                  display: 'flex',
+                  gap: '2rem',
+                  alignItems: 'flex-start'
                 }}>
 
-                  {/* Person Header */}
-                  <div style={{ marginBottom: '1rem' }}>
-                    <h3 style={{
-                      fontSize: '1.25rem',
-                      fontWeight: 600,
-                      color: '#222',
-                      marginBottom: '0.25rem'
-                    }}>
-                      {person.name}
-                    </h3>
-                    <p style={{
-                      fontSize: '1rem',
-                      color: '#666',
-                      marginBottom: '0.5rem'
-                    }}>
-                      {person.title}
-                    </p>
-
-                    <div style={{ marginBottom: '1rem' }}>
-                      <a href={`mailto:${person.email}`}
-                         style={{ color: '#0066cc', textDecoration: 'underline', marginRight: '1rem' }}>
-                        {person.email}
-                      </a>
-                      {person.website && (
-                        <a href={person.website} target="_blank" rel="noopener noreferrer"
-                           style={{ color: '#0066cc', textDecoration: 'underline' }}>
-                          Personal Website
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Bio */}
-                  <p style={{
-                    fontSize: '1rem',
-                    color: '#333',
-                    marginBottom: '1rem'
-                  }}>
-                    {person.bio}
-                  </p>
-
-                  {/* Research Interests */}
-                  <div style={{ marginBottom: '1rem' }}>
-                    <strong style={{ fontSize: '0.95rem', color: '#222' }}>Research Interests:</strong>
-                    <span style={{ fontSize: '0.95rem', color: '#666', marginLeft: '0.5rem' }}>
-                      {person.interests.join(', ')}
-                    </span>
-                  </div>
-
-                  {/* Awards (if available) */}
-                  {person.awards && (
-                    <div style={{ marginBottom: '1rem' }}>
-                      <strong style={{ fontSize: '0.95rem', color: '#222' }}>Awards & Honors:</strong>
-                      <ul style={{
-                        marginTop: '0.25rem',
-                        paddingLeft: '1.5rem',
-                        fontSize: '0.95rem',
-                        color: '#666'
+                  {/* Person Image */}
+                  <div style={{ flexShrink: 0 }}>
+                    {person.image ? (
+                      <img
+                        src={person.image}
+                        alt={person.name}
+                        style={{
+                          width: '150px',
+                          height: '150px',
+                          objectFit: 'cover',
+                          borderRadius: '8px',
+                          border: '2px solid #e2e8f0'
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '150px',
+                        height: '150px',
+                        backgroundColor: '#f7fafc',
+                        border: '2px solid #e2e8f0',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '2rem',
+                        fontWeight: 'bold',
+                        color: '#a0aec0'
                       }}>
-                        {person.awards.map((award, idx) => (
-                          <li key={idx}>{award}</li>
-                        ))}
-                      </ul>
+                        {person.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Person Content */}
+                  <div style={{ flex: 1 }}>
+                    {/* Person Header */}
+                    <div style={{ marginBottom: '1rem' }}>
+                      <h3 style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        color: '#222',
+                        marginBottom: '0.25rem'
+                      }}>
+                        {person.name}
+                      </h3>
+                      {person.title && (
+                        <p style={{
+                          fontSize: '1rem',
+                          color: '#666',
+                          marginBottom: '0.5rem'
+                        }}>
+                          {person.title}
+                        </p>
+                      )}
+
+                      <div style={{ marginBottom: '1rem' }}>
+                        {person.email && (
+                          <a href={`mailto:${person.email}`}
+                             style={{ color: '#0066cc', textDecoration: 'underline', marginRight: '1rem' }}>
+                            {person.email}
+                          </a>
+                        )}
+                        {person.phone && (
+                          <span style={{ color: '#666', marginRight: '1rem' }}>
+                            {person.phone}
+                          </span>
+                        )}
+                        {person.website && (
+                          <a href={person.website}
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             style={{ color: '#0066cc', textDecoration: 'underline', marginRight: '1rem' }}>
+                            Website
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  )}
+
+                    {/* Bio */}
+                    {person.bio && (
+                      <p style={{
+                        fontSize: '1rem',
+                        color: '#333',
+                        marginBottom: '1rem'
+                      }}>
+                        {person.bio}
+                      </p>
+                    )}
+                  </div>
 
                 </div>
               ))}
@@ -204,7 +256,7 @@ export default function People() {
             fontSize: '1rem',
             color: '#333'
           }}>
-            <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers
+            <strong>Open Positions:</strong> PhD and Master's students, Postdoctoral researchers
           </p>
           <p style={{
             fontSize: '1rem',

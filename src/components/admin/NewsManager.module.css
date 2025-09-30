@@ -2,6 +2,12 @@
   width: 100%;
 }
 
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .header {
   display: flex;
   justify-content: space-between;

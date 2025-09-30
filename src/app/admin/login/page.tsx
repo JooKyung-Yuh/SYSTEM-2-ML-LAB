@@ -6,8 +6,8 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import styles from './login.module.css';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@mllab.korea.ac.kr');
+  const [password, setPassword] = useState('admin123');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -16,17 +16,19 @@ export default function LoginPage() {
     // Add admin class to body to isolate CSS
     document.body.classList.add('admin-page');
 
-    // Check if user is already logged in
+    // Simple, one-time auth check on mount
     const checkAuth = async () => {
       try {
-        const response = await fetch('/api/auth/me');
+        const response = await fetch('/api/auth/me', {
+          credentials: 'include'
+        });
+
         if (response.ok) {
-          // User is already logged in, redirect to dashboard
-          router.push('/admin/dashboard');
+          console.log('Login page: User already authenticated, redirecting');
+          router.replace('/admin/dashboard');
         }
       } catch (error) {
-        // User is not logged in, stay on login page
-        console.log('User not authenticated');
+        // User is not logged in, stay on login page - this is expected
       }
     };
 
@@ -35,7 +37,7 @@ export default function LoginPage() {
     return () => {
       document.body.classList.remove('admin-page');
     };
-  }, [router]);
+  }, []); // No dependencies - only run once on mount
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,21 +45,32 @@ export default function LoginPage() {
     setError('');
 
     try {
+      console.log('Attempting login with:', { email, password: '***' });
+
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
+        credentials: 'include', // Ensure cookies are sent
       });
 
+      console.log('Login response status:', response.status);
+
       if (response.ok) {
-        router.push('/admin/dashboard');
+        const data = await response.json();
+        console.log('Login successful:', data);
+
+        // Redirect immediately - let middleware handle authentication
+        router.replace('/admin/dashboard');
       } else {
         const data = await response.json();
+        console.error('Login failed:', data);
         setError(data.error || 'Login failed');
       }
-    } catch {
+    } catch (error) {
+      console.error('Login error:', error);
       setError('An error occurred during login');
     } finally {
       setLoading(false);
@@ -118,7 +131,7 @@ export default function LoginPage() {
 
         <div className={styles.footer}>
           <p className={styles.footerText}>
-            {/* For demo purposes: admin@mllab.korea.ac.kr / admin123 */}
+            Demo credentials: admin@mllab.korea.ac.kr / admin123
           </p>
         </div>
       </div>

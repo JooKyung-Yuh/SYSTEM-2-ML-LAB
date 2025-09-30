@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 
-export async function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only protect admin routes
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Verify token
-    const user = await verifyToken(token);
+    const user = verifyToken(token);
     if (!user) {
       console.log('Middleware: Token verification failed, clearing cookie and redirecting');
       // Token is invalid or expired, redirect to login

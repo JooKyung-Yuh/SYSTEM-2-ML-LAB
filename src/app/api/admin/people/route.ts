@@ -21,7 +21,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { name, title, email, phone, bio, category, order, published } = data;
+    const { name, title, email, phone, website, bio, category, order, published, image } = data;
 
     const person = await prisma.person.create({
       data: {
@@ -29,10 +29,12 @@ export async function POST(request: NextRequest) {
         title,
         email,
         phone,
+        website,
         bio,
         category,
         order: order ?? 0,
-        published: published ?? true
+        published: published ?? true,
+        image
       }
     });
 

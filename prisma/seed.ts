@@ -107,6 +107,146 @@ async function main() {
     });
   }
 
+  // Create people
+  const people = [
+    {
+      name: 'Hae Beom Lee',
+      title: 'Assistant Professor, School of Electrical Engineering at Korea University',
+      email: 'haebeomlee@korea.ac.kr',
+      website: 'https://haebeom-lee.github.io/',
+      image: 'https://haebeom-lee.github.io/images/lee2.png',
+      bio: 'Dr. Hae Beom Lee is an Assistant Professor in the School of Electrical Engineering at Korea University. His research focuses on System 2 deep learning, large language model reasoning, and meta-learning approaches. Prior to joining Korea University, he served as a postdoctoral researcher at KAIST under the supervision of Prof. Juho Lee, and at Mila and Université de Montréal under the supervision of Prof. Yoshua Bengio. His work contributes to advancing the theoretical foundations and practical applications of machine learning systems capable of deliberate reasoning and adaptive learning.',
+      category: 'faculty',
+      order: 1,
+      published: true
+    }
+  ];
+
+  for (const person of people) {
+    await prisma.person.upsert({
+      where: { email: person.email },
+      update: person,
+      create: person,
+    });
+  }
+
+  // Create sample publications
+  const publications = [
+    {
+      title: 'System 2 Deep Learning with Large Language Models',
+      authors: 'Hae Beom Lee, John Doe, Jane Smith',
+      venue: 'NeurIPS',
+      year: 2025,
+      url: 'https://arxiv.org/abs/2505.23416',
+      category: 'conference',
+      order: 1,
+      published: true
+    },
+    {
+      title: 'Meta-Learning for Adaptive Reasoning Systems',
+      authors: 'Hae Beom Lee, Alice Johnson',
+      venue: 'ICML',
+      year: 2025,
+      url: 'https://arxiv.org/abs/2505.07004',
+      category: 'conference',
+      order: 2,
+      published: true
+    },
+    {
+      title: 'Large Language Model Reasoning: A Survey',
+      authors: 'Hae Beom Lee, Bob Wilson, Carol Brown',
+      venue: 'Machine Learning Journal',
+      year: 2024,
+      url: 'https://arxiv.org/abs/2406.12837',
+      category: 'journal',
+      order: 3,
+      published: true
+    }
+  ];
+
+  for (const pub of publications) {
+    await prisma.publication.create({
+      data: pub
+    });
+  }
+
+  // Create sample courses
+  const courses = [
+    {
+      code: 'ELEC621',
+      title: 'Machine Learning',
+      description: 'Introduction to machine learning algorithms and applications',
+      semester: 'Fall',
+      year: 2025,
+      instructor: 'Hae Beom Lee',
+      credits: 3,
+      order: 1,
+      published: true
+    },
+    {
+      code: 'ELEC724',
+      title: 'Deep Learning',
+      description: 'Advanced deep learning techniques and neural networks',
+      semester: 'Spring',
+      year: 2025,
+      instructor: 'Hae Beom Lee',
+      credits: 3,
+      order: 2,
+      published: true
+    },
+    {
+      code: 'ELEC825',
+      title: 'Advanced AI Systems',
+      description: 'System 2 thinking and reasoning in artificial intelligence',
+      semester: 'Fall',
+      year: 2025,
+      instructor: 'Hae Beom Lee',
+      credits: 3,
+      order: 3,
+      published: true
+    }
+  ];
+
+  for (const course of courses) {
+    await prisma.course.create({
+      data: course
+    });
+  }
+
+  // Create sample gallery items
+  const galleryItems = [
+    {
+      title: 'Lab Opening Ceremony',
+      description: 'System 2 ML Lab official opening ceremony',
+      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800',
+      category: 'events',
+      order: 1,
+      published: true
+    },
+    {
+      title: 'Research Presentation at NeurIPS',
+      description: 'Team members presenting research findings at NeurIPS 2025',
+      imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
+      category: 'conferences',
+      order: 2,
+      published: true
+    },
+    {
+      title: 'Lab Meeting Discussion',
+      description: 'Weekly lab meeting and research discussion session',
+      imageUrl: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
+      category: 'lab-life',
+      order: 3,
+      published: true
+    }
+  ];
+
+  for (const item of galleryItems) {
+    await prisma.galleryItem.create({
+      data: item
+    });
+  }
+
   // Create basic pages
   const pages = [
     { slug: 'about', title: 'About Us', content: 'About the ML Lab at KU' },

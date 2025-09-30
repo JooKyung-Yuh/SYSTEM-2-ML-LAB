@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/admin/AdminHeader';
-import NewsManager from '@/components/admin/NewsManager';
+import InlineNewsManager from '@/components/admin/InlineNewsManager';
 import PagesManager from '@/components/admin/PagesManager';
 import PeopleManager from '@/components/admin/PeopleManager';
 import PublicationsManager from '@/components/admin/PublicationsManager';
@@ -23,48 +23,44 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('news');
   const router = useRouter();
 
-  const checkAuth = useCallback(async () => {
-    try {
-      const response = await fetch('/api/auth/me');
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setLoading(false);
-      } else {
-        // Not authenticated, redirect immediately
-        router.replace('/admin/login');
-        return;
-      }
-    } catch (error) {
-      console.error('Auth check failed:', error);
-      // Authentication failed, redirect immediately
-      router.replace('/admin/login');
-      return;
-    }
-  }, [router]);
-
   useEffect(() => {
     // Add admin class to body to isolate CSS
     document.body.classList.add('admin-page');
-    checkAuth();
 
-    // Set up interval to check auth status every 5 minutes
-    const authCheckInterval = setInterval(() => {
-      checkAuth();
-    }, 5 * 60 * 1000); // 5 minutes
+    // Simple user info fetch - middleware already handles authentication
+    const fetchUserInfo = async () => {
+      try {
+        const response = await fetch('/api/auth/me', {
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user info:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserInfo();
 
     return () => {
       document.body.classList.remove('admin-page');
-      clearInterval(authCheckInterval);
     };
-  }, [checkAuth]);
+  }, []); // No periodic checks - middleware handles protection
 
   const handleLogout = async () => {
     try {
+      // Try server logout
       await fetch('/api/auth/logout', { method: 'POST' });
       router.push('/admin/login');
     } catch (error) {
       console.error('Logout failed:', error);
+      // Even if server logout fails, redirect anyway
+      router.push('/admin/login');
     }
   };
 
@@ -143,7 +139,7 @@ export default function DashboardPage() {
         </nav>
 
         <main className={styles.content}>
-          {activeTab === 'news' && <NewsManager />}
+          {activeTab === 'news' && <InlineNewsManager />}
           {activeTab === 'pages' && <PagesManager />}
           {activeTab === 'people' && <PeopleManager />}
           {activeTab === 'publications' && <PublicationsManager />}

@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import styles from './Manager.module.css';
+import AdminSection from './ui/AdminSection';
+import AdminCard from './ui/AdminCard';
+import AdminButton from './ui/AdminButton';
+import ImageUpload from './ui/ImageUpload';
 
 interface Person {
   id: string;
@@ -9,6 +13,7 @@ interface Person {
   title: string | null;
   email: string | null;
   phone: string | null;
+  website: string | null;
   image: string | null;
   bio: string | null;
   category: string;
@@ -24,6 +29,7 @@ export default function PeopleManager() {
   const [editingPerson, setEditingPerson] = useState<Person | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentImage, setCurrentImage] = useState<string | null>(null);
 
   const categories = ['faculty', 'student', 'alumni'];
 
@@ -54,10 +60,12 @@ export default function PeopleManager() {
       title: formData.get('title') as string,
       email: formData.get('email') as string,
       phone: formData.get('phone') as string,
+      website: formData.get('website') as string,
       bio: formData.get('bio') as string,
       category: formData.get('category') as string,
       order: parseInt(formData.get('order') as string) || 0,
-      published: formData.get('published') === 'on'
+      published: formData.get('published') === 'on',
+      image: currentImage
     };
 
     try {
@@ -75,6 +83,7 @@ export default function PeopleManager() {
         fetchPeople();
         setEditingPerson(null);
         setShowForm(false);
+        setCurrentImage(null);
       }
     } catch (error) {
       console.error('Failed to save person:', error);
@@ -125,15 +134,16 @@ export default function PeopleManager() {
     <div className={styles.manager}>
       <div className={styles.header}>
         <h2>People Management</h2>
-        <button
-          className={styles.addBtn}
+        <AdminButton
           onClick={() => {
             setEditingPerson(null);
+            setCurrentImage(null);
             setShowForm(true);
           }}
+          icon={<i className="fas fa-plus"></i>}
         >
           Add Person
-        </button>
+        </AdminButton>
       </div>
 
       {/* Category Filter */}
@@ -160,7 +170,15 @@ export default function PeopleManager() {
             <div key={person.id} className={styles.card}>
               <div className={styles.cardHeader}>
                 <div className={styles.avatar}>
-                  {person.name.split(' ').map(n => n[0]).join('')}
+                  {person.image ? (
+                    <img
+                      src={person.image}
+                      alt={person.name}
+                      className={styles.avatarImage}
+                    />
+                  ) : (
+                    person.name.split(' ').map(n => n[0]).join('')
+                  )}
                 </div>
                 <div className={styles.cardInfo}>
                   <h3>{person.name}</h3>
@@ -199,21 +217,24 @@ export default function PeopleManager() {
               </div>
 
               <div className={styles.cardFooter}>
-                <button
-                  className={styles.editBtn}
+                <AdminButton
                   onClick={() => {
                     setEditingPerson(person);
+                    setCurrentImage(person.image);
                     setShowForm(true);
                   }}
+                  variant="ghost"
+                  size="sm"
                 >
                   Edit
-                </button>
-                <button
-                  className={styles.deleteBtn}
+                </AdminButton>
+                <AdminButton
                   onClick={() => handleDelete(person.id)}
+                  variant="danger"
+                  size="sm"
                 >
                   Delete
-                </button>
+                </AdminButton>
               </div>
             </div>
           ))}
@@ -281,6 +302,19 @@ export default function PeopleManager() {
 
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
+                  <label htmlFor="website">Website</label>
+                  <input
+                    type="url"
+                    id="website"
+                    name="website"
+                    placeholder="https://example.com"
+                    defaultValue={editingPerson?.website || ''}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
                   <label htmlFor="category">Category *</label>
                   <select
                     id="category"
@@ -319,6 +353,17 @@ export default function PeopleManager() {
               </div>
 
               <div className={styles.formGroup}>
+                <ImageUpload
+                  label="프로필 이미지"
+                  value={currentImage}
+                  onChange={setCurrentImage}
+                  width={150}
+                  height={150}
+                  className={styles.profileImageUpload}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
                 <label className={styles.checkbox}>
                   <input
                     type="checkbox"
@@ -330,16 +375,19 @@ export default function PeopleManager() {
               </div>
 
               <div className={styles.formActions}>
-                <button type="submit" className={styles.saveBtn}>
+                <AdminButton type="submit" variant="primary">
                   {editingPerson ? 'Update Person' : 'Add Person'}
-                </button>
-                <button
+                </AdminButton>
+                <AdminButton
                   type="button"
-                  className={styles.cancelBtn}
-                  onClick={() => setShowForm(false)}
+                  variant="secondary"
+                  onClick={() => {
+                    setShowForm(false);
+                    setCurrentImage(null);
+                  }}
                 >
                   Cancel
-                </button>
+                </AdminButton>
               </div>
             </form>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Manager.module.css';
+import ImageUpload from './ui/ImageUpload';
 
 interface GalleryItem {
   id: string;
@@ -22,6 +23,7 @@ export default function GalleryManager() {
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentImage, setCurrentImage] = useState<string | null>(null);
 
   const categories = ['lab-activities', 'conferences', 'events', 'awards', 'facilities', 'milestones', 'collaborations'];
 
@@ -50,7 +52,7 @@ export default function GalleryManager() {
     const itemData = {
       title: formData.get('title') as string,
       description: formData.get('description') as string,
-      imageUrl: formData.get('imageUrl') as string,
+      imageUrl: currentImage || '',
       category: formData.get('category') as string,
       order: parseInt(formData.get('order') as string) || 0,
       published: formData.get('published') === 'on'
@@ -71,6 +73,7 @@ export default function GalleryManager() {
         fetchGalleryItems();
         setEditingItem(null);
         setShowForm(false);
+        setCurrentImage(null);
       }
     } catch (error) {
       console.error('Failed to save gallery item:', error);
@@ -125,6 +128,7 @@ export default function GalleryManager() {
           className={styles.addBtn}
           onClick={() => {
             setEditingItem(null);
+            setCurrentImage(null);
             setShowForm(true);
           }}
         >
@@ -203,6 +207,7 @@ export default function GalleryManager() {
                   className={styles.editBtn}
                   onClick={() => {
                     setEditingItem(item);
+                    setCurrentImage(item.imageUrl);
                     setShowForm(true);
                   }}
                 >
@@ -227,7 +232,10 @@ export default function GalleryManager() {
               <h3>{editingItem ? 'Edit Gallery Item' : 'Add New Gallery Item'}</h3>
               <button
                 className={styles.closeBtn}
-                onClick={() => setShowForm(false)}
+                onClick={() => {
+                  setShowForm(false);
+                  setCurrentImage(null);
+                }}
               >
                 ×
               </button>
@@ -246,14 +254,11 @@ export default function GalleryManager() {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="imageUrl">Image URL *</label>
-                <input
-                  type="url"
-                  id="imageUrl"
-                  name="imageUrl"
-                  defaultValue={editingItem?.imageUrl || ''}
-                  placeholder="https://..."
-                  required
+                <label>Image *</label>
+                <ImageUpload
+                  currentImage={currentImage}
+                  onImageChange={setCurrentImage}
+                  label="Upload gallery image"
                 />
               </div>
 
@@ -316,7 +321,10 @@ export default function GalleryManager() {
                 <button
                   type="button"
                   className={styles.cancelBtn}
-                  onClick={() => setShowForm(false)}
+                  onClick={() => {
+                    setShowForm(false);
+                    setCurrentImage(null);
+                  }}
                 >
                   Cancel
                 </button>

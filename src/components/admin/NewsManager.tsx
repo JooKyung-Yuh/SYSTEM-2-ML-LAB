@@ -2,6 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import styles from './NewsManager.module.css';
+import AdminSection from './ui/AdminSection';
+import AdminCard from './ui/AdminCard';
+import AdminButton from './ui/AdminButton';
+import ColorPicker from './ui/ColorPicker';
 
 interface NewsLink {
   text: string;
@@ -17,16 +21,25 @@ interface NewsItem {
   order: number;
 }
 
+interface NewsFormData {
+  date: string;
+  title: string;
+  description: string;
+  links: NewsLink[];
+  color?: string;
+}
+
 export default function NewsManager() {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState<NewsItem | null>(null);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<NewsFormData>({
     date: '',
     title: '',
     description: '',
-    links: [{ text: '', url: '' }]
+    links: [{ text: '', url: '' }],
+    color: '#667eea'
   });
 
   useEffect(() => {
@@ -108,7 +121,8 @@ export default function NewsManager() {
       date: '',
       title: '',
       description: '',
-      links: [{ text: '', url: '' }]
+      links: [{ text: '', url: '' }],
+      color: '#667eea'
     });
     setEditingItem(null);
     setShowForm(false);
@@ -144,16 +158,19 @@ export default function NewsManager() {
 
   return (
     <div className={styles.newsManager}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>News & Announcements</h2>
-        <button
-          onClick={() => setShowForm(true)}
-          className={styles.addButton}
-        >
-          <i className="fas fa-plus"></i>
-          Add News
-        </button>
-      </div>
+      <AdminSection
+        title="News & Announcements"
+        description="Manage laboratory news, announcements, and updates"
+        variant="filled"
+        actions={
+          <AdminButton
+            onClick={() => setShowForm(true)}
+            icon={<i className="fas fa-plus"></i>}
+          >
+            Add News
+          </AdminButton>
+        }
+      >
 
       {showForm && (
         <div className={styles.formOverlay}>
@@ -200,16 +217,25 @@ export default function NewsManager() {
               </div>
 
               <div className={styles.inputGroup}>
+                <ColorPicker
+                  label="카드 색상"
+                  value={formData.color}
+                  onChange={(color) => setFormData({ ...formData, color })}
+                />
+              </div>
+
+              <div className={styles.inputGroup}>
                 <div className={styles.linksHeader}>
                   <label>Links</label>
-                  <button
+                  <AdminButton
                     type="button"
                     onClick={addLinkField}
-                    className={styles.addLinkButton}
+                    variant="ghost"
+                    size="sm"
+                    icon={<i className="fas fa-plus"></i>}
                   >
-                    <i className="fas fa-plus"></i>
                     Add Link
-                  </button>
+                  </AdminButton>
                 </div>
 
                 {formData.links.map((link, index) => (
@@ -227,37 +253,59 @@ export default function NewsManager() {
                       placeholder="Link URL"
                     />
                     {formData.links.length > 1 && (
-                      <button
+                      <AdminButton
                         type="button"
                         onClick={() => removeLinkField(index)}
-                        className={styles.removeLinkButton}
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
+                        variant="danger"
+                        size="sm"
+                        icon={<i className="fas fa-trash"></i>}
+                      />
                     )}
                   </div>
                 ))}
               </div>
 
               <div className={styles.formActions}>
-                <button type="button" onClick={resetForm} className={styles.cancelButton}>
+                <AdminButton type="button" onClick={resetForm} variant="secondary">
                   Cancel
-                </button>
-                <button type="submit" className={styles.saveButton}>
+                </AdminButton>
+                <AdminButton type="submit" variant="primary">
                   {editingItem ? 'Update' : 'Create'}
-                </button>
+                </AdminButton>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      <div className={styles.newsList}>
-        {newsItems.map((item) => (
-          <div key={item.id} className={styles.newsCard}>
-            <div className={styles.newsContent}>
-              <div className={styles.newsDate}>{item.date}</div>
-              <h3 className={styles.newsTitle}>{item.title}</h3>
+        <div className={styles.newsList}>
+          {newsItems.map((item) => (
+            <AdminCard
+              key={item.id}
+              title={item.title}
+              subtitle={item.date}
+              variant="primary"
+              actions={
+                <div className={styles.cardActions}>
+                  <AdminButton
+                    onClick={() => handleEdit(item)}
+                    variant="ghost"
+                    size="sm"
+                    icon={<i className="fas fa-edit"></i>}
+                  >
+                    Edit
+                  </AdminButton>
+                  <AdminButton
+                    onClick={() => handleDelete(item.id)}
+                    variant="danger"
+                    size="sm"
+                    icon={<i className="fas fa-trash"></i>}
+                  >
+                    Delete
+                  </AdminButton>
+                </div>
+              }
+            >
               <p className={styles.newsDescription}>{item.description}</p>
               {item.links.length > 0 && (
                 <div className={styles.newsLinks}>
@@ -274,24 +322,10 @@ export default function NewsManager() {
                   ))}
                 </div>
               )}
-            </div>
-            <div className={styles.newsActions}>
-              <button
-                onClick={() => handleEdit(item)}
-                className={styles.editButton}
-              >
-                <i className="fas fa-edit"></i>
-              </button>
-              <button
-                onClick={() => handleDelete(item.id)}
-                className={styles.deleteButton}
-              >
-                <i className="fas fa-trash"></i>
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+            </AdminCard>
+          ))}
+        </div>
+      </AdminSection>
     </div>
   );
 }
