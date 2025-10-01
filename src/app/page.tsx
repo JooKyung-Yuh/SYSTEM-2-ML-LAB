@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { siteConfig, getImageUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Home',
+  title: 'System 2 ML Lab',
   description: siteConfig.description,
   openGraph: {
     title: siteConfig.name,

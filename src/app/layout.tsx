@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | AI Research`,
-    template: `%s | ${siteConfig.shortName}`
+    default: `System 2 ML Lab | Korea University AI Research`,
+    template: `%s | System 2 ML Lab`
   },
   description: siteConfig.description,
   keywords: siteConfig.keywords,
