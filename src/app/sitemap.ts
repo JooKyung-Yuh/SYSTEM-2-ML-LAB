@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
+import { siteConfig } from '@/lib/config';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://mllab.korea.ac.kr';
+  const baseUrl = siteConfig.url;
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

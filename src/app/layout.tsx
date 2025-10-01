@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { siteConfig } from '@/lib/config';
 
 
 
@@ -18,36 +19,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://mllab.korea.ac.kr'),
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'System 2 ML Lab at Korea University | AI Research',
-    template: '%s | System 2 ML Lab'
+    default: `${siteConfig.name} | AI Research`,
+    template: `%s | ${siteConfig.shortName}`
   },
-  description: 'Korea University System 2 Machine Learning Lab. Research in System 2 deep learning, large language model reasoning, meta-learning, and Bayesian inference. Led by Prof. Hae Beom Lee.',
-  keywords: [
-    'machine learning',
-    'deep learning',
-    'artificial intelligence',
-    'System 2 reasoning',
-    'large language models',
-    'LLM',
-    'meta-learning',
-    'Bayesian inference',
-    'AutoML',
-    'generative flow networks',
-    'Korea University',
-    'AI research',
-    'Hae Beom Lee',
-    '머신러닝',
-    '딥러닝',
-    '인공지능',
-    '고려대학교',
-    'neural networks',
-    'AI lab',
-  ],
-  authors: [{ name: 'Hae Beom Lee', url: 'https://haebeom-lee.github.io/' }],
-  creator: 'System 2 ML Lab',
-  publisher: 'Korea University',
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{
+    name: siteConfig.organization.director.name,
+    url: siteConfig.organization.director.url
+  }],
+  creator: siteConfig.organization.name,
+  publisher: siteConfig.organization.affiliation,
   formatDetection: {
     email: false,
     address: false,
@@ -57,25 +41,25 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['ko_KR'],
-    url: 'https://mllab.korea.ac.kr',
-    siteName: 'System 2 ML Lab at Korea University',
-    title: 'System 2 ML Lab | AI Research at Korea University',
-    description: 'Leading research in System 2 deep learning, LLM reasoning, and meta-learning. Korea University School of Electrical Engineering.',
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    title: `${siteConfig.shortName} | AI Research at ${siteConfig.organization.affiliation}`,
+    description: `Leading research in System 2 deep learning, LLM reasoning, and meta-learning. ${siteConfig.organization.department}.`,
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: siteConfig.images.ogImage,
         width: 1200,
         height: 630,
-        alt: 'System 2 ML Lab at Korea University',
+        alt: siteConfig.name,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'System 2 ML Lab at Korea University',
-    description: 'Research in System 2 deep learning, LLM reasoning, meta-learning, and Bayesian inference.',
-    images: ['/images/twitter-image.jpg'],
-    creator: '@KoreaUniv',
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: [siteConfig.images.twitterImage],
+    creator: siteConfig.social.twitter,
   },
   robots: {
     index: true,
@@ -89,11 +73,11 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
+    google: siteConfig.verification.google || undefined,
+    yandex: siteConfig.verification.yandex || undefined,
   },
   alternates: {
-    canonical: 'https://mllab.korea.ac.kr',
+    canonical: siteConfig.url,
   },
   category: 'Research',
 };

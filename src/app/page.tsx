@@ -2,14 +2,15 @@ import HomeClient from '@/components/HomeClient';
 import prisma from '@/lib/prisma';
 import { OrganizationStructuredData, WebsiteStructuredData } from '@/components/StructuredData';
 import { Metadata } from 'next';
+import { siteConfig, getImageUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'Home',
-  description: 'System 2 ML Lab at Korea University. Leading research in System 2 deep learning, large language model reasoning, meta-learning, AutoML, Bayesian inference, and generative flow networks.',
+  description: siteConfig.description,
   openGraph: {
-    title: 'System 2 ML Lab at Korea University',
+    title: siteConfig.name,
     description: 'Leading AI research lab focusing on System 2 reasoning, LLM, and meta-learning.',
-    images: ['/images/og-image.jpg'],
+    images: [siteConfig.images.ogImage],
   },
 };
 
@@ -27,20 +28,20 @@ export default async function Home() {
     <>
       <OrganizationStructuredData
         data={{
-          name: 'System 2 ML Lab',
-          description: 'Machine Learning research laboratory at Korea University focusing on System 2 reasoning, large language models, and meta-learning',
-          url: 'https://mllab.korea.ac.kr',
-          logo: 'https://mllab.korea.ac.kr/images/logo.png',
+          name: siteConfig.organization.name,
+          description: siteConfig.description,
+          url: siteConfig.url,
+          logo: getImageUrl(siteConfig.images.logo),
           contactPoint: {
             contactType: 'Research',
-            email: 'haebeomlee@korea.ac.kr',
+            email: siteConfig.contact.email,
           },
           address: {
-            streetAddress: '145 Anam-ro, Engineering Hall',
-            addressLocality: 'Seoul',
-            addressRegion: 'Seongbuk-gu',
-            postalCode: '02841',
-            addressCountry: 'KR',
+            streetAddress: siteConfig.address.street,
+            addressLocality: siteConfig.address.city,
+            addressRegion: siteConfig.address.region,
+            postalCode: siteConfig.address.postalCode,
+            addressCountry: siteConfig.address.country,
           },
         }}
       />

@@ -1,4 +1,5 @@
 import Script from 'next/script';
+import { siteConfig } from '@/lib/config';
 
 interface OrganizationData {
   name: string;
@@ -117,15 +118,15 @@ export function WebsiteStructuredData() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'System 2 ML Lab at Korea University',
-    alternateName: 'KU System 2 ML Lab',
-    url: 'https://mllab.korea.ac.kr',
-    description: 'Research lab focusing on System 2 deep learning, large language model reasoning, meta-learning, and Bayesian inference at Korea University.',
+    name: siteConfig.name,
+    alternateName: siteConfig.shortName,
+    url: siteConfig.url,
+    description: siteConfig.description,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://mllab.korea.ac.kr/search?q={search_term_string}',
+        urlTemplate: `${siteConfig.url}/search?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
