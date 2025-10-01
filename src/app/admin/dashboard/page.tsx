@@ -6,9 +6,9 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import InlineNewsManager from '@/components/admin/InlineNewsManager';
 import InlineAboutEditor from '@/components/admin/InlineAboutEditor';
 import InlinePeopleManager from '@/components/admin/InlinePeopleManager';
-import PublicationsManager from '@/components/admin/PublicationsManager';
-import CoursesManager from '@/components/admin/CoursesManager';
-import GalleryManager from '@/components/admin/GalleryManager';
+import InlinePublicationsManager from '@/components/admin/InlinePublicationsManager';
+import InlineCoursesManager from '@/components/admin/InlineCoursesManager';
+import InlineGalleryManager from '@/components/admin/InlineGalleryManager';
 import styles from './dashboard.module.css';
 
 interface User {
@@ -142,9 +142,9 @@ export default function DashboardPage() {
           {activeTab === 'news' && <InlineNewsManager />}
           {activeTab === 'about' && <InlineAboutEditor />}
           {activeTab === 'people' && <InlinePeopleManager />}
-          {activeTab === 'publications' && <PublicationsManager />}
-          {activeTab === 'courses' && <CoursesManager />}
-          {activeTab === 'gallery' && <GalleryManager />}
+          {activeTab === 'publications' && <InlinePublicationsManager />}
+          {activeTab === 'courses' && <InlineCoursesManager />}
+          {activeTab === 'gallery' && <InlineGalleryManager />}
         </main>
       </div>
       </div>
