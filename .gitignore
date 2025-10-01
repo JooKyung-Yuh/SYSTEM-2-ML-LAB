@@ -42,4 +42,6 @@ next-env.d.ts
 
 /design
 /src/generated/prisma
-.env*.local
+
+
+SEO-IMPROVEMENTS.md

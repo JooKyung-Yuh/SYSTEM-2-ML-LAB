@@ -1,0 +1,27 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin pages
+User-agent: *
+Disallow: /admin/
+Disallow: /api/admin/
+
+# Allow specific important pages
+Allow: /
+Allow: /about
+Allow: /people
+Allow: /publications
+Allow: /research
+Allow: /courses
+Allow: /gallery
+Allow: /news
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://mllab.korea.ac.kr/sitemap.xml
+Sitemap: https://mllab.korea.ac.kr/sitemap-pages.xml
+Sitemap: https://mllab.korea.ac.kr/sitemap-publications.xml
+Sitemap: https://mllab.korea.ac.kr/sitemap-news.xml
