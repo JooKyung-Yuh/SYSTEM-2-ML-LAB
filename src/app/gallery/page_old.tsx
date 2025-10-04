@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import styles from './gallery.module.css';
 
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -98,15 +97,39 @@ export default function Gallery() {
   const sortedItems = filteredItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#ffffff',
+      paddingTop: '8rem'
+    }}>
+      <div style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        lineHeight: 1.6
+      }}>
         {/* Header */}
-        <header className={styles.header}>
-          <h1 className={styles.title}>
+        <header style={{ marginBottom: '3rem' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 400,
+            color: '#222',
+            marginBottom: '1rem',
+            fontFamily: 'Georgia, serif'
+          }}>
             Gallery
           </h1>
-          <div className={styles.divider}></div>
-          <p className={styles.subtitle}>
+          <div style={{
+            width: '60px',
+            height: '2px',
+            background: '#0066cc',
+            marginBottom: '2rem'
+          }}></div>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#666',
+            marginBottom: '2rem'
+          }}>
             Capturing moments of discovery, collaboration, and achievement in our research journey.
           </p>
         </header>
@@ -123,12 +146,35 @@ export default function Gallery() {
           }}>
             Filter by Category:
           </h2>
-          <div className={styles.filters}>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem'
+          }}>
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`${styles.filterButton} ${selectedCategory === category ? styles.filterButtonActive : ''}`}
+                style={{
+                  background: selectedCategory === category ? '#0066cc' : 'transparent',
+                  color: selectedCategory === category ? '#ffffff' : '#0066cc',
+                  border: '1px solid #0066cc',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '4px',
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseOver={(e) => {
+                  if (selectedCategory !== category) {
+                    e.currentTarget.style.backgroundColor = '#f0f6ff';
+                  }
+                }}
+                onMouseOut={(e) => {
+                  if (selectedCategory !== category) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
+                }}
               >
                 {category}
               </button>
@@ -137,47 +183,77 @@ export default function Gallery() {
         </div>
 
         {/* Gallery Grid */}
-        <div className={styles.galleryGrid}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '2rem',
+          marginBottom: '3rem'
+        }}>
           {sortedItems.map((item) => (
-            <article key={item.id} className={styles.galleryItem}>
+            <article key={item.id} style={{
+              marginBottom: '2rem',
+              paddingBottom: '2rem',
+              borderBottom: '1px solid #eee'
+            }}>
               {/* Image Placeholder */}
-              <div className={styles.imageWrapper}>
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '3rem',
-                  color: '#999'
-                }}>
-                  📷
-                </div>
+              <div style={{
+                height: '200px',
+                background: '#f5f5f5',
+                border: '1px solid #ddd',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: '1rem',
+                color: '#999',
+                fontSize: '3rem'
+              }}>
+                📷
               </div>
 
               {/* Content */}
-              <div className={styles.itemContent}>
-                <div className={styles.itemCategory}>
-                  {item.category}
+              <div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '0.5rem'
+                }}>
+                  <h3 style={{
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    color: '#222',
+                    margin: 0,
+                    flex: 1
+                  }}>
+                    {item.title}
+                  </h3>
+                  <span style={{
+                    fontSize: '0.85rem',
+                    color: '#666',
+                    marginLeft: '1rem',
+                    flexShrink: 0
+                  }}>
+                    {new Date(item.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
                 </div>
-                <h3 className={styles.itemTitle}>
-                  {item.title}
-                </h3>
-                <div className={styles.itemDate}>
-                  {new Date(item.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                </div>
+
+                <p style={{
+                  fontSize: '0.9rem',
+                  color: '#666',
+                  marginBottom: '0.5rem'
+                }}>
+                  <strong>Category:</strong> {item.category}
+                </p>
+
                 <p style={{
                   fontSize: '0.95rem',
                   color: '#333',
                   lineHeight: 1.5,
-                  marginTop: '0.5rem'
+                  margin: 0
                 }}>
                   {item.description}
                 </p>
@@ -191,7 +267,6 @@ export default function Gallery() {
           textAlign: 'center',
           color: '#666',
           fontSize: '0.9rem',
-          marginTop: '2rem',
           marginBottom: '2rem'
         }}>
           Showing {sortedItems.length} of {galleryItems.length} items
@@ -235,30 +310,63 @@ export default function Gallery() {
       </div>
 
       {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
+      <footer style={{
+        backgroundColor: '#2c3e50',
+        color: '#ffffff',
+        padding: '3rem 0 2rem 0',
+        marginTop: '4rem'
+      }}>
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '0 2rem',
+          textAlign: 'center'
+        }}>
           <div style={{
             marginBottom: '2rem'
           }}>
-            <h3 className={styles.footerTitle}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              fontWeight: 500,
+              marginBottom: '1rem',
+              color: '#ffffff'
+            }}>
               KU SYSTEM 2 ML LAB
             </h3>
-            <p className={styles.footerText}>
+            <p style={{
+              fontSize: '1rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               School of Electrical Engineering, Korea University
             </p>
-            <p className={styles.footerAddress}>
+            <p style={{
+              fontSize: '0.95rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
               145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
             </p>
-            <p className={styles.footerText}>
+            <p style={{
+              fontSize: '0.95rem',
+              color: '#bdc3c7'
+            }}>
               <a href="mailto:haebeomlee@korea.ac.kr"
-                 className={styles.footerLink}>
+                 style={{ color: '#3498db', textDecoration: 'none' }}>
                 haebeomlee@korea.ac.kr
               </a>
             </p>
           </div>
 
-          <div className={styles.footerBottom}>
+          <div style={{
+            borderTop: '1px solid #34495e',
+            paddingTop: '1.5rem',
+            fontSize: '0.875rem',
+            color: '#95a5a6'
+          }}>
             <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
           </div>
         </div>

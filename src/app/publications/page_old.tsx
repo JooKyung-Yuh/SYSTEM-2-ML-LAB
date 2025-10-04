@@ -1,7 +1,5 @@
 'use client';
 
-import styles from './publications.module.css';
-
 export default function Publications() {
   const publications = [
     {
@@ -71,42 +69,123 @@ export default function Publications() {
   const sortedYears = Object.keys(groupedByYear).sort((a, b) => parseInt(b) - parseInt(a));
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#ffffff',
+      paddingTop: '8rem'
+    }}>
+      <div style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        lineHeight: 1.6
+      }}>
         {/* Header */}
-        <header className={styles.header}>
-          <h1 className={styles.title}>Publications</h1>
-          <div className={styles.divider}></div>
-          <p className={styles.subtitle}>
+        <header style={{ marginBottom: '3rem' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 400,
+            color: '#222',
+            marginBottom: '1rem',
+            fontFamily: 'Georgia, serif'
+          }}>
+            Publications
+          </h1>
+          <div style={{
+            width: '60px',
+            height: '2px',
+            background: '#0066cc',
+            marginBottom: '2rem'
+          }}></div>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#666',
+            marginBottom: '2rem'
+          }}>
             Our research contributions to the field of artificial intelligence and machine learning.
           </p>
         </header>
 
         {/* Publications by Year */}
         {sortedYears.map((year) => (
-          <section key={year} className={styles.yearSection}>
-            <h2 className={styles.yearTitle}>{year}</h2>
-            <div>
+          <section key={year} style={{ marginBottom: '3rem' }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: 500,
+              color: '#222',
+              marginBottom: '2rem',
+              fontFamily: 'Georgia, serif'
+            }}>
+              {year}
+            </h2>
+
+            <div style={{ marginBottom: '2rem' }}>
               {groupedByYear[year].map((pub, index) => (
-                <div key={index} className={styles.publicationCard}>
-                  <h3 className={styles.publicationTitle}>{pub.title}</h3>
-                  <p className={styles.authors}>{pub.authors}</p>
-                  <p className={styles.venue}>
+                <div key={index} style={{
+                  marginBottom: '2rem',
+                  paddingBottom: '1.5rem',
+                  borderBottom: '1px solid #eee'
+                }}>
+
+                  {/* Publication Title */}
+                  <h3 style={{
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    color: '#222',
+                    marginBottom: '0.5rem',
+                    lineHeight: 1.3
+                  }}>
+                    {pub.title}
+                  </h3>
+
+                  {/* Authors */}
+                  <p style={{
+                    fontSize: '1rem',
+                    color: '#666',
+                    marginBottom: '0.5rem'
+                  }}>
+                    {pub.authors}
+                  </p>
+
+                  {/* Venue */}
+                  <p style={{
+                    fontSize: '1rem',
+                    color: '#333',
+                    marginBottom: '1rem'
+                  }}>
                     <strong>{pub.venue}</strong>
                     {pub.type.includes('Spotlight') && <em> (Spotlight)</em>}
                     {pub.type.includes('Oral') && <em> (Oral)</em>}
                   </p>
-                  <p className={styles.abstract}>{pub.abstract}</p>
+
+                  {/* Abstract */}
+                  <p style={{
+                    fontSize: '0.95rem',
+                    color: '#555',
+                    lineHeight: 1.5,
+                    marginBottom: '1rem'
+                  }}>
+                    {pub.abstract}
+                  </p>
+
+                  {/* Links */}
                   {pub.link && (
-                    <a
-                      href={pub.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.link}
-                    >
-                      View Paper
-                    </a>
+                    <div>
+                      <a
+                        href={pub.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: '#0066cc',
+                          textDecoration: 'underline',
+                          fontSize: '0.95rem'
+                        }}
+                      >
+                        View Paper
+                      </a>
+                    </div>
                   )}
+
                 </div>
               ))}
             </div>
@@ -116,19 +195,30 @@ export default function Publications() {
         {/* Research Areas */}
         <section style={{
           marginTop: '4rem',
-          padding: 'clamp(1.5rem, 3vw, 2rem)',
+          padding: '2rem',
           backgroundColor: '#f8f9fa',
           borderLeft: '3px solid #0066cc'
         }}>
-          <h2 className={styles.yearTitle}>Research Areas</h2>
-          <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', color: '#333', marginBottom: '1rem' }}>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: 500,
+            color: '#222',
+            marginBottom: '1rem',
+            fontFamily: 'Georgia, serif'
+          }}>
+            Research Areas
+          </h2>
+          <p style={{
+            fontSize: '1rem',
+            color: '#333',
+            marginBottom: '1rem'
+          }}>
             Our publications span several key areas in machine learning and artificial intelligence:
           </p>
           <ul style={{
-            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+            fontSize: '1rem',
             color: '#333',
-            paddingLeft: 'clamp(1rem, 2vw, 1.5rem)',
-            lineHeight: 1.8
+            paddingLeft: '1.5rem'
           }}>
             <li>Large Language Model Reasoning</li>
             <li>System 2 Deep Learning</li>
@@ -138,27 +228,67 @@ export default function Publications() {
             <li>Generative Flow Networks</li>
           </ul>
         </section>
+
       </div>
 
       {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 className={styles.footerTitle}>KU SYSTEM 2 ML LAB</h3>
-            <p className={styles.footerText}>
+      <footer style={{
+        backgroundColor: '#2c3e50',
+        color: '#ffffff',
+        padding: '3rem 0 2rem 0',
+        marginTop: '4rem'
+      }}>
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '0 2rem',
+          textAlign: 'center'
+        }}>
+          <div style={{
+            marginBottom: '2rem'
+          }}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              fontWeight: 500,
+              marginBottom: '1rem',
+              color: '#ffffff'
+            }}>
+              KU SYSTEM 2 ML LAB
+            </h3>
+            <p style={{
+              fontSize: '1rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               School of Electrical Engineering, Korea University
             </p>
-            <p className={styles.footerAddress}>
+            <p style={{
+              fontSize: '0.95rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
               145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
             </p>
-            <p className={styles.footerText}>
-              <a href="mailto:haebeomlee@korea.ac.kr" className={styles.footerLink}>
+            <p style={{
+              fontSize: '0.95rem',
+              color: '#bdc3c7'
+            }}>
+              <a href="mailto:haebeomlee@korea.ac.kr"
+                 style={{ color: '#3498db', textDecoration: 'none' }}>
                 haebeomlee@korea.ac.kr
               </a>
             </p>
           </div>
-          <div className={styles.footerBottom}>
+
+          <div style={{
+            borderTop: '1px solid #34495e',
+            paddingTop: '1.5rem',
+            fontSize: '0.875rem',
+            color: '#95a5a6'
+          }}>
             <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
           </div>
         </div>

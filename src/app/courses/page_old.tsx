@@ -1,7 +1,5 @@
 'use client';
 
-import styles from './courses.module.css';
-
 export default function Courses() {
   const courses = [
     {
@@ -71,15 +69,39 @@ export default function Courses() {
   const levelOrder = ["Graduate", "Graduate Seminar", "Undergraduate"];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
+    <div style={{
+      minHeight: '100vh',
+      background: '#ffffff',
+      paddingTop: '8rem'
+    }}>
+      <div style={{
+        maxWidth: '900px',
+        margin: '0 auto',
+        padding: '0 2rem',
+        lineHeight: 1.6
+      }}>
         {/* Header */}
-        <header className={styles.header}>
-          <h1 className={styles.title}>
+        <header style={{ marginBottom: '3rem' }}>
+          <h1 style={{
+            fontSize: '2.5rem',
+            fontWeight: 400,
+            color: '#222',
+            marginBottom: '1rem',
+            fontFamily: 'Georgia, serif'
+          }}>
             Courses
           </h1>
-          <div className={styles.divider}></div>
-          <p className={styles.subtitle}>
+          <div style={{
+            width: '60px',
+            height: '2px',
+            background: '#0066cc',
+            marginBottom: '2rem'
+          }}></div>
+          <p style={{
+            fontSize: '1.1rem',
+            color: '#666',
+            marginBottom: '2rem'
+          }}>
             Comprehensive curriculum covering fundamental to advanced topics in artificial intelligence and machine learning.
           </p>
         </header>
@@ -164,7 +186,12 @@ export default function Courses() {
                   {/* Topics */}
                   <div>
                     <strong style={{ fontSize: '0.95rem', color: '#222' }}>Topics Covered:</strong>
-                    <ul className={styles.topicsList}>
+                    <ul style={{
+                      marginTop: '0.5rem',
+                      paddingLeft: '1.5rem',
+                      fontSize: '0.95rem',
+                      color: '#666'
+                    }}>
                       {course.topics.map((topic, topicIndex) => (
                         <li key={topicIndex} style={{ marginBottom: '0.25rem' }}>
                           {topic}
@@ -251,30 +278,63 @@ export default function Courses() {
       </div>
 
       {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
+      <footer style={{
+        backgroundColor: '#2c3e50',
+        color: '#ffffff',
+        padding: '3rem 0 2rem 0',
+        marginTop: '4rem'
+      }}>
+        <div style={{
+          maxWidth: '900px',
+          margin: '0 auto',
+          padding: '0 2rem',
+          textAlign: 'center'
+        }}>
           <div style={{
             marginBottom: '2rem'
           }}>
-            <h3 className={styles.footerTitle}>
+            <h3 style={{
+              fontSize: '1.5rem',
+              fontWeight: 500,
+              marginBottom: '1rem',
+              color: '#ffffff'
+            }}>
               KU SYSTEM 2 ML LAB
             </h3>
-            <p className={styles.footerText}>
+            <p style={{
+              fontSize: '1rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               School of Electrical Engineering, Korea University
             </p>
-            <p className={styles.footerAddress}>
+            <p style={{
+              fontSize: '0.95rem',
+              lineHeight: 1.6,
+              color: '#bdc3c7',
+              marginBottom: '1rem'
+            }}>
               Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
               145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
             </p>
-            <p className={styles.footerText}>
+            <p style={{
+              fontSize: '0.95rem',
+              color: '#bdc3c7'
+            }}>
               <a href="mailto:haebeomlee@korea.ac.kr"
-                 className={styles.footerLink}>
+                 style={{ color: '#3498db', textDecoration: 'none' }}>
                 haebeomlee@korea.ac.kr
               </a>
             </p>
           </div>
 
-          <div className={styles.footerBottom}>
+          <div style={{
+            borderTop: '1px solid #34495e',
+            paddingTop: '1.5rem',
+            fontSize: '0.875rem',
+            color: '#95a5a6'
+          }}>
             <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
           </div>
         </div>
