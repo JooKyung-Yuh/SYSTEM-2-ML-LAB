@@ -11,7 +11,7 @@ export default function Publications() {
       year: "2025",
       type: "Conference",
       abstract: "We propose a cost-sensitive approach to freeze-thaw Bayesian optimization that efficiently tunes hyperparameters by considering computational cost in the optimization process.",
-      link: "#"
+      link: "https://arxiv.org/abs/2405.17918"
     },
     {
       title: "Bayesian Neural Scaling Laws Extrapolation with Prior-Fitted Networks",
@@ -20,7 +20,7 @@ export default function Publications() {
       year: "2025",
       type: "Conference",
       abstract: "This work develops Bayesian methods for extrapolating neural scaling laws using prior-fitted networks to predict performance at larger scales.",
-      link: "#"
+      link: "https://arxiv.org/abs/2505.23032"
     },
     {
       title: "Delta-AI: Local Objectives for Amortized Inference in Sparse Graphical Models",
@@ -29,7 +29,7 @@ export default function Publications() {
       year: "2024",
       type: "Conference",
       abstract: "We introduce Delta-AI, a method for efficient amortized inference in sparse graphical models using local objectives that scale to large networks.",
-      link: "#"
+      link: "https://arxiv.org/abs/2310.02423"
     },
     {
       title: "Online Hyperparameter Meta-Learning with Hypergradient Distillation",
@@ -38,7 +38,7 @@ export default function Publications() {
       year: "2022",
       type: "Conference (Spotlight)",
       abstract: "We propose an online meta-learning approach for hyperparameter optimization that uses hypergradient distillation to efficiently adapt to new tasks.",
-      link: "#"
+      link: "https://arxiv.org/abs/2110.02508"
     },
     {
       title: "Sequential Reptile: Inter-Task Gradient Alignment for Multilingual Learning",
@@ -47,7 +47,7 @@ export default function Publications() {
       year: "2022",
       type: "Conference (Oral)",
       abstract: "This work extends the Reptile algorithm to sequential learning scenarios with inter-task gradient alignment for improved multilingual performance.",
-      link: "#"
+      link: "https://arxiv.org/abs/2110.02600"
     },
     {
       title: "Meta-Learning Low Rank Covariance Factors for Energy-Based Deterministic Uncertainty",
@@ -56,7 +56,7 @@ export default function Publications() {
       year: "2022",
       type: "Conference",
       abstract: "We develop a meta-learning approach for learning low-rank covariance factors in energy-based models to improve uncertainty estimation.",
-      link: "#"
+      link: "https://arxiv.org/abs/2110.02381"
     }
   ];
 
