@@ -99,6 +99,7 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 3,
+          paddingBottom: isMobile ? '280px' : '350px',
           opacity: isLoaded ? 1 : 0,
           transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
           transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
@@ -153,9 +154,11 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
       <div
         id="main-content"
         style={{
-          position: 'relative',
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
           zIndex: 10,
-          flexShrink: 0,
           opacity: isLoaded ? 1 : 0,
           transform: isLoaded ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
