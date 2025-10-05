@@ -1,4 +1,7 @@
 import prisma from '@/lib/prisma';
+import Footer from '@/components/Footer';
+import JoinUs from '@/components/JoinUs';
+import styles from './people.module.css';
 
 // Force dynamic rendering - no caching
 export const dynamic = 'force-dynamic';
@@ -65,27 +68,12 @@ export default async function People() {
         lineHeight: 1.6
       }}>
         {/* Header */}
-        <header style={{ marginBottom: '3rem' }}>
-          <h1 style={{
-            fontSize: '2.5rem',
-            fontWeight: 400,
-            color: '#222',
-            marginBottom: '1rem',
-            fontFamily: 'Georgia, serif'
-          }}>
+        <header className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>
             People
           </h1>
-          <div style={{
-            width: '60px',
-            height: '2px',
-            background: '#0066cc',
-            marginBottom: '2rem'
-          }}></div>
-          <p style={{
-            fontSize: '1.1rem',
-            color: '#666',
-            marginBottom: '2rem'
-          }}>
+          <div className={styles.pageDivider}></div>
+          <p className={styles.pageSubtitle}>
             Meet our diverse team of researchers, faculty, and students working together
             to advance the field of artificial intelligence.
           </p>
@@ -97,14 +85,8 @@ export default async function People() {
           if (members.length === 0) return null;
 
           return (
-            <section key={category} style={{ marginBottom: '3rem' }}>
-              <h2 style={{
-                fontSize: '1.5rem',
-                fontWeight: 500,
-                color: '#222',
-                marginBottom: '2rem',
-                fontFamily: 'Georgia, serif'
-              }}>
+            <section key={category} className={styles.categorySection}>
+              <h2 className={styles.categoryTitle}>
                 {categoryLabels[category] || category}
               </h2>
 
@@ -216,112 +198,11 @@ export default async function People() {
           );
         })}
 
-        {/* Join Us Section */}
-        <section style={{
-          marginTop: '4rem',
-          padding: '2rem',
-          backgroundColor: '#f8f9fa',
-          borderLeft: '3px solid #0066cc'
-        }}>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: 500,
-            color: '#222',
-            marginBottom: '1rem',
-            fontFamily: 'Georgia, serif'
-          }}>
-            Join Our Team
-          </h2>
-          <p style={{
-            fontSize: '1rem',
-            color: '#333',
-            marginBottom: '1rem'
-          }}>
-            We are always looking for talented and motivated individuals to join our research group.
-            If you are interested in System 2 deep learning, large language model reasoning, or related areas,
-            please feel free to reach out.
-          </p>
-          <p style={{
-            fontSize: '1rem',
-            color: '#333'
-          }}>
-            <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers
-          </p>
-          <p style={{
-            fontSize: '1rem',
-            marginTop: '1rem'
-          }}>
-            Contact: <a href="mailto:haebeomlee@korea.ac.kr"
-                       style={{ color: '#0066cc', textDecoration: 'underline' }}>
-              haebeomlee@korea.ac.kr
-            </a>
-          </p>
-        </section>
+        <JoinUs />
 
       </div>
 
-      {/* Footer */}
-      <footer style={{
-        backgroundColor: '#2c3e50',
-        color: '#ffffff',
-        padding: '3rem 0 2rem 0',
-        marginTop: '4rem'
-      }}>
-        <div style={{
-          maxWidth: '900px',
-          margin: '0 auto',
-          padding: '0 2rem',
-          textAlign: 'center'
-        }}>
-          <div style={{
-            marginBottom: '2rem'
-          }}>
-            <h3 style={{
-              fontSize: '1.5rem',
-              fontWeight: 500,
-              marginBottom: '1rem',
-              color: '#ffffff'
-            }}>
-              KU SYSTEM 2 ML LAB
-            </h3>
-            <p style={{
-              fontSize: '1rem',
-              lineHeight: 1.6,
-              color: '#bdc3c7',
-              marginBottom: '1rem'
-            }}>
-              School of Electrical Engineering, Korea University
-            </p>
-            <p style={{
-              fontSize: '0.95rem',
-              lineHeight: 1.6,
-              color: '#bdc3c7',
-              marginBottom: '1rem'
-            }}>
-              Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
-              145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
-            </p>
-            <p style={{
-              fontSize: '0.95rem',
-              color: '#bdc3c7'
-            }}>
-              <a href="mailto:haebeomlee@korea.ac.kr"
-                 style={{ color: '#3498db', textDecoration: 'none' }}>
-                haebeomlee@korea.ac.kr
-              </a>
-            </p>
-          </div>
-
-          <div style={{
-            borderTop: '1px solid #34495e',
-            paddingTop: '1.5rem',
-            fontSize: '0.875rem',
-            color: '#95a5a6'
-          }}>
-            <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

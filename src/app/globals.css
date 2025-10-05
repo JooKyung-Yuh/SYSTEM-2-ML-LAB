@@ -1,5 +1,29 @@
 @import "tailwindcss";
 
+/* Typography Scale - CSS Variables for consistent font sizes across all pages */
+:root {
+  /* Page Titles (h1) */
+  --font-size-page-title: clamp(2rem, 4vw, 2.5rem);        /* 32-40px */
+
+  /* Section Titles (h2) */
+  --font-size-section-title: clamp(1.25rem, 2.5vw, 1.5rem); /* 20-24px */
+
+  /* Card/Subsection Titles (h3) */
+  --font-size-card-title: clamp(1.1rem, 2.2vw, 1.25rem);    /* 17.6-20px */
+
+  /* Subtitles */
+  --font-size-subtitle: clamp(1rem, 2vw, 1.1rem);           /* 16-17.6px */
+
+  /* Body Text */
+  --font-size-body: clamp(0.9rem, 2vw, 1rem);               /* 14.4-16px */
+
+  /* Small Text */
+  --font-size-small: clamp(0.85rem, 1.8vw, 0.95rem);        /* 13.6-15.2px */
+
+  /* Caption/Footer Text */
+  --font-size-caption: clamp(0.8rem, 1.5vw, 0.875rem);      /* 12.8-14px */
+}
+
 /* Admin pages CSS isolation */
 body.admin-page {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;

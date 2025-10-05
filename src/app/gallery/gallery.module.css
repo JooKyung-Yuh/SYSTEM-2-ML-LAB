@@ -5,7 +5,7 @@
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 3vw, 2rem);
   line-height: 1.6;
@@ -13,7 +13,6 @@
 
 .header {
   margin-bottom: 3rem;
-  text-align: center;
 }
 
 .title {
@@ -28,7 +27,7 @@
   width: 60px;
   height: 2px;
   background: #0066cc;
-  margin: 0 auto 2rem auto;
+  margin-bottom: 2rem;
 }
 
 .subtitle {

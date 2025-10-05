@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import styles from './gallery.module.css';
+import Footer from '@/components/Footer';
+import JoinUs from '@/components/JoinUs';
 
 export default function Gallery() {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -198,71 +200,11 @@ export default function Gallery() {
           {selectedCategory !== 'All' && ` in ${selectedCategory}`}
         </div>
 
-        {/* Gallery Information */}
-        <section style={{
-          marginTop: '4rem',
-          padding: '2rem',
-          backgroundColor: '#f8f9fa',
-          borderLeft: '3px solid #0066cc'
-        }}>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: 500,
-            color: '#222',
-            marginBottom: '1rem',
-            fontFamily: 'Georgia, serif'
-          }}>
-            About Our Gallery
-          </h2>
-          <p style={{
-            fontSize: '1rem',
-            color: '#333',
-            marginBottom: '1rem'
-          }}>
-            Our gallery showcases the vibrant research community and collaborative spirit of our lab.
-            From conference presentations to daily research activities, these images capture the essence
-            of our journey in advancing artificial intelligence research.
-          </p>
-          <p style={{
-            fontSize: '1rem',
-            color: '#333'
-          }}>
-            We regularly update our gallery with new events, achievements, and milestones.
-            For high-resolution images or specific requests, please contact us.
-          </p>
-        </section>
+        <JoinUs />
 
       </div>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div style={{
-            marginBottom: '2rem'
-          }}>
-            <h3 className={styles.footerTitle}>
-              KU SYSTEM 2 ML LAB
-            </h3>
-            <p className={styles.footerText}>
-              School of Electrical Engineering, Korea University
-            </p>
-            <p className={styles.footerAddress}>
-              Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
-              145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
-            </p>
-            <p className={styles.footerText}>
-              <a href="mailto:haebeomlee@korea.ac.kr"
-                 className={styles.footerLink}>
-                haebeomlee@korea.ac.kr
-              </a>
-            </p>
-          </div>
-
-          <div className={styles.footerBottom}>
-            <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import RichTextEditor from './RichTextEditor';
 import styles from './GridCardEditor.module.css';
 
 interface GridCard {
   id: string;
   title: string;
   content: string;
+  details?: string;
 }
 
 interface GridCardEditorProps {
@@ -28,7 +30,7 @@ export default function GridCardEditor({ cards, onChange }: GridCardEditorProps)
     onChange(cards.filter(card => card.id !== id));
   };
 
-  const handleUpdateCard = (id: string, field: 'title' | 'content', value: string) => {
+  const handleUpdateCard = (id: string, field: 'title' | 'content' | 'details', value: string) => {
     onChange(cards.map(card =>
       card.id === id ? { ...card, [field]: value } : card
     ));
@@ -76,6 +78,15 @@ export default function GridCardEditor({ cards, onChange }: GridCardEditorProps)
               placeholder="카드 설명"
               rows={3}
             />
+
+            <div className={styles.detailsSection}>
+              <label className={styles.detailsLabel}>상세 설명 (Details)</label>
+              <RichTextEditor
+                content={card.details || ''}
+                onChange={(html) => handleUpdateCard(card.id, 'details', html)}
+                placeholder="클릭 시 보여질 상세 설명을 작성하세요..."
+              />
+            </div>
           </div>
         ))}
 

@@ -1,5 +1,8 @@
 import prisma from '@/lib/prisma';
 import styles from './about.module.css';
+import ResearchAreasGrid from '@/components/ResearchAreasGrid';
+import Footer from '@/components/Footer';
+import JoinUs from '@/components/JoinUs';
 
 // Force dynamic rendering - no caching
 export const dynamic = 'force-dynamic';
@@ -83,7 +86,7 @@ export default async function About() {
 
               // Render grid layout differently
               if (section.layout === 'grid') {
-                let gridData: { description?: string; cards: Array<{ id: string; title: string; content: string }> } = { cards: [] };
+                let gridData: { description?: string; cards: Array<{ id: string; title: string; content: string; details?: string }> } = { cards: [] };
                 try {
                   const parsed = JSON.parse(section.content);
                   // Handle old format (array) and new format (object with description)
@@ -101,17 +104,10 @@ export default async function About() {
                     <h2 className={styles.sectionTitle}>
                       {section.title}
                     </h2>
-                    {gridData.description && (
-                      <p className={styles.paragraph}>{gridData.description}</p>
-                    )}
-                    <div className={styles.researchGrid}>
-                      {gridData.cards.map((card) => (
-                        <div key={card.id} className={styles.researchCard}>
-                          <h3>{card.title}</h3>
-                          <p>{card.content}</p>
-                        </div>
-                      ))}
-                    </div>
+                    <ResearchAreasGrid
+                      cards={gridData.cards}
+                      description={gridData.description}
+                    />
                   </section>
                 );
               }
@@ -229,34 +225,14 @@ export default async function About() {
                   </div>
                 </div>
               </section>
+
+              <JoinUs />
             </>
           )}
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div style={{ marginBottom: '2rem' }}>
-            <h3 className={styles.footerTitle}>KU SYSTEM 2 ML LAB</h3>
-            <p className={styles.footerText}>
-              School of Electrical Engineering, Korea University
-            </p>
-            <p className={styles.footerAddress}>
-              Student Lab: Engineering Hall 238, Professor Office: Engineering Hall 501<br/>
-              145 Anam-ro, Seongbuk-gu, Seoul 02841, Republic of Korea
-            </p>
-            <p className={styles.footerText}>
-              <a href="mailto:haebeomlee@korea.ac.kr" className={styles.footerLink}>
-                haebeomlee@korea.ac.kr
-              </a>
-            </p>
-          </div>
-          <div className={styles.footerBottom}>
-            <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

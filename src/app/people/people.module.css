@@ -27,13 +27,50 @@
   padding: 0 2rem;
 }
 
+.pageHeader {
+  margin-bottom: 3rem;
+}
+
+.pageTitle {
+  font-size: var(--font-size-page-title);
+  font-weight: 400;
+  color: #222;
+  margin-bottom: 1rem;
+  font-family: Georgia, serif;
+}
+
+.pageDivider {
+  width: 60px;
+  height: 2px;
+  background: #0066cc;
+  margin-bottom: 2rem;
+}
+
+.pageSubtitle {
+  font-size: var(--font-size-subtitle);
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.categorySection {
+  margin-bottom: 3rem;
+}
+
+.categoryTitle {
+  font-size: var(--font-size-section-title);
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 2rem;
+  font-family: Georgia, serif;
+}
+
 .header {
   text-align: center;
   margin-bottom: 4rem;
 }
 
 .title {
-  font-size: 3rem;
+  font-size: var(--font-size-page-title);
   font-weight: 700;
   color: #ffffff;
   margin-bottom: 1rem;
@@ -41,7 +78,7 @@
 }
 
 .subtitle {
-  font-size: 1.25rem;
+  font-size: var(--font-size-subtitle);
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 2rem;
   line-height: 1.6;
@@ -63,7 +100,7 @@
 }
 
 .sectionTitle {
-  font-size: 2rem;
+  font-size: var(--font-size-section-title);
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 2rem;
@@ -152,7 +189,7 @@
 }
 
 .personName {
-  font-size: 1.5rem;
+  font-size: var(--font-size-card-title);
   font-weight: 700;
   color: #1a202c;
   margin-bottom: 0.5rem;
@@ -160,14 +197,14 @@
 }
 
 .personTitle {
-  font-size: 1rem;
+  font-size: var(--font-size-subtitle);
   color: #667eea;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .personBio {
-  font-size: 0.95rem;
+  font-size: var(--font-size-small);
   color: #4a5568;
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -187,7 +224,7 @@
   gap: 0.5rem;
   color: #667eea;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   transition: all 0.2s ease;
   padding: 0.25rem;
   border-radius: 6px;
@@ -229,7 +266,7 @@
 }
 
 .joinTitle {
-  font-size: 2rem;
+  font-size: var(--font-size-section-title);
   font-weight: 700;
   color: #1a202c;
   margin-bottom: 1rem;
@@ -238,7 +275,7 @@
 }
 
 .joinDescription {
-  font-size: 1.1rem;
+  font-size: var(--font-size-subtitle);
   color: #4a5568;
   line-height: 1.7;
   margin-bottom: 2rem;
@@ -250,7 +287,7 @@
 }
 
 .joinContact {
-  font-size: 1rem;
+  font-size: var(--font-size-subtitle);
   color: #667eea;
   font-weight: 600;
   position: relative;
@@ -298,14 +335,6 @@
     padding: 0 1rem;
   }
 
-  .title {
-    font-size: 2.5rem;
-  }
-
-  .subtitle {
-    font-size: 1.1rem;
-  }
-
   .grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
@@ -321,19 +350,7 @@
     height: 120px;
   }
 
-  .personName {
-    font-size: 1.25rem;
-  }
-
   .joinSection {
     padding: 2rem 1.5rem;
-  }
-
-  .joinTitle {
-    font-size: 1.75rem;
-  }
-
-  .joinDescription {
-    font-size: 1rem;
   }
 }

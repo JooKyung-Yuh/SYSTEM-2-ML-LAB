@@ -120,6 +120,20 @@
   box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
 }
 
+.detailsSection {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.detailsLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
 .emptyState {
   text-align: center;
   padding: 3rem 2rem;
