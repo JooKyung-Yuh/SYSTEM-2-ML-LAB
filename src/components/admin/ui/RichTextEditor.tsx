@@ -58,14 +58,13 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
       },
       handleKeyDown: (view, event) => {
         // Tab key for indentation
-        if (event.key === 'Tab') {
+        if (event.key === 'Tab' && editor) {
           event.preventDefault();
           if (event.shiftKey) {
-            // Shift+Tab: outdent (lift list item or remove indentation)
-            return editor.chain().focus().liftListItem('listItem').run() ||
-                   editor.chain().focus().outdent().run();
+            // Shift+Tab: outdent (lift list item)
+            return editor.chain().focus().liftListItem('listItem').run();
           } else {
-            // Tab: indent (sink list item or add indentation)
+            // Tab: indent (sink list item or add spaces)
             return editor.chain().focus().sinkListItem('listItem').run() ||
                    editor.chain().focus().insertContent('\u00A0\u00A0\u00A0\u00A0').run();
           }
