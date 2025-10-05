@@ -1,13 +1,18 @@
 .container {
+  color: #444;
+  background: #fff;
   min-height: 100vh;
-  background: #ffffff;
   padding-top: 8rem;
+  font-family: Lato, Helvetica, Arial, sans-serif;
+  font-size: 13pt;
+  font-weight: 300;
+  line-height: 1.6;
 }
 
 .content {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
+  padding: 0 max(1rem, min(3vw, 2rem));
   line-height: 1.6;
 }
 
@@ -48,6 +53,27 @@
   margin-bottom: 2rem;
 }
 
+/* Layout-specific styles matching Vercel version */
+.sectionFullWidth {
+  /* Default - standard paragraph layout */
+}
+
+.sectionCentered {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sectionHighlight {
+  /* Lab Director style - left border like directorCard */
+  border-left: 3px solid #0066cc;
+  padding-left: 1.5rem;
+}
+
+.sectionGrid {
+  /* Research Areas style - uses researchGrid and researchCard classes below */
+}
+
 .directorName {
   font-size: clamp(1.1rem, 2.5vw, 1.25rem);
   font-weight: 600;
@@ -73,8 +99,12 @@
   margin-top: 1.5rem;
 }
 
+.researchCard {
+  /* Simple card - no background, just clean spacing */
+}
+
 .researchCard h3 {
-  font-size: clamp(1rem, 2vw, 1.1rem);
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #222;
@@ -82,7 +112,9 @@
 
 .researchCard p {
   color: #666;
-  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .footer {
@@ -95,7 +127,7 @@
 .footerContent {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 clamp(1rem, 3vw, 2rem);
+  padding: 0 max(1rem, min(3vw, 2rem));
   text-align: center;
 }
 
@@ -138,6 +170,124 @@
 .link {
   color: #0066cc;
   text-decoration: underline;
+}
+
+/* Global link styles within sections */
+.section :global(a) {
+  color: #0066cc;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.section :global(a):hover {
+  color: #0052a3;
+}
+
+/* Global link styles within directorCard and paragraph */
+.directorCard :global(a),
+.paragraph :global(a) {
+  color: #0066cc;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.directorCard :global(a):hover,
+.paragraph :global(a):hover {
+  color: #0052a3;
+}
+
+/* Paragraph and list styles for HTML content */
+.section :global(p) {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #333;
+}
+
+.section :global(p):last-child {
+  margin-bottom: 0;
+}
+
+.section :global(ul),
+.section :global(ol) {
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section :global(ul) {
+  list-style-type: disc;
+}
+
+.section :global(ol) {
+  list-style-type: decimal;
+}
+
+.section :global(ul li),
+.section :global(ol li) {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+}
+
+.section :global(strong) {
+  font-weight: 600;
+  color: #222;
+}
+
+.section :global(em) {
+  font-style: italic;
+}
+
+.section :global(h1),
+.section :global(h2),
+.section :global(h3),
+.section :global(h4) {
+  font-weight: 600;
+  color: #222;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.section :global(h1) { font-size: clamp(1.75rem, 4vw, 2rem); }
+.section :global(h2) { font-size: clamp(1.5rem, 3.5vw, 1.75rem); }
+.section :global(h3) { font-size: clamp(1.25rem, 3vw, 1.5rem); }
+.section :global(h4) { font-size: clamp(1.1rem, 2.5vw, 1.25rem); }
+
+/* Keep backward compatibility */
+.directorCard :global(p),
+.paragraph :global(p) {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.directorCard :global(p):last-child,
+.paragraph :global(p):last-child {
+  margin-bottom: 0;
+}
+
+.directorCard :global(ul),
+.paragraph :global(ul) {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.directorCard :global(ul li),
+.paragraph :global(ul li) {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.directorCard :global(strong),
+.paragraph :global(strong) {
+  font-weight: 600;
+  color: #222;
+}
+
+.directorCard :global(em),
+.paragraph :global(em) {
+  font-style: italic;
 }
 
 .footerLink {

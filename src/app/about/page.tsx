@@ -1,12 +1,14 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import prisma from '@/lib/prisma';
 import styles from './about.module.css';
+
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
 
 interface PageSection {
   id: string;
   title: string;
   content: string;
+  layout: string;
   order: number;
 }
 
@@ -18,38 +20,29 @@ interface PageData {
   sections: PageSection[];
 }
 
-export default function About() {
-  const [pageData, setPageData] = useState<PageData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchPageData();
-  }, []);
-
-  const fetchPageData = async () => {
-    try {
-      const response = await fetch('/api/admin/pages');
-      if (response.ok) {
-        const pages = await response.json();
-        const aboutPage = pages.find((p: PageData) => p.slug === 'about');
-        if (aboutPage) {
-          setPageData(aboutPage);
+async function getAboutPageData(): Promise<PageData | null> {
+  try {
+    const page = await prisma.page.findFirst({
+      where: {
+        slug: 'about',
+        published: true
+      },
+      include: {
+        sections: {
+          orderBy: { order: 'asc' }
         }
       }
-    } catch (error) {
-      console.error('Failed to fetch page data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    });
 
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div>Loading...</div>
-      </div>
-    );
+    return page;
+  } catch (error) {
+    console.error('Failed to fetch page data:', error);
+    return null;
   }
+}
+
+export default async function About() {
+  const pageData = await getAboutPageData();
 
   return (
     <div className={styles.container}>
@@ -72,16 +65,69 @@ export default function About() {
         {/* Dynamic Sections */}
         <div>
           {pageData?.sections && pageData.sections.length > 0 ? (
-            pageData.sections.sort((a, b) => a.order - b.order).map((section) => (
-              <section key={section.id} className={styles.section}>
-                <h2 className={styles.sectionTitle}>
-                  {section.title}
-                </h2>
-                <div
-                  dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br>') }}
-                />
-              </section>
-            ))
+            pageData.sections.sort((a, b) => a.order - b.order).map((section) => {
+              // Determine layout class
+              const getLayoutClass = (layout: string) => {
+                switch (layout) {
+                  case 'centered':
+                    return `${styles.section} ${styles.sectionCentered}`;
+                  case 'highlight':
+                    return `${styles.section} ${styles.sectionHighlight}`;
+                  case 'grid':
+                    return `${styles.section} ${styles.sectionGrid}`;
+                  case 'full-width':
+                  default:
+                    return `${styles.section} ${styles.sectionFullWidth}`;
+                }
+              };
+
+              // Render grid layout differently
+              if (section.layout === 'grid') {
+                let gridData: { description?: string; cards: Array<{ id: string; title: string; content: string }> } = { cards: [] };
+                try {
+                  const parsed = JSON.parse(section.content);
+                  // Handle old format (array) and new format (object with description)
+                  if (Array.isArray(parsed)) {
+                    gridData = { cards: parsed };
+                  } else {
+                    gridData = parsed;
+                  }
+                } catch {
+                  gridData = { cards: [] };
+                }
+
+                return (
+                  <section key={section.id} className={getLayoutClass(section.layout)}>
+                    <h2 className={styles.sectionTitle}>
+                      {section.title}
+                    </h2>
+                    {gridData.description && (
+                      <p className={styles.paragraph}>{gridData.description}</p>
+                    )}
+                    <div className={styles.researchGrid}>
+                      {gridData.cards.map((card) => (
+                        <div key={card.id} className={styles.researchCard}>
+                          <h3>{card.title}</h3>
+                          <p>{card.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                );
+              }
+
+              // Regular content layouts
+              return (
+                <section key={section.id} className={getLayoutClass(section.layout)}>
+                  <h2 className={styles.sectionTitle}>
+                    {section.title}
+                  </h2>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: section.content }}
+                  />
+                </section>
+              );
+            })
           ) : (
             // Default content when no sections exist
             <>

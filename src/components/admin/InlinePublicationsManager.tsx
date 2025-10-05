@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { showToast, toastMessages } from '@/lib/toast';
 import styles from './InlinePublicationsManager.module.css';
 
 interface Publication {
@@ -24,6 +25,8 @@ export default function InlinePublicationsManager() {
   const [originalData, setOriginalData] = useState<Partial<Publication>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPublications();
@@ -82,8 +85,9 @@ export default function InlinePublicationsManager() {
   };
 
   const handleSave = async () => {
-    if (!editingId || !editingData) return;
+    if (!editingId || !editingData || saving) return;
 
+    setSaving(true);
     try {
       const response = await fetch(`/api/admin/publications/${editingId}`, {
         method: 'PUT',
@@ -104,9 +108,15 @@ export default function InlinePublicationsManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
+        showToast.success(toastMessages.publications.updated);
+      } else {
+        showToast.error(toastMessages.publications.error);
       }
     } catch (error) {
       console.error('Failed to save publication:', error);
+      showToast.error(toastMessages.publications.error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -119,6 +129,7 @@ export default function InlinePublicationsManager() {
   const handleDelete = async (itemId: string) => {
     if (!confirm('이 논문을 삭제하시겠습니까?')) return;
 
+    setDeleting(itemId);
     try {
       const response = await fetch(`/api/admin/publications/${itemId}`, {
         method: 'DELETE'
@@ -127,9 +138,15 @@ export default function InlinePublicationsManager() {
       if (response.ok) {
         const filteredItems = publications.filter(item => item.id !== itemId);
         setPublications(filteredItems);
+        showToast.success(toastMessages.publications.deleted);
+      } else {
+        showToast.error(toastMessages.publications.error);
       }
     } catch (error) {
       console.error('Failed to delete publication:', error);
+      showToast.error(toastMessages.publications.error);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -203,6 +220,7 @@ export default function InlinePublicationsManager() {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }, 100);
+      showToast.success(toastMessages.publications.created);
     })
     .catch(error => {
       console.error('Failed to create publication:', error);
@@ -210,6 +228,7 @@ export default function InlinePublicationsManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
+      showToast.error(toastMessages.publications.error);
     });
   };
 
@@ -321,10 +340,18 @@ export default function InlinePublicationsManager() {
                 <div className={styles.controls}>
                   {editingId === pub.id ? (
                     <>
-                      <button className={styles.saveBtn} onClick={handleSave}>
-                        ✓
+                      <button
+                        className={styles.saveBtn}
+                        onClick={handleSave}
+                        disabled={saving}
+                      >
+                        {saving ? '⏳' : '✓'}
                       </button>
-                      <button className={styles.cancelBtn} onClick={handleCancel}>
+                      <button
+                        className={styles.cancelBtn}
+                        onClick={handleCancel}
+                        disabled={saving}
+                      >
                         ✕
                       </button>
                     </>
@@ -333,14 +360,16 @@ export default function InlinePublicationsManager() {
                       <button
                         className={styles.editBtn}
                         onClick={() => handleEdit(pub)}
+                        disabled={deleting === pub.id}
                       >
                         ✏️
                       </button>
                       <button
                         className={styles.deleteBtn}
                         onClick={() => handleDelete(pub.id)}
+                        disabled={deleting === pub.id}
                       >
-                        ✕
+                        {deleting === pub.id ? '⏳' : '✕'}
                       </button>
                     </>
                   )}

@@ -485,3 +485,66 @@
     padding: 2rem 1.5rem;
   }
 }
+/* Image Upload Styles */
+.imageUploadWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.imagePreview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e2e8f0;
+}
+
+.imageUploadLabel {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.imageInput {
+  display: none;
+}
+
+.uploadButtonText {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  background: #0066cc;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.uploadButtonText:hover {
+  background: #0052a3;
+  transform: translateY(-1px);
+}
+
+.imageUploadLabel:has(input:disabled) .uploadButtonText {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.removeImageBtn {
+  padding: 0.5rem 1rem;
+  background: #ffffff;
+  color: #e53e3e;
+  border: 1px solid #fc8181;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.removeImageBtn:hover {
+  background: #fed7d7;
+  border-color: #e53e3e;
+}

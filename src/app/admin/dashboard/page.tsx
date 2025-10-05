@@ -9,6 +9,7 @@ import InlinePeopleManager from '@/components/admin/InlinePeopleManager';
 import InlinePublicationsManager from '@/components/admin/InlinePublicationsManager';
 import InlineCoursesManager from '@/components/admin/InlineCoursesManager';
 import InlineGalleryManager from '@/components/admin/InlineGalleryManager';
+import ToastProvider from '@/components/admin/ui/ToastProvider';
 import styles from './dashboard.module.css';
 
 interface User {
@@ -75,6 +76,7 @@ export default function DashboardPage() {
 
   return (
     <>
+      <ToastProvider />
       <AdminHeader userEmail={user.email} onLogout={handleLogout} />
       <div className={styles.dashboard}>
 

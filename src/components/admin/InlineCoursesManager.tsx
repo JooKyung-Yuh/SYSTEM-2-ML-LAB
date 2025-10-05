@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './InlineCoursesManager.module.css';
+import { showToast, toastMessages } from '@/lib/toast';
 
 interface Course {
   id: string;
@@ -25,6 +26,8 @@ export default function InlineCoursesManager() {
   const [originalData, setOriginalData] = useState<Partial<Course>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchCourses();
@@ -84,8 +87,9 @@ export default function InlineCoursesManager() {
   };
 
   const handleSave = async () => {
-    if (!editingId || !editingData) return;
+    if (!editingId || !editingData || saving) return;
 
+    setSaving(true);
     try {
       const response = await fetch(`/api/admin/courses/${editingId}`, {
         method: 'PUT',
@@ -107,9 +111,15 @@ export default function InlineCoursesManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
+        showToast.success(toastMessages.courses.updated);
+      } else {
+        showToast.error(toastMessages.courses.error);
       }
     } catch (error) {
       console.error('Failed to save course:', error);
+      showToast.error(toastMessages.courses.error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -122,6 +132,7 @@ export default function InlineCoursesManager() {
   const handleDelete = async (itemId: string) => {
     if (!confirm('이 강의를 삭제하시겠습니까?')) return;
 
+    setDeleting(itemId);
     try {
       const response = await fetch(`/api/admin/courses/${itemId}`, {
         method: 'DELETE'
@@ -130,9 +141,15 @@ export default function InlineCoursesManager() {
       if (response.ok) {
         const filteredItems = courses.filter(item => item.id !== itemId);
         setCourses(filteredItems);
+        showToast.success(toastMessages.courses.deleted);
+      } else {
+        showToast.error(toastMessages.courses.error);
       }
     } catch (error) {
       console.error('Failed to delete course:', error);
+      showToast.error(toastMessages.courses.error);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -190,6 +207,7 @@ export default function InlineCoursesManager() {
       setEditingId(currentId => currentId === optimisticId ? newData.id : currentId);
       setEditingData(currentData => currentData.id === optimisticId ? { ...newData } : currentData);
       setOriginalData(currentData => currentData.id === optimisticId ? { ...newData } : currentData);
+      showToast.success(toastMessages.courses.created);
 
       setTimeout(() => {
         const element = document.querySelector(`[data-course-id="${newData.id}"]`);
@@ -204,6 +222,7 @@ export default function InlineCoursesManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
+      showToast.error(toastMessages.courses.error);
     });
   };
 
@@ -312,10 +331,18 @@ export default function InlineCoursesManager() {
                 <div className={styles.controls}>
                   {editingId === course.id ? (
                     <>
-                      <button className={styles.saveBtn} onClick={handleSave}>
-                        ✓
+                      <button
+                        className={styles.saveBtn}
+                        onClick={handleSave}
+                        disabled={saving}
+                      >
+                        {saving ? '⏳' : '✓'}
                       </button>
-                      <button className={styles.cancelBtn} onClick={handleCancel}>
+                      <button
+                        className={styles.cancelBtn}
+                        onClick={handleCancel}
+                        disabled={saving}
+                      >
                         ✕
                       </button>
                     </>
@@ -324,14 +351,16 @@ export default function InlineCoursesManager() {
                       <button
                         className={styles.editBtn}
                         onClick={() => handleEdit(course)}
+                        disabled={deleting === course.id}
                       >
                         ✏️
                       </button>
                       <button
                         className={styles.deleteBtn}
                         onClick={() => handleDelete(course.id)}
+                        disabled={deleting === course.id}
                       >
-                        ✕
+                        {deleting === course.id ? '⏳' : '✕'}
                       </button>
                     </>
                   )}

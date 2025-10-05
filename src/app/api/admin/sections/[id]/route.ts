@@ -11,14 +11,15 @@ export async function PUT(
 
     const { id } = await context.params;
     const data = await request.json();
-    const { title, content, order } = data;
+    const { title, content, order, layout } = data;
 
     const section = await prisma.section.update({
       where: { id },
       data: {
         title,
         content,
-        order
+        order,
+        layout
       }
     });
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { showToast, toastMessages } from '@/lib/toast';
 import styles from './InlineNewsManager.module.css';
 
 interface NewsLink {
@@ -25,6 +26,8 @@ export default function InlineNewsManager() {
   const [editingData, setEditingData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
   const [originalData, setOriginalData] = useState<Partial<NewsItem & { links: NewsLink[] }>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchNewsItems();
@@ -80,8 +83,9 @@ export default function InlineNewsManager() {
   };
 
   const handleSave = async () => {
-    if (!editingId || !editingData) return;
+    if (!editingId || !editingData || saving) return;
 
+    setSaving(true);
     try {
       // Clean up links data - remove id field for new links
       const cleanedLinks = (editingData.links || []).map(link => ({
@@ -112,9 +116,16 @@ export default function InlineNewsManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
-          }
+
+        showToast.success(toastMessages.news.updated);
+      } else {
+        showToast.error(toastMessages.news.error);
+      }
     } catch (error) {
       console.error('Failed to save news item:', error);
+      showToast.error(toastMessages.news.error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -153,6 +164,7 @@ export default function InlineNewsManager() {
   const handleDelete = async (itemId: string) => {
     if (!confirm('이 뉴스를 삭제하시겠습니까?')) return;
 
+    setDeleting(itemId);
     try {
       const response = await fetch(`/api/admin/news/${itemId}`, {
         method: 'DELETE'
@@ -162,9 +174,15 @@ export default function InlineNewsManager() {
         // 성능 개선: fetchNewsItems 대신 즉시 상태 업데이트
         const filteredItems = newsItems.filter(item => item.id !== itemId);
         setNewsItems(filteredItems);
+        showToast.success(toastMessages.news.deleted);
+      } else {
+        showToast.error(toastMessages.news.error);
       }
     } catch (error) {
       console.error('Failed to delete news item:', error);
+      showToast.error(toastMessages.news.error);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -267,6 +285,8 @@ export default function InlineNewsManager() {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }, 100);
+
+      showToast.success(toastMessages.news.created);
     })
     .catch(error => {
       console.error('Failed to create news item:', error);
@@ -275,6 +295,7 @@ export default function InlineNewsManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
+      showToast.error(toastMessages.news.error);
       });
   };
 
@@ -311,10 +332,18 @@ export default function InlineNewsManager() {
               <div className={styles.controls}>
                 {editingId === item.id ? (
                   <>
-                    <button className={styles.saveBtn} onClick={handleSave}>
-                      ✓
+                    <button
+                      className={styles.saveBtn}
+                      onClick={handleSave}
+                      disabled={saving}
+                    >
+                      {saving ? '⏳' : '✓'}
                     </button>
-                    <button className={styles.cancelBtn} onClick={handleCancel}>
+                    <button
+                      className={styles.cancelBtn}
+                      onClick={handleCancel}
+                      disabled={saving}
+                    >
                       ✕
                     </button>
                   </>
@@ -323,14 +352,16 @@ export default function InlineNewsManager() {
                     <button
                       className={styles.editBtn}
                       onClick={() => handleEdit(item)}
+                      disabled={deleting === item.id}
                     >
                       ✏️
                     </button>
                     <button
                       className={styles.deleteBtn}
                       onClick={() => handleDelete(item.id)}
+                      disabled={deleting === item.id}
                     >
-                      ✕
+                      {deleting === item.id ? '⏳' : '✕'}
                     </button>
                   </>
                 )}

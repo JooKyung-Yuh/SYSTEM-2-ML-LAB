@@ -22,13 +22,14 @@ export async function POST(request: NextRequest) {
     await requireAuth(request);
 
     const data = await request.json();
-    const { title, content, order, pageId } = data;
+    const { title, content, order, pageId, layout } = data;
 
     const section = await prisma.section.create({
       data: {
         title,
         content,
         order: order ?? 0,
+        layout: layout ?? 'full-width',
         pageId
       }
     });

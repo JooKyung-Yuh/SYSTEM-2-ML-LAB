@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './InlineGalleryManager.module.css';
+import { showToast, toastMessages } from '@/lib/toast';
 
 interface GalleryItem {
   id: string;
@@ -22,6 +23,8 @@ export default function InlineGalleryManager() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     fetchGalleryItems();
@@ -77,8 +80,9 @@ export default function InlineGalleryManager() {
   };
 
   const handleSave = async () => {
-    if (!editingId || !editingData) return;
+    if (!editingId || !editingData || saving) return;
 
+    setSaving(true);
     try {
       const response = await fetch(`/api/admin/gallery/${editingId}`, {
         method: 'PUT',
@@ -96,9 +100,15 @@ export default function InlineGalleryManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
+        showToast.success(toastMessages.gallery.updated);
+      } else {
+        showToast.error(toastMessages.gallery.error);
       }
     } catch (error) {
       console.error('Failed to save gallery item:', error);
+      showToast.error(toastMessages.gallery.error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -111,6 +121,7 @@ export default function InlineGalleryManager() {
   const handleDelete = async (itemId: string) => {
     if (!confirm('이 갤러리 항목을 삭제하시겠습니까?')) return;
 
+    setDeleting(itemId);
     try {
       const response = await fetch(`/api/admin/gallery/${itemId}`, {
         method: 'DELETE'
@@ -119,9 +130,15 @@ export default function InlineGalleryManager() {
       if (response.ok) {
         const filteredItems = galleryItems.filter(item => item.id !== itemId);
         setGalleryItems(filteredItems);
+        showToast.success(toastMessages.gallery.deleted);
+      } else {
+        showToast.error(toastMessages.gallery.error);
       }
     } catch (error) {
       console.error('Failed to delete gallery item:', error);
+      showToast.error(toastMessages.gallery.error);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -201,6 +218,7 @@ export default function InlineGalleryManager() {
       setEditingId(currentId => currentId === optimisticId ? newData.id : currentId);
       setEditingData(currentData => currentData.id === optimisticId ? { ...newData } : currentData);
       setOriginalData(currentData => currentData.id === optimisticId ? { ...newData } : currentData);
+      showToast.success(toastMessages.gallery.created);
 
       setTimeout(() => {
         const element = document.querySelector(`[data-gallery-id="${newData.id}"]`);
@@ -215,6 +233,7 @@ export default function InlineGalleryManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
+      showToast.error(toastMessages.gallery.error);
     });
   };
 
@@ -307,10 +326,18 @@ export default function InlineGalleryManager() {
                 <div className={styles.controls}>
                   {editingId === item.id ? (
                     <>
-                      <button className={styles.saveBtn} onClick={handleSave}>
-                        ✓
+                      <button
+                        className={styles.saveBtn}
+                        onClick={handleSave}
+                        disabled={saving}
+                      >
+                        {saving ? '⏳' : '✓'}
                       </button>
-                      <button className={styles.cancelBtn} onClick={handleCancel}>
+                      <button
+                        className={styles.cancelBtn}
+                        onClick={handleCancel}
+                        disabled={saving}
+                      >
                         ✕
                       </button>
                     </>
@@ -319,14 +346,16 @@ export default function InlineGalleryManager() {
                       <button
                         className={styles.editBtn}
                         onClick={() => handleEdit(item)}
+                        disabled={deleting === item.id}
                       >
                         ✏️
                       </button>
                       <button
                         className={styles.deleteBtn}
                         onClick={() => handleDelete(item.id)}
+                        disabled={deleting === item.id}
                       >
-                        ✕
+                        {deleting === item.id ? '⏳' : '✕'}
                       </button>
                     </>
                   )}

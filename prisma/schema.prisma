@@ -50,6 +50,7 @@ model Section {
   id      String @id @default(cuid())
   title   String
   content String
+  layout  String @default("full-width")
   order   Int    @default(0)
   pageId  String
   page    Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)

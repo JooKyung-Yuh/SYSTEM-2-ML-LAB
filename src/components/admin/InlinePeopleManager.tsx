@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './InlinePeopleManager.module.css';
+import { showToast, toastMessages } from '@/lib/toast';
 
 interface Person {
   id: string;
@@ -24,6 +25,9 @@ export default function InlinePeopleManager() {
   const [editingData, setEditingData] = useState<Partial<Person>>({});
   const [originalData, setOriginalData] = useState<Partial<Person>>({});
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [uploading, setUploading] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPeople();
@@ -85,8 +89,9 @@ export default function InlinePeopleManager() {
   };
 
   const handleSave = async () => {
-    if (!editingId || !editingData) return;
+    if (!editingId || !editingData || saving) return;
 
+    setSaving(true);
     try {
       const response = await fetch(`/api/admin/people/${editingId}`, {
         method: 'PUT',
@@ -112,9 +117,15 @@ export default function InlinePeopleManager() {
         setEditingId(null);
         setEditingData({});
         setOriginalData({});
-          }
+        showToast.success(toastMessages.people.updated);
+      } else {
+        showToast.error(toastMessages.people.error);
+      }
     } catch (error) {
       console.error('Failed to save person:', error);
+      showToast.error(toastMessages.people.error);
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -124,9 +135,39 @@ export default function InlinePeopleManager() {
     setOriginalData({});
   };
 
+  const handleImageUpload = async (personId: string, file: File) => {
+    if (!file) return;
+
+    setUploading(personId);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setEditingData({ ...editingData, image: data.url });
+        showToast.success('이미지가 업로드되었습니다');
+      } else {
+        const error = await response.json();
+        showToast.error(error.error || '이미지 업로드 실패');
+      }
+    } catch (error) {
+      console.error('Failed to upload image:', error);
+      showToast.error('이미지 업로드 중 오류가 발생했습니다');
+    } finally {
+      setUploading(null);
+    }
+  };
+
   const handleDelete = async (personId: string) => {
     if (!confirm('이 팀원을 삭제하시겠습니까?')) return;
 
+    setDeleting(personId);
     try {
       const response = await fetch(`/api/admin/people/${personId}`, {
         method: 'DELETE'
@@ -135,9 +176,15 @@ export default function InlinePeopleManager() {
       if (response.ok) {
         const filteredItems = people.filter(person => person.id !== personId);
         setPeople(filteredItems);
+        showToast.success(toastMessages.people.deleted);
+      } else {
+        showToast.error(toastMessages.people.error);
       }
     } catch (error) {
       console.error('Failed to delete person:', error);
+      showToast.error(toastMessages.people.error);
+    } finally {
+      setDeleting(null);
     }
   };
 
@@ -238,6 +285,7 @@ export default function InlinePeopleManager() {
         }
         return currentData;
       });
+      showToast.success(toastMessages.people.created);
 
       setTimeout(() => {
         const element = document.querySelector(`[data-person-id="${newData.id}"]`);
@@ -252,6 +300,7 @@ export default function InlinePeopleManager() {
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
+      showToast.error(toastMessages.people.error);
       });
   };
 
@@ -311,10 +360,18 @@ export default function InlinePeopleManager() {
                     <div className={styles.controls}>
                       {editingId === person.id ? (
                         <>
-                          <button className={styles.saveBtn} onClick={handleSave}>
-                            ✓
+                          <button
+                            className={styles.saveBtn}
+                            onClick={handleSave}
+                            disabled={saving}
+                          >
+                            {saving ? '⏳' : '✓'}
                           </button>
-                          <button className={styles.cancelBtn} onClick={handleCancel}>
+                          <button
+                            className={styles.cancelBtn}
+                            onClick={handleCancel}
+                            disabled={saving}
+                          >
                             ✕
                           </button>
                         </>
@@ -323,14 +380,16 @@ export default function InlinePeopleManager() {
                           <button
                             className={styles.editBtn}
                             onClick={() => handleEdit(person)}
+                            disabled={deleting === person.id}
                           >
                             ✏️
                           </button>
                           <button
                             className={styles.deleteBtn}
                             onClick={() => handleDelete(person.id)}
+                            disabled={deleting === person.id}
                           >
-                            ✕
+                            {deleting === person.id ? '⏳' : '✕'}
                           </button>
                         </>
                       )}
@@ -340,13 +399,39 @@ export default function InlinePeopleManager() {
                   <div className={styles.personCard}>
                     <div className={styles.personImageContainer}>
                       {editingId === person.id ? (
-                        <input
-                          type="url"
-                          value={editingData.image || ''}
-                          onChange={(e) => setEditingData({ ...editingData, image: e.target.value })}
-                          className={styles.editImage}
-                          placeholder="Image URL"
-                        />
+                        <div className={styles.imageUploadWrapper}>
+                          {editingData.image && (
+                            <img
+                              src={editingData.image}
+                              alt="Preview"
+                              className={styles.imagePreview}
+                            />
+                          )}
+                          <label className={styles.imageUploadLabel}>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleImageUpload(person.id, file);
+                              }}
+                              className={styles.imageInput}
+                              disabled={uploading === person.id}
+                            />
+                            <span className={styles.uploadButtonText}>
+                              {uploading === person.id ? '⏳ 업로드 중...' : editingData.image ? '📷 이미지 변경' : '📷 이미지 업로드'}
+                            </span>
+                          </label>
+                          {editingData.image && (
+                            <button
+                              type="button"
+                              onClick={() => setEditingData({ ...editingData, image: null })}
+                              className={styles.removeImageBtn}
+                            >
+                              ✕ 제거
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <>
                           {person.image ? (
