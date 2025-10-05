@@ -1,7 +1,7 @@
-'use client';
+import prisma from '@/lib/prisma';
 
-import { useState, useEffect } from 'react';
-import styles from './people.module.css';
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
 
 interface Person {
   id: string;
@@ -17,27 +17,25 @@ interface Person {
   published: boolean;
 }
 
-export default function People() {
-  const [people, setPeople] = useState<Person[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchPeople();
-  }, []);
-
-  const fetchPeople = async () => {
-    try {
-      const response = await fetch('/api/people');
-      if (response.ok) {
-        const data = await response.json();
-        setPeople(data.filter((person: Person) => person.published));
+async function getPeople(): Promise<Person[]> {
+  try {
+    const people = await prisma.person.findMany({
+      where: {
+        published: true
+      },
+      orderBy: {
+        order: 'asc'
       }
-    } catch (error) {
-      console.error('Failed to fetch people:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    });
+    return people;
+  } catch (error) {
+    console.error('Failed to fetch people:', error);
+    return [];
+  }
+}
+
+export default async function People() {
+  const people = await getPeople();
 
   const groupedPeople = people.reduce((acc, person) => {
     if (!acc[person.category]) {
@@ -53,15 +51,6 @@ export default function People() {
     student: "Students",
     alumni: "Alumni"
   };
-
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <div className={styles.spinner}></div>
-        <p>Loading team members...</p>
-      </div>
-    );
-  }
 
   return (
     <div style={{

@@ -77,7 +77,7 @@ export default async function About() {
                     return `${styles.section} ${styles.sectionGrid}`;
                   case 'full-width':
                   default:
-                    return `${styles.section} ${styles.sectionFullWidth}`;
+                    return styles.section;
                 }
               };
 

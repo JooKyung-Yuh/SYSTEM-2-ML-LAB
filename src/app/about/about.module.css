@@ -3,7 +3,7 @@
   background: #fff;
   min-height: 100vh;
   padding-top: 8rem;
-  font-family: Lato, Helvetica, Arial, sans-serif;
+  font-family: Lato, Helvetica, sans-serif;
   font-size: 13pt;
   font-weight: 300;
   line-height: 1.6;
@@ -21,8 +21,8 @@
 }
 
 .title {
-  font-size: clamp(2rem, 4vw, 2.5rem);
-  font-weight: 400;
+  font-size: max(2rem, min(4vw, 2.5rem));
+  font-weight: 300;
   color: #222;
   margin-bottom: 1rem;
   font-family: Georgia, serif;
@@ -40,8 +40,8 @@
 }
 
 .sectionTitle {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  font-weight: 500;
+  font-size: max(1.25rem, min(3vw, 1.5rem));
+  font-weight: 700;
   color: #222;
   margin-bottom: 1.5rem;
   font-family: Georgia, serif;
@@ -75,8 +75,8 @@
 }
 
 .directorName {
-  font-size: clamp(1.1rem, 2.5vw, 1.25rem);
-  font-weight: 600;
+  font-size: max(1.1rem, min(2.5vw, 1.25rem));
+  font-weight: 700;
   color: #222;
   margin-bottom: 0.5rem;
 }
@@ -84,12 +84,44 @@
 .directorTitle {
   color: #666;
   margin-bottom: 1rem;
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: max(0.9rem, min(2vw, 1rem));
 }
 
 .paragraph {
   margin-bottom: 1rem;
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: max(0.9rem, min(2vw, 1rem));
+}
+
+/* Style for content from Rich Text Editor */
+.section p {
+  margin-bottom: 1rem;
+  font-size: max(0.9rem, min(2vw, 1rem));
+}
+
+.section ul {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  font-size: max(0.9rem, min(2vw, 1rem));
+}
+
+.section li {
+  margin-bottom: 0.5rem;
+}
+
+.section h3 {
+  font-size: max(1.1rem, min(2.5vw, 1.25rem));
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.section a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.section strong {
+  font-weight: 700;
 }
 
 .researchGrid {
@@ -104,15 +136,15 @@
 }
 
 .researchCard h3 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: max(1rem, min(2vw, 1.1rem)) !important;
+  font-weight: 700;
   margin-bottom: 0.5rem;
   color: #222;
 }
 
 .researchCard p {
   color: #666;
-  font-size: 0.95rem;
+  font-size: max(0.85rem, min(1.8vw, 0.95rem)) !important;
   line-height: 1.6;
   margin: 0;
 }
