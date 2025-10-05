@@ -6,8 +6,8 @@ import AdminHeader from '@/components/admin/AdminHeader';
 import styles from './login.module.css';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('admin@mllab.korea.ac.kr');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -129,11 +129,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className={styles.footer}>
-          <p className={styles.footerText}>
-            Demo credentials: admin@mllab.korea.ac.kr / admin123
-          </p>
-        </div>
       </div>
       </div>
     </>

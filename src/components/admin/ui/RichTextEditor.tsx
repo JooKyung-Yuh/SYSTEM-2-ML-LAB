@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import { Color } from '@tiptap/extension-color';
@@ -17,12 +17,12 @@ interface RichTextEditorProps {
   placeholder?: string;
 }
 
-export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  const editor = useEditor({
+  const editor: Editor | null = useEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({

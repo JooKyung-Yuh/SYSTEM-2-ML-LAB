@@ -190,7 +190,7 @@ export default function InlineAboutEditor() {
 
       if (response.ok) {
         fetchPageData();
-        showToast.success(toastMessages.pages.deleted);
+        showToast.success(toastMessages.pages.sectionDeleted);
       } else {
         showToast.error(toastMessages.pages.error);
       }
