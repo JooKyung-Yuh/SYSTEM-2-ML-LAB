@@ -30,10 +30,11 @@ This document outlines a comprehensive improvement plan for the System 2 ML Lab 
 
 ### Key Areas for Improvement
 - ✅ Research and News pages removed (content integrated into About Us and Homepage)
-- ❌ Limited visual impact and brand differentiation
+- ✅ Homepage design kept clean and simple (decision: no CTA buttons needed)
 - ⚠️ Publications page filtering complete, but needs database integration
-- ❌ Insufficient Professor profile integration
-- ⚠️ Call-to-action elements improved (Join Us added), but homepage CTAs missing
+- ❌ Insufficient Professor profile integration (needs photo)
+- ✅ Call-to-action elements complete (Join Us component on all pages)
+- ✅ Lab Statistics decided against (keeps About Us clean)
 - ❌ Limited storytelling in Gallery page
 
 ---
@@ -67,28 +68,19 @@ This document outlines a comprehensive improvement plan for the System 2 ML Lab 
 
 ---
 
-#### 2. Homepage Hero Section Enhancement ⭐⭐⭐
-**Status:** Functional but lacks clear CTA
+#### 2. Homepage Hero Section Enhancement ⭐⭐⭐ ✅ DECIDED AGAINST
+**Status:** ✅ Keeping current clean design
 **Impact:** HIGH - First impression
-**Effort:** LOW (1 day)
+**Decision:** Homepage simplicity is a strength, no changes needed
 
-**Implementation:**
-- [ ] Add 3 prominent CTA buttons:
-  ```
-  [Join Our Lab] → /about#join-us
-  [Explore Research] → /research
-  [Latest Publications] → /publications
-  ```
-- [ ] Strengthen value proposition text:
-  ```
-  "Advancing AI through System 2 Thinking"
-  "Meta-Learning | LLM Reasoning | Bayesian Inference"
-  "Led by Prof. Hae Beom Lee at Korea University"
-  ```
-- [ ] Improve hero background image (brighter, clearer overlay)
-- [ ] Add subtle animation to CTA buttons
+**Rationale:**
+- Current homepage is clean and elegant
+- News carousel at bottom provides dynamic content
+- Adding CTA buttons would conflict with News section
+- Minimalist design aligns with academic aesthetic
+- Join Us CTAs already present on all other pages
 
-**Design Reference:** Stanford HAI hero section
+**Conclusion:** Homepage kept as-is
 
 ---
 
@@ -165,22 +157,20 @@ This document outlines a comprehensive improvement plan for the System 2 ML Lab 
 
 ---
 
-#### 6. About Us Page - Lab Statistics Section ⭐⭐
-**Status:** Missing quantitative metrics
+#### 6. About Us Page - Lab Statistics Section ⭐⭐ ✅ DECIDED AGAINST
+**Status:** ✅ Not implementing to maintain simplicity
 **Impact:** MEDIUM - Build credibility
-**Effort:** LOW (0.5 day)
+**Decision:** About Us page is already comprehensive, statistics would add clutter
 
-**Implementation:**
-- [ ] "Lab by the Numbers" section:
-  ```
-  [XX] Publications    [YY] Active Students
-  [ZZ] Projects        [WW] Collaborations
-  ```
-- [ ] Animated counters on scroll
-- [ ] Icons for each metric
-- [ ] Update via admin dashboard
+**Rationale:**
+- About Us already has 5 sections (Lab Director, Mission, Philosophy, Research Areas, Join Us)
+- Research Areas grid already provides visual richness
+- Publications count visible on Publications page
+- Student count visible on People page
+- Statistics would make page feel crowded
+- Current clean design is a strength
 
-**Design Reference:** Stanford HAI statistics section
+**Conclusion:** No statistics section added
 
 ---
 
@@ -547,10 +537,10 @@ buttons, nav: -apple-system, BlinkMacSystemFont, 'Segoe UI'
 
 1. ~~**Publications "Total Count" Header**~~ ✅ COMPLETED
 2. ~~**Publications Filtering System**~~ ✅ COMPLETED
-3. **Homepage CTA Buttons** ⭐ (30 mins) - NEXT PRIORITY
-4. **Professor Photo** (15 mins - need image)
-5. **Lab Statistics Section** (1 hour)
-6. **Research Page Hero Text** (30 mins)
+3. ~~**Homepage CTA Buttons**~~ ✅ DECIDED AGAINST (keeping clean design)
+4. ~~**Lab Statistics Section**~~ ✅ DECIDED AGAINST (avoiding clutter)
+5. **Professor Photo in About Us** (15 mins - need image)
+6. ~~**Research Page Hero Text**~~ ❌ N/A (Research page removed)
 
 ## 📋 Session Summary (2025-10-05)
 
@@ -562,40 +552,45 @@ buttons, nav: -apple-system, BlinkMacSystemFont, 'Segoe UI'
 5. **Join Us Sections** - Created shared JoinUs component, applied to all pages
 6. **Page Layout Consistency** - Ensured all pages use 900px max-width, left-aligned
 
-### 🎯 Next Priority Tasks:
-
-#### Immediate (Quick Wins - 1-2 hours):
-1. **Homepage CTA Buttons** ⭐⭐⭐
-   - Add 3 CTAs: [Join Our Lab] [Explore Research] [Latest Publications]
-   - Strengthen value proposition text
-   - 30 minutes
-
-2. **Publications Total Count Header** ✅ DONE
-   - Shows "Total X Publications"
-   - Shows filtered count dynamically
+### 🎯 Remaining Priority Tasks:
 
 #### High Priority (1-3 days):
-3. **About Us - Professor Profile Enhancement** ⭐⭐
-   - Add professional headshot
-   - Highlight key achievements
-   - 1 day
+1. **About Us - Professor Profile Enhancement** ⭐⭐⭐
+   - Add professional headshot of Prof. Lee
+   - Highlight key achievements/collaborations
+   - Improve visual hierarchy
+   - **Effort:** 1 day (15 mins if photo available)
 
-4. **About Us - Lab Statistics** ⭐
-   - "Lab by the Numbers" section
-   - Animated counters
-   - 1 hour
-
-5. **People Page Enhancement** ⭐⭐
+2. **People Page Enhancement** ⭐⭐
    - Larger profile photos
    - Research interests tags
-   - Personal website/GitHub links
-   - 1-2 days
+   - Personal website/GitHub/Scholar links
+   - **Effort:** 1-2 days
 
-6. **Gallery Storytelling Enhancement** ⭐
+3. **Gallery Storytelling Enhancement** ⭐
    - Add event names and dates
    - Better categorization
-   - Image captions
-   - 1 day
+   - Image captions with context
+   - **Effort:** 1 day
+
+#### Medium Priority:
+4. **SEO & Performance Optimization** ⭐⭐
+   - Convert to Next.js Image component
+   - Optimize images (WebP)
+   - Schema.org markup expansion
+   - **Effort:** 2 days
+
+5. **Admin Dashboard Improvements** ⭐
+   - WYSIWYG editor enhancements
+   - Preview before publish
+   - Content version history
+   - **Effort:** 2 days
+
+### ❌ Explicitly Rejected Tasks:
+- ~~Homepage CTA Buttons~~ - Decided to keep clean design
+- ~~Lab Statistics Section~~ - Would clutter About Us page
+- ~~Research Page~~ - Removed, content in About Us
+- ~~News Page~~ - Removed, content in Homepage carousel
 
 ---
 

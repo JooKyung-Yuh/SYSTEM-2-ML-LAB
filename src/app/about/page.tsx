@@ -131,33 +131,44 @@ export default async function About() {
               <section className={styles.section}>
                 <h2 className={styles.sectionTitle}>Lab Director</h2>
                 <div className={styles.directorCard}>
-                  <h3 className={styles.directorName}>Hae Beom Lee</h3>
-                  <p className={styles.directorTitle}>
-                    Assistant Professor, School of Electrical Engineering, Korea University
-                  </p>
-                  <p className={styles.paragraph}>
-                    Professor Lee leads our research group focusing on System 2 thinking and deliberate reasoning in AI systems.
-                    He brings extensive experience from his postdoctoral work at Mila (Université de Montréal) with Prof. Yoshua
-                    Bengio and at KAIST with Prof. Juho Lee.
-                  </p>
-                  <div className={styles.paragraph}>
-                    <strong>Education & Career:</strong>
-                    <ul className={styles.list}>
-                      <li>2021: Ph.D. in Computer Science, KAIST (advised by Prof. Sung Ju Hwang)</li>
-                      <li>2021-2022: Postdoctoral Researcher, KAIST</li>
-                      <li>2022-2023: Postdoctoral Researcher, Mila & Université de Montréal</li>
-                      <li>2023-Present: Assistant Professor, Korea University</li>
-                    </ul>
+                  <div className={styles.directorLayout}>
+                    <div className={styles.directorPhoto}>
+                      <img
+                        src="/images/professor-lee.png"
+                        alt="Professor Hae Beom Lee"
+                        className={styles.professorImage}
+                      />
+                    </div>
+                    <div className={styles.directorInfo}>
+                      <h3 className={styles.directorName}>Hae Beom Lee</h3>
+                      <p className={styles.directorTitle}>
+                        Assistant Professor, School of Electrical Engineering, Korea University
+                      </p>
+                      <p className={styles.paragraph}>
+                        Professor Lee leads our research group focusing on System 2 thinking and deliberate reasoning in AI systems.
+                        He brings extensive experience from his postdoctoral work at Mila (Université de Montréal) with Prof. Yoshua
+                        Bengio and at KAIST with Prof. Juho Lee.
+                      </p>
+                      <div className={styles.paragraph}>
+                        <strong>Education & Career:</strong>
+                        <ul className={styles.list}>
+                          <li>2021: Ph.D. in Computer Science, KAIST (advised by Prof. Sung Ju Hwang)</li>
+                          <li>2021-2022: Postdoctoral Researcher, KAIST</li>
+                          <li>2022-2023: Postdoctoral Researcher, Mila & Université de Montréal</li>
+                          <li>2023-Present: Assistant Professor, Korea University</li>
+                        </ul>
+                      </div>
+                      <p>
+                        <a href="https://haebeom-lee.github.io/" target="_blank" rel="noopener noreferrer"
+                           className={styles.link}>
+                          Personal Website
+                        </a> |{' '}
+                        <a href="mailto:haebeomlee@korea.ac.kr" className={styles.link}>
+                          Email
+                        </a>
+                      </p>
+                    </div>
                   </div>
-                  <p>
-                    <a href="https://haebeom-lee.github.io/" target="_blank" rel="noopener noreferrer"
-                       className={styles.link}>
-                      Personal Website
-                    </a> |{' '}
-                    <a href="mailto:haebeomlee@korea.ac.kr" className={styles.link}>
-                      Email
-                    </a>
-                  </p>
                 </div>
               </section>
 

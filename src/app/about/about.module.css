@@ -53,6 +53,45 @@
   margin-bottom: 2rem;
 }
 
+.directorLayout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.directorPhoto {
+  flex-shrink: 0;
+}
+
+.professorImage {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.directorInfo {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .directorLayout {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .professorImage {
+    width: 180px;
+    height: 180px;
+  }
+
+  .directorInfo {
+    text-align: left;
+  }
+}
+
 /* Layout-specific styles matching Vercel version */
 .sectionFullWidth {
   /* Default - standard paragraph layout */

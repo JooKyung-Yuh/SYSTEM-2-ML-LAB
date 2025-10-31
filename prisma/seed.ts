@@ -264,6 +264,119 @@ async function main() {
     });
   }
 
+  // Create About Us page sections
+  const aboutPage = await prisma.page.findUnique({ where: { slug: 'about' } });
+  console.log('About page found:', aboutPage ? 'YES' : 'NO');
+
+  if (aboutPage) {
+    const aboutSections = [
+      {
+        pageId: aboutPage.id,
+        title: 'Lab Director',
+        content: `
+          <div style="display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 2rem;">
+            <div style="flex-shrink: 0;">
+              <img src="/images/professor-lee.png" alt="Professor Hae Beom Lee" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);" />
+            </div>
+            <div style="flex: 1;">
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #222; margin-bottom: 0.5rem;">Hae Beom Lee</h3>
+              <p style="color: #666; margin-bottom: 1rem; font-size: 1rem;">Assistant Professor, School of Electrical Engineering, Korea University</p>
+              <p style="margin-bottom: 1rem; font-size: 1rem; color: #333; line-height: 1.6;">Professor Lee leads our research group focusing on System 2 thinking and deliberate reasoning in AI systems. He brings extensive experience from his postdoctoral work at Mila (Université de Montréal) with Prof. Yoshua Bengio and at KAIST with Prof. Juho Lee.</p>
+              <div style="margin-bottom: 1rem;">
+                <strong>Education & Career:</strong>
+                <ul style="margin-top: 0.5rem; padding-left: 1.5rem; line-height: 1.8;">
+                  <li>2021: Ph.D. in Computer Science, KAIST (advised by Prof. Sung Ju Hwang)</li>
+                  <li>2021-2022: Postdoctoral Researcher, KAIST</li>
+                  <li>2022-2023: Postdoctoral Researcher, Mila & Université de Montréal</li>
+                  <li>2023-Present: Assistant Professor, Korea University</li>
+                </ul>
+              </div>
+              <p>
+                <a href="https://haebeom-lee.github.io/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none;">Personal Website</a> |
+                <a href="mailto:haebeomlee@korea.ac.kr" style="color: #0066cc; text-decoration: none;">Email</a>
+              </p>
+            </div>
+          </div>
+        `,
+        layout: 'full-width',
+        order: 1
+      },
+      {
+        pageId: aboutPage.id,
+        title: 'Our Mission',
+        content: `
+          <p style="margin-bottom: 1rem;">Our lab at Korea University's School of Electrical Engineering is dedicated to advancing the frontiers of artificial intelligence through innovative research in System 2 deep learning and large language model reasoning.</p>
+          <p>We strive to develop AI systems that can perform complex reasoning, meta-learning, and deliberate thinking processes, bridging the gap between current machine learning capabilities and human-like cognitive abilities.</p>
+        `,
+        layout: 'full-width',
+        order: 2
+      },
+      {
+        pageId: aboutPage.id,
+        title: 'Research Philosophy',
+        content: `
+          <p style="margin-bottom: 1rem;">We emphasize both theoretical understanding and practical applications of machine learning, fostering interdisciplinary collaboration to solve real-world problems through innovative research.</p>
+          <p style="margin-bottom: 0.5rem;">Our approach focuses on:</p>
+          <ul style="padding-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Theoretical Rigor:</strong> Building solid mathematical foundations for AI systems</li>
+            <li><strong>Practical Impact:</strong> Developing solutions that address real-world challenges</li>
+            <li><strong>Interdisciplinary Approach:</strong> Collaborating across cognitive science, neuroscience, and computer science</li>
+            <li><strong>Open Research:</strong> Contributing to the global AI research community through publications and open-source projects</li>
+          </ul>
+        `,
+        layout: 'full-width',
+        order: 3
+      },
+      {
+        pageId: aboutPage.id,
+        title: 'Research Areas',
+        content: JSON.stringify({
+          description: 'Our research spans multiple areas at the intersection of machine learning and cognitive science:',
+          cards: [
+            {
+              id: '1',
+              title: 'Large Language Model Reasoning',
+              content: 'Advancing reasoning capabilities in large language models for complex problem solving.'
+            },
+            {
+              id: '2',
+              title: 'System 2 Deep Learning',
+              content: 'Developing deliberate, slow, and logical thinking processes in neural networks.'
+            },
+            {
+              id: '3',
+              title: 'Meta-Learning',
+              content: 'Learning to learn: algorithms that can quickly adapt to new tasks and domains.'
+            },
+            {
+              id: '4',
+              title: 'AutoML',
+              content: 'Automated machine learning for efficient model design and hyperparameter optimization.'
+            },
+            {
+              id: '5',
+              title: 'Bayesian Inference',
+              content: 'Principled uncertainty quantification and probabilistic reasoning in machine learning.'
+            },
+            {
+              id: '6',
+              title: 'Generative Flow Networks',
+              content: 'Novel generative models for sampling from complex probability distributions.'
+            }
+          ]
+        }),
+        layout: 'grid',
+        order: 4
+      }
+    ];
+
+    for (const section of aboutSections) {
+      await prisma.section.create({
+        data: section
+      });
+    }
+  }
+
   console.log('Seed data created successfully');
 }
 
