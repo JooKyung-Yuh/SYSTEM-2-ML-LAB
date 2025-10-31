@@ -1,11 +1,11 @@
 import { jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
 const secret = new TextEncoder().encode(JWT_SECRET);
-
-// Debug: Check if JWT_SECRET is consistent
-console.log('Auth module loaded, JWT_SECRET:', JWT_SECRET ? JWT_SECRET.substring(0, 10) + '...' : 'Missing');
 
 export interface AuthUser {
   userId: string;
@@ -17,15 +17,8 @@ export interface AuthUser {
 
 export async function verifyToken(token: string): Promise<AuthUser | null> {
   try {
-    console.log('Auth: Verifying token:', token.substring(0, 30) + '...');
-    console.log('Auth: Using JWT_SECRET:', JWT_SECRET ? 'Present' : 'Missing');
-    console.log('Auth: Current timestamp:', Math.floor(Date.now() / 1000));
-
     // Use jose library for Edge Runtime compatibility
     const { payload } = await jwtVerify(token, secret);
-
-    console.log('Auth: Token verification successful for:', payload.email);
-    console.log('Auth: Token exp:', payload.exp, 'iat:', payload.iat);
 
     return {
       userId: payload.userId as string,
@@ -35,17 +28,7 @@ export async function verifyToken(token: string): Promise<AuthUser | null> {
       exp: payload.exp
     };
   } catch (error) {
-    console.error('Auth: Token verification failed:', error);
-
-    // Try to decode without verification to see the payload
-    try {
-      const parts = token.split('.');
-      const payload = JSON.parse(atob(parts[1]));
-      console.log('Auth: Token payload (unverified):', payload);
-    } catch (decodeError) {
-      console.error('Auth: Could not decode token:', decodeError);
-    }
-
+    console.error('Auth: Token verification failed');
     return null;
   }
 }

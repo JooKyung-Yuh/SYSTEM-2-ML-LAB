@@ -2,16 +2,49 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
 import prisma from '@/lib/prisma';
+import { loginSchema, validateRequest } from '@/lib/validation';
+import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
 const secret = new TextEncoder().encode(JWT_SECRET);
-
-// Debug: Check if JWT_SECRET is consistent
-console.log('Login API loaded, JWT_SECRET:', JWT_SECRET ? JWT_SECRET.substring(0, 10) + '...' : 'Missing');
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    // Apply rate limiting (5 login attempts per 15 minutes per IP)
+    const identifier = getClientIdentifier(request);
+    const rateLimit = await rateLimiters.login(identifier);
+
+    if (!rateLimit.success) {
+      const resetDate = new Date(rateLimit.reset);
+      return NextResponse.json(
+        {
+          error: 'Too many login attempts. Please try again later.',
+          retryAfter: resetDate.toISOString()
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimit.reset - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': resetDate.toISOString(),
+          }
+        }
+      );
+    }
+
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(loginSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
+    const { email, password } = validation.data;
 
     // Find user
     const user = await prisma.user.findUnique({
@@ -29,10 +62,6 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token with expiration time using jose library
-    console.log('Login: Generating token for user:', user.email);
-    console.log('Login: Using JWT_SECRET:', JWT_SECRET ? 'Present' : 'Missing');
-    console.log('Login: Current timestamp:', Math.floor(Date.now() / 1000));
-
     const iat = Math.floor(Date.now() / 1000);
     const exp = iat + 30 * 60; // 30 minutes
 
@@ -45,9 +74,6 @@ export async function POST(request: NextRequest) {
       .setIssuedAt(iat)
       .setExpirationTime(exp)
       .sign(secret);
-
-    console.log('Login: Token generated successfully');
-    console.log('Login: Token exp:', exp, 'iat:', iat);
 
     // Set cookie using simple, standard approach
     const response = NextResponse.json({
@@ -64,8 +90,10 @@ export async function POST(request: NextRequest) {
       path: '/'
     });
 
-    console.log('Login: Token generated and cookie set:', token.substring(0, 20) + '...');
-    console.log('Login: Cookie will be set with maxAge 1800 seconds');
+    // Add rate limit headers
+    response.headers.set('X-RateLimit-Limit', '5');
+    response.headers.set('X-RateLimit-Remaining', rateLimit.remaining.toString());
+    response.headers.set('X-RateLimit-Reset', new Date(rateLimit.reset).toISOString());
 
     return response;
   } catch (error) {

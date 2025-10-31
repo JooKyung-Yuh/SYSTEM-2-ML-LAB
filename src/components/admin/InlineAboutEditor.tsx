@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import styles from './InlineAboutEditor.module.css';
 import { showToast, toastMessages } from '@/lib/toast';
 import RichTextEditor from './ui/RichTextEditor';
@@ -499,7 +500,12 @@ export default function InlineAboutEditor() {
                     <div
                       className={styles.sectionContent}
                       onClick={() => handleEdit(section.id, 'section', section)}
-                      dangerouslySetInnerHTML={{ __html: section.content }}
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(section.content, {
+                          ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'div', 'span'],
+                          ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class']
+                        })
+                      }}
                     />
                   </>
                 )}

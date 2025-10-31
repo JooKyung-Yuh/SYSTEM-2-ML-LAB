@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { createNewsSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,18 +30,23 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth(request);
 
-    const data = await request.json();
-    const { title, description, date, order, links } = data;
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(createNewsSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
+    const { links, ...newsData } = validation.data;
 
     const newsItem = await prisma.newsItem.create({
       data: {
-        title,
-        description,
-        date,
-        order: order || 0,
-        links: {
-          create: links || [],
-        },
+        ...newsData,
+        order: newsData.order || 0,
+        links: links ? {
+          create: links,
+        } : undefined,
       },
       include: {
         links: true,

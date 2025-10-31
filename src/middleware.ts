@@ -13,18 +13,14 @@ export async function middleware(request: NextRequest) {
 
     // Check authentication for other admin routes
     const token = request.cookies.get('auth-token')?.value;
-    console.log('Middleware: Checking route:', pathname);
-    console.log('Middleware: Token found:', !!token);
 
     if (!token) {
-      console.log('Middleware: No token, redirecting to login');
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
 
     // Verify token
     const verifiedUser = await verifyToken(token);
     if (!verifiedUser) {
-      console.log('Middleware: Token verification failed, clearing cookie and redirecting');
       // Token is invalid or expired, redirect to login
       const response = NextResponse.redirect(new URL('/admin/login', request.url));
       // Clear the invalid cookie to prevent redirect loops
@@ -37,8 +33,6 @@ export async function middleware(request: NextRequest) {
       });
       return response;
     }
-
-    console.log('Middleware: Authentication successful for:', verifiedUser.email);
 
     // User is authenticated, allow access
     return NextResponse.next();

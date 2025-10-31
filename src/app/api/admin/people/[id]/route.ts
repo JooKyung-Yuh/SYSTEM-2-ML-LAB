@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { updatePersonSchema, validateRequest } from '@/lib/validation';
 
 export async function PUT(
   request: NextRequest,
@@ -10,23 +11,17 @@ export async function PUT(
     await requireAuth(request);
 
     const { id } = await context.params;
-    const data = await request.json();
-    const { name, title, email, phone, website, bio, category, order, published, image } = data;
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(updatePersonSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     const person = await prisma.person.update({
       where: { id },
-      data: {
-        name,
-        title,
-        email,
-        phone,
-        website,
-        bio,
-        category,
-        order,
-        published,
-        image
-      }
+      data: validation.data
     });
 
     return NextResponse.json(person);

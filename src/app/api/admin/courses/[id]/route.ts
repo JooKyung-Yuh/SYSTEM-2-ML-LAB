@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { updateCourseSchema, validateRequest } from '@/lib/validation';
 
 export async function PUT(
   request: NextRequest,
@@ -10,23 +11,17 @@ export async function PUT(
     await requireAuth(request);
 
     const { id } = await context.params;
-    const data = await request.json();
-    const { code, title, description, semester, year, instructor, credits, syllabus, order, published } = data;
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(updateCourseSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     const course = await prisma.course.update({
       where: { id },
-      data: {
-        code,
-        title,
-        description,
-        semester,
-        year,
-        instructor,
-        credits,
-        syllabus,
-        order,
-        published
-      }
+      data: validation.data
     });
 
     return NextResponse.json(course);

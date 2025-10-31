@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Require authentication
+    await requireAuth(request);
+
     const galleryItems = await prisma.galleryItem.findMany({
       orderBy: [
         { category: 'asc' },

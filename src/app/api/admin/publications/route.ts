@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { createPublicationSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,21 +26,16 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth(request);
 
-    const data = await request.json();
-    const { title, authors, venue, year, url, pdfUrl, category, order, published } = data;
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(createPublicationSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     const publication = await prisma.publication.create({
-      data: {
-        title,
-        authors,
-        venue,
-        year,
-        url,
-        pdfUrl,
-        category,
-        order: order ?? 0,
-        published: published ?? true
-      }
+      data: validation.data
     });
 
     return NextResponse.json(publication);

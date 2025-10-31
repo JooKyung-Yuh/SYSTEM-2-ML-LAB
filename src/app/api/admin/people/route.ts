@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { createPersonSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -25,21 +26,18 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth(request);
 
-    const data = await request.json();
-    const { name, title, email, phone, website, bio, category, order, published, image } = data;
+    const body = await request.json();
+
+    // Validate input
+    const validation = validateRequest(createPersonSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     const person = await prisma.person.create({
       data: {
-        name,
-        title,
-        email,
-        phone,
-        website,
-        bio,
-        category,
-        order: order ?? 0,
-        published: published ?? true,
-        image
+        ...validation.data,
+        order: validation.data.order ?? 0,
       }
     });
 

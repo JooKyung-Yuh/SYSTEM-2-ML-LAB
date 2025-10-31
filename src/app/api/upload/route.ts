@@ -1,9 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import path from 'path';
+import { requireAuth } from '@/lib/auth';
+import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
 
 export async function POST(request: NextRequest) {
   try {
+    // Require authentication
+    await requireAuth(request);
+
+    // Apply rate limiting (10 uploads per minute per IP)
+    const identifier = getClientIdentifier(request);
+    const rateLimit = await rateLimiters.upload(identifier);
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Too many upload requests. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil((rateLimit.reset - Date.now()) / 1000).toString(),
+            'X-RateLimit-Limit': '10',
+            'X-RateLimit-Remaining': '0',
+          }
+        }
+      );
+    }
+
     const data = await request.formData();
     const file: File | null = data.get('file') as unknown as File;
 

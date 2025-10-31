@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { updateNewsSchema, validateRequest } from '@/lib/validation';
 
 export async function PUT(
   request: NextRequest,
@@ -10,25 +11,34 @@ export async function PUT(
     await requireAuth(request);
     const { id } = await params;
 
-    const data = await request.json();
-    const { title, description, date, order, links } = data;
+    const body = await request.json();
 
-    // First, delete existing links
-    await prisma.newsLink.deleteMany({
-      where: { newsItemId: id },
-    });
+    // Validate input
+    const validation = validateRequest(updateNewsSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
+    const { links, ...newsData } = validation.data;
+
+    // First, delete existing links if new links are provided
+    if (links) {
+      await prisma.newsLink.deleteMany({
+        where: { newsItemId: id },
+      });
+    }
 
     // Update the news item with new data and links
     const newsItem = await prisma.newsItem.update({
       where: { id },
       data: {
-        title,
-        description,
-        date,
-        order: order || 0,
-        links: {
-          create: links || [],
-        },
+        ...newsData,
+        ...(newsData.order !== undefined && { order: newsData.order || 0 }),
+        ...(links && {
+          links: {
+            create: links,
+          },
+        }),
       },
       include: {
         links: true,

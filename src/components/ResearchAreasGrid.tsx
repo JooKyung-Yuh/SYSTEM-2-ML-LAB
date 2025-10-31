@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
 import styles from '@/app/about/about.module.css';
 
 interface ResearchCard {
@@ -103,7 +104,12 @@ export default function ResearchAreasGrid({ cards, description }: ResearchAreasG
               <h3 className={styles.detailsTitle}>{selectedCardData.title}</h3>
               <div
                 className={styles.detailsText}
-                dangerouslySetInnerHTML={{ __html: selectedCardData.details || '' }}
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(selectedCardData.details || '', {
+                    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3'],
+                    ALLOWED_ATTR: ['href', 'target', 'rel']
+                  })
+                }}
               />
             </>
           )}

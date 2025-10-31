@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import DOMPurify from 'isomorphic-dompurify';
 import styles from './about.module.css';
 import ResearchAreasGrid from '@/components/ResearchAreasGrid';
 import Footer from '@/components/Footer';
@@ -119,7 +120,12 @@ export default async function About() {
                     {section.title}
                   </h2>
                   <div
-                    dangerouslySetInnerHTML={{ __html: section.content }}
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(section.content, {
+                        ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'div', 'span'],
+                        ALLOWED_ATTR: ['href', 'target', 'rel', 'style', 'class']
+                      })
+                    }}
                   />
                 </section>
               );
