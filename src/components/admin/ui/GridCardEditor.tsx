@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import RichTextEditor from './RichTextEditor';
 import styles from './GridCardEditor.module.css';
 

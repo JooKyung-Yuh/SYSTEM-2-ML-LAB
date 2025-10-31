@@ -4,6 +4,8 @@ import { OrganizationStructuredData, WebsiteStructuredData } from '@/components/
 import { Metadata } from 'next';
 import { siteConfig, getImageUrl } from '@/lib/config';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'System 2 ML Lab',
   description: siteConfig.description,

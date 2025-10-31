@@ -22,8 +22,8 @@ export async function middleware(request: NextRequest) {
     }
 
     // Verify token
-    const user = await verifyToken(token);
-    if (!user) {
+    const verifiedUser = await verifyToken(token);
+    if (!verifiedUser) {
       console.log('Middleware: Token verification failed, clearing cookie and redirecting');
       // Token is invalid or expired, redirect to login
       const response = NextResponse.redirect(new URL('/admin/login', request.url));
@@ -38,7 +38,7 @@ export async function middleware(request: NextRequest) {
       return response;
     }
 
-    console.log('Middleware: Authentication successful for:', user.email);
+    console.log('Middleware: Authentication successful for:', verifiedUser.email);
 
     // User is authenticated, allow access
     return NextResponse.next();
