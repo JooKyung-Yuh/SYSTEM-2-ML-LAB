@@ -160,7 +160,7 @@ export default async function About() {
                       </div>
                       <p>
                         <a href="https://haebeom-lee.github.io/" target="_blank" rel="noopener noreferrer"
-                           className={styles.link}>
+                          className={styles.link}>
                           Personal Website
                         </a> |{' '}
                         <a href="mailto:haebeomlee@korea.ac.kr" className={styles.link}>
