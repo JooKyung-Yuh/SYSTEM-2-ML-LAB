@@ -1,5 +1,6 @@
 import { jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
+import { requireCsrfProtection } from './csrf';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
@@ -40,7 +41,12 @@ export async function getAuthUser(request: NextRequest): Promise<AuthUser | null
   return await verifyToken(token);
 }
 
-export async function requireAuth(request: NextRequest): Promise<AuthUser> {
+export async function requireAuth(request: NextRequest, options?: { skipCsrf?: boolean }): Promise<AuthUser> {
+  // Check CSRF protection for state-changing methods
+  if (!options?.skipCsrf) {
+    await requireCsrfProtection(request);
+  }
+
   const user = await getAuthUser(request);
   if (!user) {
     throw new Error('Unauthorized');
