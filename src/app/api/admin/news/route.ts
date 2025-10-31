@@ -38,15 +38,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const { links, ...newsData } = validation.data;
+    const { links, title, description, date, order } = validation.data;
 
     const newsItem = await prisma.newsItem.create({
       data: {
-        ...newsData,
-        order: newsData.order || 0,
-        links: links ? {
-          create: links,
-        } : undefined,
+        title,
+        description: description || '',
+        date,
+        order: order || 0,
+        ...(links && {
+          links: {
+            create: links,
+          },
+        }),
       },
       include: {
         links: true,

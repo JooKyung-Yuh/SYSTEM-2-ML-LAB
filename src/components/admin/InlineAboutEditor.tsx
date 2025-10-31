@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from 'dompurify';
 import styles from './InlineAboutEditor.module.css';
 import { showToast, toastMessages } from '@/lib/toast';
 import RichTextEditor from './ui/RichTextEditor';

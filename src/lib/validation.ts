@@ -9,20 +9,15 @@ export const loginSchema = z.object({
 // People validation schemas
 export const createPersonSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
-  title: z.string().min(1, 'Title is required').max(200, 'Title is too long'),
-  role: z.enum(['FACULTY', 'POSTDOC', 'PHD', 'MS', 'UNDERGRAD', 'ALUMNI'], {
-    errorMap: () => ({ message: 'Invalid role' }),
-  }),
+  title: z.string().optional().or(z.literal('')),
+  category: z.string().min(1, 'Category is required').max(100, 'Category is too long'),
   email: z.string().email('Invalid email format').optional().or(z.literal('')),
   phone: z.string().max(50, 'Phone is too long').optional().or(z.literal('')),
-  office: z.string().max(100, 'Office is too long').optional().or(z.literal('')),
-  bio: z.string().optional().or(z.literal('')),
+  website: z.string().optional().or(z.literal('')),
   image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')),
-  website: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  googleScholar: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  linkedin: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  github: z.string().url('Invalid URL format').optional().or(z.literal('')),
+  bio: z.string().optional().or(z.literal('')),
   order: z.number().int().min(0).optional(),
+  published: z.boolean().optional(),
 });
 
 export const updatePersonSchema = createPersonSchema.partial();
@@ -33,20 +28,18 @@ export const createPublicationSchema = z.object({
   authors: z.string().min(1, 'Authors are required'),
   venue: z.string().min(1, 'Venue is required').max(200, 'Venue is too long'),
   year: z.number().int().min(1900).max(new Date().getFullYear() + 5),
-  abstract: z.string().optional().or(z.literal('')),
-  pdfUrl: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  projectUrl: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  codeUrl: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  bibtex: z.string().optional().or(z.literal('')),
-  image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')),
-  tags: z.string().optional().or(z.literal('')),
+  url: z.string().optional().or(z.literal('')),
+  pdfUrl: z.string().optional().or(z.literal('')),
+  category: z.string().min(1, 'Category is required').max(100, 'Category is too long'),
+  order: z.number().int().min(0).optional(),
+  published: z.boolean().optional(),
 });
 
 export const updatePublicationSchema = createPublicationSchema.partial();
 
 // News validation schemas
 export const newsLinkSchema = z.object({
-  label: z.string().min(1, 'Label is required').max(100, 'Label is too long'),
+  text: z.string().min(1, 'Text is required').max(100, 'Text is too long'),
   url: z.string().url('Invalid URL format'),
 });
 
@@ -104,11 +97,8 @@ export const createGalleryItemSchema = z.object({
 export const updateGalleryItemSchema = createGalleryItemSchema.partial();
 
 // File upload validation
-export const fileUploadSchema = z.object({
-  file: z.instanceof(File, { message: 'File is required' }),
-  maxSize: z.number().optional().default(5 * 1024 * 1024), // 5MB default
-  allowedTypes: z.array(z.string()).optional().default(['image/jpeg', 'image/png', 'image/webp', 'image/gif']),
-});
+// Note: File validation is done in the upload route handlers directly
+// since File is a browser API and not available in Node.js server environment
 
 // Helper function to validate request body
 export function validateRequest<T>(schema: z.ZodSchema<T>, data: unknown): { success: true; data: T } | { success: false; error: string } {
@@ -117,7 +107,7 @@ export function validateRequest<T>(schema: z.ZodSchema<T>, data: unknown): { suc
     return { success: true, data: validated };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const errorMessage = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      const errorMessage = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
       return { success: false, error: errorMessage };
     }
     return { success: false, error: 'Validation failed' };

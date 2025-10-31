@@ -19,7 +19,7 @@ export async function PUT(
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const { links, ...newsData } = validation.data;
+    const { links, title, description, date, order } = validation.data;
 
     // First, delete existing links if new links are provided
     if (links) {
@@ -32,8 +32,10 @@ export async function PUT(
     const newsItem = await prisma.newsItem.update({
       where: { id },
       data: {
-        ...newsData,
-        ...(newsData.order !== undefined && { order: newsData.order || 0 }),
+        ...(title !== undefined && { title }),
+        ...(description !== undefined && { description }),
+        ...(date !== undefined && { date }),
+        ...(order !== undefined && { order }),
         ...(links && {
           links: {
             create: links,
