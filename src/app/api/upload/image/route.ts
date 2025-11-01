@@ -3,6 +3,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { requireAuth } from '@/lib/auth';
 import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
+import { validateFileUpload, generateSafeFilename } from '@/lib/fileValidation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    
+
     if (!file) {
       return NextResponse.json(
         { error: 'No file uploaded' },
@@ -37,29 +38,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json(
-        { error: 'File must be an image' },
-        { status: 400 }
-      );
-    }
-
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: 'File size must be less than 5MB' },
-        { status: 400 }
-      );
+    // Comprehensive file validation with magic byte verification
+    const validation = await validateFileUpload(file);
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const originalName = file.name.replace(/\s+/g, '-');
-    const filename = `${timestamp}-${originalName}`;
+    // Generate safe filename
+    const filename = generateSafeFilename(file.name);
     
     // Ensure directory exists
     const uploadDir = path.join(process.cwd(), 'public', 'images', 'people');

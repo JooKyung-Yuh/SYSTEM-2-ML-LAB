@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises';
 import path from 'path';
 import { requireAuth } from '@/lib/auth';
 import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
+import { validateFileUpload, generateSafeFilename } from '@/lib/fileValidation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,25 +35,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
-    // Check file type
-    if (!file.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 });
-    }
-
-    // Check file size (5MB limit)
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
-    if (file.size > MAX_SIZE) {
-      return NextResponse.json({ error: 'File size exceeds 5MB limit' }, { status: 400 });
+    // Comprehensive file validation with magic byte verification
+    const validation = await validateFileUpload(file);
+    if (!validation.valid) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(2, 15);
-    const extension = path.extname(file.name);
-    const filename = `${timestamp}_${randomStr}${extension}`;
+    // Generate safe filename
+    const filename = generateSafeFilename(file.name);
 
     // Ensure uploads directory exists
     const uploadsDir = path.join(process.cwd(), 'public/uploads');
