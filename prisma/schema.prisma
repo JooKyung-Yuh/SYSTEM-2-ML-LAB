@@ -26,6 +26,7 @@ model NewsItem {
   order       Int        @default(0)
   links       NewsLink[]
 
+  @@unique([title, date], name: "title_date")
   @@index([order])
   @@index([date])
 }
@@ -62,6 +63,7 @@ model Section {
   pageId  String
   page    Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
 
+  @@unique([pageId, title, order], name: "page_title_order")
   @@index([pageId])
   @@index([order])
 }
@@ -142,4 +144,11 @@ model GalleryItem {
   @@index([category])
   @@index([order])
   @@index([published])
+}
+
+model SiteSettings {
+  id               String   @id @default(cuid())
+  showNewsCarousel Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

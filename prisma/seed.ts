@@ -4,6 +4,16 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
+  // Create site settings with default showNewsCarousel: false
+  await prisma.siteSettings.upsert({
+    where: { id: 'default' },
+    update: {},
+    create: {
+      id: 'default',
+      showNewsCarousel: false,
+    },
+  });
+
   // Create admin user
   const hashedPassword = await bcrypt.hash('admin123', 10);
   const adminUser = await prisma.user.upsert({
@@ -94,17 +104,47 @@ async function main() {
   ];
 
   for (const item of newsItems) {
-    const newsItem = await prisma.newsItem.create({
-      data: {
-        date: item.date,
-        title: item.title,
-        description: item.description,
-        order: item.order,
-        links: {
-          create: item.links
-        }
-      }
+    // First, check if news item exists
+    const existing = await prisma.newsItem.findUnique({
+      where: {
+        title_date: {
+          title: item.title,
+          date: item.date,
+        },
+      },
+      include: { links: true },
     });
+
+    if (existing) {
+      // Delete existing links and update
+      await prisma.newsLink.deleteMany({
+        where: { newsItemId: existing.id },
+      });
+
+      await prisma.newsItem.update({
+        where: { id: existing.id },
+        data: {
+          description: item.description,
+          order: item.order,
+          links: {
+            create: item.links,
+          },
+        },
+      });
+    } else {
+      // Create new
+      await prisma.newsItem.create({
+        data: {
+          date: item.date,
+          title: item.title,
+          description: item.description,
+          order: item.order,
+          links: {
+            create: item.links,
+          },
+        },
+      });
+    }
   }
 
   // Create people
@@ -165,8 +205,16 @@ async function main() {
   ];
 
   for (const pub of publications) {
-    await prisma.publication.create({
-      data: pub
+    await prisma.publication.upsert({
+      where: {
+        title_authors_venue: {
+          title: pub.title,
+          authors: pub.authors,
+          venue: pub.venue,
+        },
+      },
+      update: pub,
+      create: pub,
     });
   }
 
@@ -208,8 +256,10 @@ async function main() {
   ];
 
   for (const course of courses) {
-    await prisma.course.create({
-      data: course
+    await prisma.course.upsert({
+      where: { code: course.code },
+      update: course,
+      create: course,
     });
   }
 
@@ -242,8 +292,10 @@ async function main() {
   ];
 
   for (const item of galleryItems) {
-    await prisma.galleryItem.create({
-      data: item
+    await prisma.galleryItem.upsert({
+      where: { title: item.title },
+      update: item,
+      create: item,
     });
   }
 
@@ -377,8 +429,19 @@ async function main() {
     ];
 
     for (const section of aboutSections) {
-      await prisma.section.create({
-        data: section
+      await prisma.section.upsert({
+        where: {
+          page_title_order: {
+            pageId: section.pageId,
+            title: section.title,
+            order: section.order,
+          },
+        },
+        update: {
+          content: section.content,
+          layout: section.layout,
+        },
+        create: section,
       });
     }
   }

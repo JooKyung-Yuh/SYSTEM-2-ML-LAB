@@ -9,6 +9,7 @@ import InlinePeopleManager from '@/components/admin/InlinePeopleManager';
 import InlinePublicationsManager from '@/components/admin/InlinePublicationsManager';
 import InlineCoursesManager from '@/components/admin/InlineCoursesManager';
 import InlineGalleryManager from '@/components/admin/InlineGalleryManager';
+import SettingsManager from '@/components/admin/SettingsManager';
 import ToastProvider from '@/components/admin/ui/ToastProvider';
 import styles from './dashboard.module.css';
 
@@ -137,6 +138,15 @@ export default function DashboardPage() {
                 Gallery
               </button>
             </li>
+            <li>
+              <button
+                className={`${styles.navButton} ${activeTab === 'settings' ? styles.active : ''}`}
+                onClick={() => setActiveTab('settings')}
+              >
+                <i className="fas fa-cog"></i>
+                Settings
+              </button>
+            </li>
           </ul>
         </nav>
 
@@ -147,6 +157,7 @@ export default function DashboardPage() {
           {activeTab === 'publications' && <InlinePublicationsManager />}
           {activeTab === 'courses' && <InlineCoursesManager />}
           {activeTab === 'gallery' && <InlineGalleryManager />}
+          {activeTab === 'settings' && <SettingsManager />}
         </main>
       </div>
       </div>
