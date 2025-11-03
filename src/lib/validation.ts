@@ -6,6 +6,11 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+// Settings validation schemas
+export const updateSettingsSchema = z.object({
+  showNewsCarousel: z.boolean(),
+}).strict();
+
 // People validation schemas
 export const createPersonSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { updateSettingsSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -36,14 +37,14 @@ export async function PATCH(request: NextRequest) {
     await requireAuth(request);
 
     const body = await request.json();
-    const { showNewsCarousel } = body;
 
-    if (typeof showNewsCarousel !== 'boolean') {
-      return NextResponse.json(
-        { error: 'showNewsCarousel must be a boolean value' },
-        { status: 400 }
-      );
+    // Validate input using Zod schema
+    const validation = validateRequest(updateSettingsSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
+
+    const { showNewsCarousel } = validation.data;
 
     const settings = await prisma.siteSettings.upsert({
       where: { id: 'default' },
@@ -56,9 +57,17 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json(settings);
   } catch (error) {
-    console.error('Error updating settings:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error updating settings:', {
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
     return NextResponse.json(
-      { error: 'Failed to update settings' },
+      {
+        error: 'Failed to update settings',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     );
   }

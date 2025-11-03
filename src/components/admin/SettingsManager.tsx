@@ -19,8 +19,14 @@ export default function SettingsManager() {
 
   const fetchSettings = async () => {
     try {
-      const response = await fetch('/api/admin/settings');
-      if (!response.ok) throw new Error('Failed to fetch settings');
+      const response = await fetch('/api/admin/settings', {
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Fetch error:', errorData);
+        throw new Error(errorData.error || 'Failed to fetch settings');
+      }
       const data = await response.json();
       setSettings(data);
     } catch (error) {
@@ -41,10 +47,15 @@ export default function SettingsManager() {
       const response = await fetch('/api/admin/settings', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ [field]: newValue }),
       });
 
-      if (!response.ok) throw new Error('Failed to update settings');
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Update error:', errorData);
+        throw new Error(errorData.error || 'Failed to update settings');
+      }
 
       const updatedSettings = await response.json();
       setSettings(updatedSettings);

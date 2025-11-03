@@ -5,12 +5,26 @@ import { NextRequest } from 'next/server';
  * Validates Origin and Referer headers to prevent Cross-Site Request Forgery
  */
 
-const ALLOWED_ORIGINS = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  process.env.NEXT_PUBLIC_APP_URL,
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
-].filter(Boolean) as string[];
+// Build allowed origins list dynamically on each check
+// This ensures environment variables are always fresh in serverless environments
+const getAllowedOrigins = () => {
+  const origins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+  ];
+
+  // Add public site URL
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    origins.push(process.env.NEXT_PUBLIC_SITE_URL);
+  }
+
+  // Add Vercel preview URL (automatically set by Vercel)
+  if (process.env.VERCEL_URL) {
+    origins.push(`https://${process.env.VERCEL_URL}`);
+  }
+
+  return origins;
+};
 
 /**
  * Verify that the request comes from an allowed origin
@@ -22,6 +36,14 @@ export function verifyCsrfToken(request: NextRequest): { valid: boolean; error?:
   // Only check state-changing methods (POST, PUT, DELETE, PATCH)
   if (!['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
     return { valid: true };
+  }
+
+  // Get allowed origins fresh on each request
+  const allowedOrigins = getAllowedOrigins();
+
+  // Log allowed origins for debugging (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('CSRF: Checking against allowed origins:', allowedOrigins);
   }
 
   // Get origin from headers
@@ -38,7 +60,7 @@ export function verifyCsrfToken(request: NextRequest): { valid: boolean; error?:
 
   // Check origin header (preferred)
   if (origin) {
-    const isAllowed = ALLOWED_ORIGINS.some((allowedOrigin) => {
+    const isAllowed = allowedOrigins.some((allowedOrigin) => {
       return origin === allowedOrigin || origin.startsWith(allowedOrigin);
     });
 
@@ -55,7 +77,7 @@ export function verifyCsrfToken(request: NextRequest): { valid: boolean; error?:
     const refererUrl = new URL(referer);
     const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
 
-    const isAllowed = ALLOWED_ORIGINS.some((allowedOrigin) => {
+    const isAllowed = allowedOrigins.some((allowedOrigin) => {
       return refererOrigin === allowedOrigin || refererOrigin.startsWith(allowedOrigin);
     });
 
@@ -78,6 +100,22 @@ export async function requireCsrfProtection(request: NextRequest): Promise<void>
   const result = verifyCsrfToken(request);
 
   if (!result.valid) {
+    const allowedOrigins = getAllowedOrigins();
+
+    // Log CSRF failure details for debugging
+    console.error('CSRF validation failed:', {
+      error: result.error,
+      method: request.method,
+      origin: request.headers.get('origin'),
+      referer: request.headers.get('referer'),
+      allowedOrigins,
+      env: {
+        NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+        VERCEL_URL: process.env.VERCEL_URL,
+        NODE_ENV: process.env.NODE_ENV,
+      }
+    });
+
     throw new Error(result.error || 'CSRF validation failed');
   }
 }
