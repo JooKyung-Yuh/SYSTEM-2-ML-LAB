@@ -25,6 +25,9 @@ model NewsItem {
   updatedAt   DateTime   @updatedAt
   order       Int        @default(0)
   links       NewsLink[]
+
+  @@index([order])
+  @@index([date])
 }
 
 model NewsLink {
@@ -33,6 +36,8 @@ model NewsLink {
   url        String
   newsItemId String
   newsItem   NewsItem @relation(fields: [newsItemId], references: [id], onDelete: Cascade)
+
+  @@index([newsItemId])
 }
 
 model Page {
@@ -44,6 +49,8 @@ model Page {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   sections  Section[]
+
+  @@index([published])
 }
 
 model Section {
@@ -54,6 +61,9 @@ model Section {
   order   Int    @default(0)
   pageId  String
   page    Page   @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
+  @@index([order])
 }
 
 model Person {
@@ -70,6 +80,10 @@ model Person {
   published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([order])
+  @@index([published])
 }
 
 model Publication {
@@ -87,6 +101,10 @@ model Publication {
   updatedAt DateTime @updatedAt
 
   @@unique([title, authors, venue], name: "title_authors_venue")
+  @@index([year])
+  @@index([category])
+  @@index([order])
+  @@index([published])
 }
 
 model Course {
@@ -103,6 +121,11 @@ model Course {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([year])
+  @@index([semester])
+  @@index([order])
+  @@index([published])
 }
 
 model GalleryItem {
@@ -115,4 +138,8 @@ model GalleryItem {
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([order])
+  @@index([published])
 }
