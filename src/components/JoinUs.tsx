@@ -12,7 +12,7 @@ const JoinUs = () => {
         please feel free to reach out.
       </p>
       <p className={styles.joinText}>
-        <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers
+        <strong>Open Positions:</strong> PhD and Master&apos;s students, Postdoctoral researchers, Undergraduate research interns
       </p>
       <p className={styles.joinContact}>
         <strong>Contact:</strong>{' '}
