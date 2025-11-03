@@ -6,6 +6,7 @@ import styles from './SettingsManager.module.css';
 
 interface SiteSettings {
   showNewsCarousel: boolean;
+  showRecruitmentBanner: boolean;
 }
 
 export default function SettingsManager() {
@@ -110,6 +111,26 @@ export default function SettingsManager() {
             <span className={styles.toggleSlider}></span>
             <span className={styles.toggleLabel}>
               {settings.showNewsCarousel ? 'ON' : 'OFF'}
+            </span>
+          </button>
+        </div>
+
+        <div className={styles.settingItem}>
+          <div className={styles.settingInfo}>
+            <h3 className={styles.settingTitle}>Recruitment Banner</h3>
+            <p className={styles.settingDescription}>
+              Show or hide the recruitment banner on the home page
+            </p>
+          </div>
+          <button
+            className={`${styles.toggle} ${settings.showRecruitmentBanner ? styles.toggleOn : styles.toggleOff}`}
+            onClick={() => handleToggle('showRecruitmentBanner')}
+            disabled={saving}
+            aria-label="Toggle recruitment banner visibility"
+          >
+            <span className={styles.toggleSlider}></span>
+            <span className={styles.toggleLabel}>
+              {settings.showRecruitmentBanner ? 'ON' : 'OFF'}
             </span>
           </button>
         </div>

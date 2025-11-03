@@ -4,13 +4,14 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create site settings with default showNewsCarousel: false
+  // Create site settings with defaults
   await prisma.siteSettings.upsert({
     where: { id: 'default' },
     update: {},
     create: {
       id: 'default',
       showNewsCarousel: false,
+      showRecruitmentBanner: true,
     },
   });
 

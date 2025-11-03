@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import NewsCarousel from '@/components/NewsCarousel';
+import RecruitmentBanner from '@/components/RecruitmentBanner';
 
 interface NewsLink {
   id: string;
@@ -29,20 +30,23 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showNewsCarousel, setShowNewsCarousel] = useState(false);
+  const [showRecruitmentBanner, setShowRecruitmentBanner] = useState(false);
 
   useEffect(() => {
-    // Fetch site settings to check if news carousel should be shown
+    // Fetch site settings
     const fetchSettings = async () => {
       try {
         const response = await fetch('/api/settings');
         if (response.ok) {
           const data = await response.json();
           setShowNewsCarousel(data.showNewsCarousel);
+          setShowRecruitmentBanner(data.showRecruitmentBanner);
         }
       } catch (error) {
         console.error('Failed to fetch settings:', error);
-        // Default to hiding carousel on error
+        // Default to hiding carousel, showing recruitment banner
         setShowNewsCarousel(false);
+        setShowRecruitmentBanner(true);
       }
     };
 
@@ -117,7 +121,13 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 3,
-          paddingBottom: showNewsCarousel ? (isMobile ? '280px' : '350px') : '0',
+          paddingBottom: showNewsCarousel && showRecruitmentBanner
+            ? (isMobile ? '340px' : '420px')
+            : showNewsCarousel
+            ? (isMobile ? '280px' : '350px')
+            : showRecruitmentBanner
+            ? (isMobile ? '100px' : '80px')
+            : '0',
           opacity: isLoaded ? 1 : 0,
           transform: isLoaded ? 'translateY(0)' : 'translateY(20px)',
           transition: 'opacity 1.0s ease-out, transform 1.0s ease-out',
@@ -167,6 +177,21 @@ export default function HomeClient({ newsItems }: HomeClientProps) {
           </div>
         </div>
       </section>
+
+      {/* Recruitment Banner - Above news carousel */}
+      {showRecruitmentBanner && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: showNewsCarousel ? (isMobile ? '230px' : '300px') : 0,
+            left: 0,
+            right: 0,
+            zIndex: 9,
+          }}
+        >
+          <RecruitmentBanner isLoaded={isLoaded} />
+        </div>
+      )}
 
       {/* News Cards - Fixed at bottom - Only show if enabled */}
       {showNewsCarousel && (

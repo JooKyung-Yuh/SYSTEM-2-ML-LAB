@@ -30,11 +30,13 @@ export async function GET(request: NextRequest) {
       // Return default settings if not found
       return NextResponse.json({
         showNewsCarousel: false,
+        showRecruitmentBanner: true,
       });
     }
 
     return NextResponse.json({
       showNewsCarousel: settings.showNewsCarousel,
+      showRecruitmentBanner: settings.showRecruitmentBanner,
     });
   } catch (error) {
     console.error('Error fetching settings:', error);

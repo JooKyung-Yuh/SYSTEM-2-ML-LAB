@@ -5,7 +5,7 @@ import { updateSettingsSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
-    await requireAuth(request);
+    await requireAuth(request, { skipCsrf: true });
 
     const settings = await prisma.siteSettings.findUnique({
       where: { id: 'default' }
@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         data: {
           id: 'default',
           showNewsCarousel: false,
+          showRecruitmentBanner: true,
         }
       });
       return NextResponse.json(newSettings);
@@ -44,14 +45,20 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
-    const { showNewsCarousel } = validation.data;
+    const { showNewsCarousel, showRecruitmentBanner } = validation.data;
+
+    // Build update object with only provided fields
+    const updateData: { showNewsCarousel?: boolean; showRecruitmentBanner?: boolean } = {};
+    if (showNewsCarousel !== undefined) updateData.showNewsCarousel = showNewsCarousel;
+    if (showRecruitmentBanner !== undefined) updateData.showRecruitmentBanner = showRecruitmentBanner;
 
     const settings = await prisma.siteSettings.upsert({
       where: { id: 'default' },
-      update: { showNewsCarousel },
+      update: updateData,
       create: {
         id: 'default',
-        showNewsCarousel,
+        showNewsCarousel: showNewsCarousel ?? false,
+        showRecruitmentBanner: showRecruitmentBanner ?? true,
       }
     });
 

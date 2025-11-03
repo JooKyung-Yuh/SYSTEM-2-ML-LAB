@@ -147,8 +147,9 @@ model GalleryItem {
 }
 
 model SiteSettings {
-  id               String   @id @default(cuid())
-  showNewsCarousel Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                    String   @id @default(cuid())
+  showNewsCarousel      Boolean  @default(false)
+  showRecruitmentBanner Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }

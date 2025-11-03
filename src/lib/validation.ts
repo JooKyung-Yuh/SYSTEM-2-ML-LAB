@@ -8,7 +8,8 @@ export const loginSchema = z.object({
 
 // Settings validation schemas
 export const updateSettingsSchema = z.object({
-  showNewsCarousel: z.boolean(),
+  showNewsCarousel: z.boolean().optional(),
+  showRecruitmentBanner: z.boolean().optional(),
 }).strict();
 
 // People validation schemas
