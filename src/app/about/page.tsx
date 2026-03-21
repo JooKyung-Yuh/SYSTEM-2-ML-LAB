@@ -155,9 +155,18 @@ export default async function About() {
                         <strong>Education & Career:</strong>
                         <ul className={styles.list}>
                           <li>2021: Ph.D. in Computer Science, KAIST (advised by Prof. Sung Ju Hwang)</li>
-                          <li>2021-2022: Postdoctoral Researcher, KAIST</li>
-                          <li>2022-2023: Postdoctoral Researcher, Mila & Université de Montréal</li>
+                          <li>2021-2022: Postdoctoral Researcher, KAIST (with Prof. Juho Lee)</li>
+                          <li>2022-2023: Postdoctoral Researcher, Mila & Université de Montréal (with Prof. Yoshua Bengio)</li>
                           <li>2023-Present: Assistant Professor, Korea University</li>
+                        </ul>
+                      </div>
+                      <div className={styles.paragraph}>
+                        <strong>Awards & Honors:</strong>
+                        <ul className={styles.list}>
+                          <li>Google Ph.D. Fellowship Program (2021)</li>
+                          <li>Global Ph.D. Fellowship Program (2019-2021)</li>
+                          <li>Outstanding Reviewer, ICML 2022 (Top 10%)</li>
+                          <li>Outstanding Reviewer, ICML 2020 (Top 33%)</li>
                         </ul>
                       </div>
                       <p>
@@ -235,6 +244,10 @@ export default async function About() {
                   <div className={styles.researchCard}>
                     <h3>Generative Flow Networks</h3>
                     <p>Novel generative models for sampling from complex probability distributions.</p>
+                  </div>
+                  <div className={styles.researchCard}>
+                    <h3>Transfer / Multi-Task / Continual Learning</h3>
+                    <p>Knowledge transfer across tasks and domains, learning multiple tasks jointly, and adapting to evolving data distributions.</p>
                   </div>
                 </div>
               </section>

@@ -32,3 +32,14 @@
 .joinLink:hover {
   text-decoration: underline;
 }
+
+.positionList {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.positionList li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}

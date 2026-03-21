@@ -156,7 +156,15 @@ async function main() {
       email: 'haebeomlee@korea.ac.kr',
       website: 'https://haebeom-lee.github.io/',
       image: 'https://haebeom-lee.github.io/images/lee2.png',
-      bio: 'Dr. Hae Beom Lee is an Assistant Professor in the School of Electrical Engineering at Korea University. His research focuses on System 2 deep learning, large language model reasoning, and meta-learning approaches. Prior to joining Korea University, he served as a postdoctoral researcher at KAIST under the supervision of Prof. Juho Lee, and at Mila and Université de Montréal under the supervision of Prof. Yoshua Bengio. His work contributes to advancing the theoretical foundations and practical applications of machine learning systems capable of deliberate reasoning and adaptive learning.',
+      bio: `Dr. Hae Beom Lee is an Assistant Professor in the School of Electrical Engineering at Korea University. His research focuses on Large Language Model Reasoning, System 2 Deep Learning, Meta-Learning, AutoML/Hyperparameter Optimization, Bayesian Inference, and Generative Flow Networks (GFlowNet).
+
+Prior to joining Korea University, he served as a postdoctoral researcher at KAIST under Prof. Juho Lee, and at Mila & Université de Montréal under Prof. Yoshua Bengio. He received his Ph.D. from KAIST under Prof. Sung Ju Hwang.
+
+Awards & Honors:
+• Google Ph.D. Fellowship Program 2021
+• Global Ph.D. Fellowship Program (2019-2021)
+• ICML 2022 Outstanding Reviewer (Top 10%)
+• ICML 2020 Outstanding Reviewer (Top 33%)`,
       category: 'faculty',
       order: 1,
       published: true
@@ -390,37 +398,43 @@ async function main() {
               id: '1',
               title: 'Large Language Model Reasoning',
               content: 'Advancing reasoning capabilities in large language models for complex problem solving.',
-              details: '<p>We develop methods to enhance the reasoning capabilities of large language models (LLMs) through systematic approaches to problem decomposition, verification, and iterative refinement. Our work focuses on enabling LLMs to tackle complex multi-step reasoning tasks that require planning, logical inference, and mathematical problem-solving.</p><p><strong>Key Research Directions:</strong></p><ul><li>Chain-of-thought prompting and reasoning strategies</li><li>Self-verification and error correction mechanisms</li><li>Multi-step problem decomposition and planning</li><li>Integration of external knowledge and tools</li></ul>'
+              details: '<p>We develop methods to enhance the reasoning capabilities of large language models (LLMs) through systematic approaches to problem decomposition, verification, and iterative refinement.</p><p><strong>Key Research Directions:</strong></p><ul><li>Chain-of-thought prompting and reasoning strategies</li><li>Self-verification and error correction mechanisms</li><li>Multi-step problem decomposition and planning</li></ul>'
             },
             {
               id: '2',
               title: 'System 2 Deep Learning',
               content: 'Developing deliberate, slow, and logical thinking processes in neural networks.',
-              details: '<p>Inspired by human cognition, we develop neural architectures that can perform deliberate, reflective reasoning (System 2) rather than just fast, intuitive pattern matching (System 1). This involves creating models that can engage in planning, hypothesis testing, and logical inference.</p><p><strong>Key Research Directions:</strong></p><ul><li>Neural-symbolic integration for logical reasoning</li><li>Iterative refinement and self-correction</li><li>Explicit planning and search in neural networks</li><li>Cognitive architectures for AI systems</li></ul>'
+              details: '<p>Inspired by human cognition (Kahneman\'s System 1/System 2), we develop neural architectures that can perform deliberate, reflective reasoning rather than just fast, intuitive pattern matching.</p><p><strong>Key Research Directions:</strong></p><ul><li>Neural-symbolic integration for logical reasoning</li><li>Iterative refinement and self-correction</li><li>Explicit planning and search in neural networks</li></ul>'
             },
             {
               id: '3',
-              title: 'Meta-Learning',
-              content: 'Learning to learn: algorithms that can quickly adapt to new tasks and domains.',
-              details: '<p>Meta-learning enables AI systems to rapidly adapt to new tasks with minimal data by learning from prior experience across multiple related tasks. Our research focuses on developing efficient meta-learning algorithms that can generalize across diverse problem domains.</p><p><strong>Key Research Directions:</strong></p><ul><li>Few-shot learning and rapid adaptation</li><li>Task distribution modeling and transfer</li><li>Neural architecture search and optimization</li><li>Continual learning and lifelong adaptation</li></ul>'
+              title: 'Meta-Learning / Bi-level Optimization',
+              content: 'Learning to learn: algorithms that can quickly adapt to new tasks with minimal data.',
+              details: '<p>Meta-learning enables AI systems to rapidly adapt to new tasks by learning from prior experience. Our research focuses on bi-level optimization and hypergradient-based methods.</p><p><strong>Key Papers:</strong></p><ul><li>Online Hyperparameter Meta-Learning (ICLR 2022 Spotlight)</li><li>Learning to Balance (ICLR 2020 Oral)</li><li>Meta Dropout (ICLR 2020)</li></ul>'
             },
             {
               id: '4',
-              title: 'AutoML',
-              content: 'Automated machine learning for efficient model design and hyperparameter optimization.',
-              details: '<p>We develop automated approaches to machine learning that reduce the need for manual tuning and expert knowledge. Our research focuses on efficient methods for hyperparameter optimization, neural architecture search, and automated feature engineering.</p><p><strong>Key Research Directions:</strong></p><ul><li>Bayesian optimization for hyperparameter tuning</li><li>Neural architecture search (NAS)</li><li>Automated feature selection and engineering</li><li>Efficient resource allocation and early stopping</li></ul>'
+              title: 'AutoML / Hyperparameter Optimization',
+              content: 'Automated machine learning for efficient model design and hyperparameter tuning.',
+              details: '<p>We develop efficient methods for hyperparameter optimization using Bayesian optimization, freeze-thaw strategies, and cost-sensitive approaches.</p><p><strong>Key Papers:</strong></p><ul><li>Cost-Sensitive Freeze-thaw Bayesian Optimization (NeurIPS 2025)</li><li>Bayesian Neural Scaling Laws Extrapolation (ICML 2025)</li></ul>'
             },
             {
               id: '5',
-              title: 'Bayesian Inference',
+              title: 'Bayesian Inference and Learning',
               content: 'Principled uncertainty quantification and probabilistic reasoning in machine learning.',
-              details: '<p>We develop Bayesian methods for machine learning that provide principled approaches to uncertainty quantification, model selection, and decision-making under uncertainty. Our work enables AI systems to express confidence in their predictions and make robust decisions.</p><p><strong>Key Research Directions:</strong></p><ul><li>Variational inference and approximation methods</li><li>Bayesian neural networks and deep ensembles</li><li>Uncertainty quantification and calibration</li><li>Bayesian optimization and active learning</li></ul>'
+              details: '<p>We develop Bayesian methods that provide principled approaches to uncertainty quantification and decision-making under uncertainty.</p><p><strong>Key Papers:</strong></p><ul><li>DropMax: Adaptive Variational Softmax (NeurIPS 2018)</li><li>Uncertainty-Aware Attention (NeurIPS 2018)</li></ul>'
             },
             {
               id: '6',
-              title: 'Generative Flow Networks',
-              content: 'Novel generative models for sampling from complex probability distributions.',
-              details: '<p>Generative Flow Networks (GFlowNets) are a new class of generative models that learn to sample objects proportionally to a reward function. Unlike traditional RL, GFlowNets can generate diverse high-reward candidates, making them particularly useful for scientific discovery and combinatorial optimization.</p><p><strong>Key Research Directions:</strong></p><ul><li>Efficient training algorithms for GFlowNets</li><li>Applications to drug discovery and materials science</li><li>Theoretical foundations and convergence analysis</li><li>Integration with reinforcement learning and active learning</li></ul>'
+              title: 'Generative Flow Networks (GFlowNet)',
+              content: 'Novel generative models for sampling diverse high-reward candidates.',
+              details: '<p>GFlowNets learn to sample objects proportionally to a reward function, enabling diverse high-reward candidate generation for scientific discovery.</p><p><strong>Key Papers:</strong></p><ul><li>Delta-AI: Local Objectives for Amortized Inference (ICLR 2024)</li></ul>'
+            },
+            {
+              id: '7',
+              title: 'Transfer / Multi-Task / Continual Learning',
+              content: 'Enabling knowledge transfer across tasks and continuous learning.',
+              details: '<p>We research how to transfer knowledge across tasks, learn multiple tasks simultaneously, and adapt without forgetting.</p><p><strong>Key Papers:</strong></p><ul><li>Large-Scale Meta-Learning with Continual Trajectory Shifting (ICML 2021)</li><li>MetaPerturb (NeurIPS 2020 Spotlight)</li><li>Deep Asymmetric Multi-task Feature Learning (ICML 2018)</li></ul>'
             }
           ]
         }),

@@ -1,70 +1,88 @@
 export default function Research() {
   const researchAreas = [
     {
-      title: "System 2 Thinking",
-      description: "Developing AI systems that can engage in deliberate, analytical reasoning processes similar to human System 2 thinking.",
-      details: "Our research focuses on creating computational models that can move beyond fast, intuitive responses to engage in slow, deliberate reasoning. This involves developing architectures that can pause, reflect, and systematically work through complex problems.",
+      title: "Large Language Model Reasoning",
+      description: "Advancing reasoning capabilities in large language models for complex problem solving and deliberate thinking.",
+      details: "We develop methods to enhance the reasoning capabilities of large language models (LLMs) through systematic approaches to problem decomposition, verification, and iterative refinement. Our work focuses on enabling LLMs to tackle complex multi-step reasoning tasks that require planning, logical inference, and mathematical problem-solving.",
       projects: [
-        "Dual-Process Cognitive Architectures",
-        "Deliberative Planning in Neural Networks",
-        "Metacognitive Control Mechanisms"
+        "Chain-of-Thought Prompting and Reasoning Strategies",
+        "Self-Verification and Error Correction Mechanisms",
+        "Multi-Step Problem Decomposition and Planning",
+        "Integration of External Knowledge and Tools"
+      ],
+      image: "/research-llm.jpg"
+    },
+    {
+      title: "System 2 Deep Learning",
+      description: "Developing deliberate, slow, and logical thinking processes in neural networks inspired by human cognition.",
+      details: "Inspired by human cognition (Kahneman's System 1/System 2), we develop neural architectures that can perform deliberate, reflective reasoning rather than just fast, intuitive pattern matching. This involves creating models that can engage in planning, hypothesis testing, and logical inference.",
+      projects: [
+        "Neural-Symbolic Integration for Logical Reasoning",
+        "Iterative Refinement and Self-Correction",
+        "Explicit Planning and Search in Neural Networks",
+        "Cognitive Architectures for AI Systems"
       ],
       image: "/research-system2.jpg"
     },
     {
-      title: "Complex Reasoning",
-      description: "Building models capable of multi-step reasoning, logical inference, and handling complex problem-solving scenarios.",
-      details: "We investigate how to enable AI systems to break down complex problems into manageable steps, maintain coherent reasoning chains, and apply logical principles consistently across diverse domains.",
+      title: "Meta-Learning / Bi-level Optimization",
+      description: "Learning to learn: algorithms that can quickly adapt to new tasks and domains with minimal data.",
+      details: "Meta-learning enables AI systems to rapidly adapt to new tasks with minimal data by learning from prior experience across multiple related tasks. Our research focuses on developing efficient meta-learning algorithms through bi-level optimization that can generalize across diverse problem domains.",
       projects: [
-        "Multi-Step Reasoning Frameworks",
-        "Logical Inference Networks",
-        "Abstract Problem Solving"
-      ],
-      image: "/research-reasoning.jpg"
-    },
-    {
-      title: "Cognitive Architecture",
-      description: "Exploring novel architectures that combine intuitive and deliberate processing for more human-like AI systems.",
-      details: "Our work examines how to integrate different types of cognitive processes within unified architectures, balancing efficiency with sophisticated reasoning capabilities.",
-      projects: [
-        "Hybrid Symbolic-Neural Systems",
-        "Attention-Based Reasoning Modules",
-        "Memory-Augmented Architectures"
-      ],
-      image: "/research-architecture.jpg"
-    },
-    {
-      title: "Meta-Learning",
-      description: "Developing systems that can learn how to learn and adapt reasoning strategies dynamically.",
-      details: "We research how AI systems can acquire general learning principles that transfer across tasks and domains, enabling rapid adaptation to new reasoning challenges.",
-      projects: [
-        "Strategy Learning Algorithms",
-        "Transfer Learning for Reasoning",
-        "Few-Shot Problem Solving"
+        "Few-Shot Learning and Rapid Adaptation",
+        "Online Hyperparameter Meta-Learning",
+        "Hypergradient-Based Optimization",
+        "Task Distribution Modeling and Transfer"
       ],
       image: "/research-metalearning.jpg"
     },
     {
-      title: "Causal Inference",
-      description: "Building models capable of understanding and reasoning about causal relationships in complex systems.",
-      details: "Our research focuses on enabling AI to understand not just correlations but true causal relationships, allowing for better prediction and intervention planning.",
+      title: "AutoML / Hyperparameter Optimization",
+      description: "Automated machine learning for efficient model design, hyperparameter tuning, and neural architecture search.",
+      details: "We develop automated approaches to machine learning that reduce the need for manual tuning and expert knowledge. Our research focuses on efficient methods for hyperparameter optimization using Bayesian optimization, freeze-thaw strategies, and cost-sensitive approaches.",
       projects: [
-        "Causal Discovery Algorithms",
-        "Interventional Reasoning",
-        "Counterfactual Inference"
+        "Bayesian Optimization for Hyperparameter Tuning",
+        "Cost-Sensitive Freeze-Thaw Optimization",
+        "Neural Architecture Search (NAS)",
+        "Neural Scaling Laws Extrapolation"
       ],
-      image: "/research-causal.jpg"
+      image: "/research-automl.jpg"
     },
     {
-      title: "AI Safety",
-      description: "Ensuring AI systems remain safe, aligned, and beneficial as they become more capable of sophisticated reasoning.",
-      details: "We investigate how to maintain control and alignment as AI systems become more autonomous and capable of complex reasoning, ensuring they remain beneficial and safe.",
+      title: "Bayesian Inference and Learning",
+      description: "Principled uncertainty quantification and probabilistic reasoning in machine learning systems.",
+      details: "We develop Bayesian methods for machine learning that provide principled approaches to uncertainty quantification, model selection, and decision-making under uncertainty. Our work enables AI systems to express confidence in their predictions and make robust decisions.",
       projects: [
-        "Interpretable Reasoning Systems",
-        "Alignment Through Reasoning",
-        "Safe Exploration in Complex Domains"
+        "Variational Inference and Approximation Methods",
+        "Bayesian Neural Networks and Deep Ensembles",
+        "Uncertainty Quantification and Calibration",
+        "Bayesian Meta-Learning for Imbalanced Tasks"
       ],
-      image: "/research-safety.jpg"
+      image: "/research-bayesian.jpg"
+    },
+    {
+      title: "Generative Flow Networks (GFlowNet)",
+      description: "Novel generative models for sampling diverse high-reward candidates from complex distributions.",
+      details: "Generative Flow Networks (GFlowNets) are a new class of generative models that learn to sample objects proportionally to a reward function. Unlike traditional RL, GFlowNets can generate diverse high-reward candidates, making them particularly useful for scientific discovery and combinatorial optimization.",
+      projects: [
+        "Efficient Training Algorithms for GFlowNets",
+        "Local Objectives for Amortized Inference (Delta-AI)",
+        "Applications to Drug Discovery and Materials Science",
+        "Theoretical Foundations and Convergence Analysis"
+      ],
+      image: "/research-gflownet.jpg"
+    },
+    {
+      title: "Transfer / Multi-Task / Continual Learning",
+      description: "Enabling knowledge transfer across tasks and continuous learning without catastrophic forgetting.",
+      details: "We research how to enable AI systems to transfer knowledge across related tasks, learn multiple tasks simultaneously, and continuously adapt to new information without forgetting previous knowledge. This includes developing regularization methods and meta-learning approaches for lifelong learning.",
+      projects: [
+        "Sequential Reptile for Multilingual Learning",
+        "Continual Trajectory Shifting",
+        "Meta-Learned Transferable Regularizers",
+        "Deep Asymmetric Multi-Task Feature Learning"
+      ],
+      image: "/research-transfer.jpg"
     }
   ];
 
