@@ -44,6 +44,8 @@ next-env.d.ts
 /src/generated/prisma
 
 
+/docs
+
 SEO-IMPROVEMENTS.md
 COMPREHENSIVE-SECURITY-EVALUATION-REPORT.md
 TODO-CHECKLIST.md
