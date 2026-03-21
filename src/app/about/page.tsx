@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import styles from './about.module.css';
 import ResearchAreasGrid from '@/components/ResearchAreasGrid';
+import SafeHTML from '@/components/SafeHTML';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 
@@ -118,11 +119,7 @@ export default async function About() {
                   <h2 className={styles.sectionTitle}>
                     {section.title}
                   </h2>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: section.content
-                    }}
-                  />
+                  <SafeHTML html={section.content} />
                 </section>
               );
             })

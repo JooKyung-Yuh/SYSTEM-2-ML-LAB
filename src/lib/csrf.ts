@@ -61,7 +61,7 @@ export function verifyCsrfToken(request: NextRequest): { valid: boolean; error?:
   // Check origin header (preferred)
   if (origin) {
     const isAllowed = allowedOrigins.some((allowedOrigin) => {
-      return origin === allowedOrigin || origin.startsWith(allowedOrigin);
+      return origin === allowedOrigin;
     });
 
     if (!isAllowed) {
@@ -78,7 +78,7 @@ export function verifyCsrfToken(request: NextRequest): { valid: boolean; error?:
     const refererOrigin = `${refererUrl.protocol}//${refererUrl.host}`;
 
     const isAllowed = allowedOrigins.some((allowedOrigin) => {
-      return refererOrigin === allowedOrigin || refererOrigin.startsWith(allowedOrigin);
+      return refererOrigin === allowedOrigin;
     });
 
     if (!isAllowed) {

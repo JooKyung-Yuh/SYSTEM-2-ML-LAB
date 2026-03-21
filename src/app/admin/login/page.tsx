@@ -24,7 +24,6 @@ export default function LoginPage() {
         });
 
         if (response.ok) {
-          console.log('Login page: User already authenticated, redirecting');
           router.replace('/admin/dashboard');
         }
       } catch {
@@ -45,8 +44,6 @@ export default function LoginPage() {
     setError('');
 
     try {
-      console.log('Attempting login with:', { email, password: '***' });
-
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -56,12 +53,7 @@ export default function LoginPage() {
         credentials: 'include', // Ensure cookies are sent
       });
 
-      console.log('Login response status:', response.status);
-
       if (response.ok) {
-        const data = await response.json();
-        console.log('Login successful:', data);
-
         // Redirect immediately - let middleware handle authentication
         router.replace('/admin/dashboard');
       } else {

@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAuth(request);
     const data = await request.json();
     const { title, description, imageUrl, category, order, published } = data;
 

@@ -19,7 +19,7 @@ export const createPersonSchema = z.object({
   category: z.string().min(1, 'Category is required').max(100, 'Category is too long'),
   email: z.string().email('Invalid email format').optional().or(z.literal('')),
   phone: z.string().max(50, 'Phone is too long').optional().or(z.literal('')),
-  website: z.string().optional().or(z.literal('')),
+  website: z.string().url('Invalid URL format').optional().or(z.literal('')),
   image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')),
   bio: z.string().optional().or(z.literal('')),
   order: z.number().int().min(0).optional(),

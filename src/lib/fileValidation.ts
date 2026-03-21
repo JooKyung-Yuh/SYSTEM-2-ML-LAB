@@ -26,11 +26,6 @@ const FILE_SIGNATURES = {
   'image/webp': [
     [0x52, 0x49, 0x46, 0x46], // RIFF (first 4 bytes)
   ],
-  // SVG (XML-based, harder to detect by magic bytes)
-  'image/svg+xml': [
-    [0x3C, 0x3F, 0x78, 0x6D, 0x6C], // <?xml
-    [0x3C, 0x73, 0x76, 0x67], // <svg
-  ],
 };
 
 const ALLOWED_IMAGE_TYPES = [
@@ -38,7 +33,6 @@ const ALLOWED_IMAGE_TYPES = [
   'image/png',
   'image/gif',
   'image/webp',
-  'image/svg+xml',
 ];
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB

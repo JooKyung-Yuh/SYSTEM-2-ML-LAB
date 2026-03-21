@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { requireAuth } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
     const { id } = await context.params;
     const body = await request.json();
     const { date, title, description, links } = body;
@@ -43,6 +45,7 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
+    await requireAuth(request);
     const { id } = await context.params;
     await prisma.newsItem.delete({
       where: { id },
