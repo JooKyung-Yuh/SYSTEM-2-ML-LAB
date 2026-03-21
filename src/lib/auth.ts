@@ -6,7 +6,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
   throw new Error('JWT_SECRET environment variable is required');
 }
-const secret = new TextEncoder().encode(JWT_SECRET);
+export const jwtSecret = new TextEncoder().encode(JWT_SECRET);
+const secret = jwtSecret;
 
 export interface AuthUser {
   userId: string;

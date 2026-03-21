@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn about System 2 ML Lab at Korea University - our mission, research philosophy, and team led by Prof. Hae Beom Lee.',
+};
 import styles from './about.module.css';
 import ResearchAreasGrid from '@/components/ResearchAreasGrid';
 import SafeHTML from '@/components/SafeHTML';

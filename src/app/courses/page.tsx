@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+
+export const metadata: Metadata = {
+  title: 'Courses',
+  description: 'Graduate and undergraduate courses offered by System 2 ML Lab at Korea University.',
+};
 import styles from './courses.module.css';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';

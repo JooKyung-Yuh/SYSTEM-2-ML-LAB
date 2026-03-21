@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+
+export const metadata: Metadata = {
+  title: 'Gallery',
+  description: 'Photos and highlights from System 2 ML Lab - conferences, events, and lab life.',
+};
 import GalleryClient from '@/components/GalleryClient';
 import styles from './gallery.module.css';
 import Footer from '@/components/Footer';

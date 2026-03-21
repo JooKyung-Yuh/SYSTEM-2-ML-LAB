@@ -1,4 +1,10 @@
+import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+
+export const metadata: Metadata = {
+  title: 'People',
+  description: 'Meet the researchers, faculty, and students at System 2 ML Lab, Korea University.',
+};
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 import styles from './people.module.css';

@@ -215,7 +215,7 @@
 .venue {
   font-size: clamp(0.85rem, 1.7vw, 0.95rem);
   color: #0066cc;
-  fontStyle: italic;
+  font-style: italic;
   margin-bottom: 0.75rem;
 }
 

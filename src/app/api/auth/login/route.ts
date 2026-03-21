@@ -2,14 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { SignJWT } from 'jose';
 import prisma from '@/lib/prisma';
+import { jwtSecret } from '@/lib/auth';
 import { loginSchema, validateRequest } from '@/lib/validation';
 import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
-
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
-}
-const secret = new TextEncoder().encode(JWT_SECRET);
 
 export async function POST(request: NextRequest) {
   try {
@@ -73,7 +68,7 @@ export async function POST(request: NextRequest) {
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt(iat)
       .setExpirationTime(exp)
-      .sign(secret);
+      .sign(jwtSecret);
 
     // Set cookie using simple, standard approach
     const response = NextResponse.json({

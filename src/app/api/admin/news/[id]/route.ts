@@ -65,12 +65,7 @@ export async function DELETE(
     await requireAuth(request);
     const { id } = await params;
 
-    // Delete links first (due to foreign key constraint)
-    await prisma.newsLink.deleteMany({
-      where: { newsItemId: id },
-    });
-
-    // Delete the news item
+    // Cascade delete handles links automatically (schema onDelete: Cascade)
     await prisma.newsItem.delete({
       where: { id },
     });
