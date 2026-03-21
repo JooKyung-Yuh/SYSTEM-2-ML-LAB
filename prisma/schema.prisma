@@ -96,6 +96,10 @@ model Publication {
   year      Int
   url       String?
   pdfUrl    String?
+  codeUrl   String?
+  abstract  String?
+  topics    String?
+  type      String?
   category  String
   order     Int      @default(0)
   published Boolean  @default(true)
@@ -110,19 +114,22 @@ model Publication {
 }
 
 model Course {
-  id          String   @id @default(cuid())
-  code        String   @unique
-  title       String
-  description String?
-  semester    String
-  year        Int
-  instructor  String
-  credits     Int?
-  syllabus    String?
-  published   Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  code          String   @unique
+  title         String
+  description   String?
+  semester      String
+  year          Int
+  instructor    String
+  credits       Int?
+  syllabus      String?
+  schedule      String?
+  prerequisites String?
+  topics        String?
+  published     Boolean  @default(true)
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([year])
   @@index([semester])
@@ -136,6 +143,7 @@ model GalleryItem {
   description String?
   imageUrl    String
   category    String?
+  date        String?
   order       Int      @default(0)
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
