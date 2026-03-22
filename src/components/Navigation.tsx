@@ -2,13 +2,19 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (pathname?.startsWith('/admin')) return null;
 
@@ -31,6 +37,11 @@ const Navigation = () => {
       className={styles.header}
       role="banner"
       data-page={isHomePage ? 'home' : 'inner'}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0)' : 'translateY(-10px)',
+        transition: 'opacity 0.6s ease, transform 0.6s ease',
+      }}
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo} style={{ color: textColor }}>
