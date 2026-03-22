@@ -30,12 +30,7 @@ const Navigation = () => {
     <header
       className={styles.header}
       role="banner"
-      style={{
-        background: isHomePage
-          ? 'transparent'
-          : 'linear-gradient(180deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.8) 50%, rgba(248,250,252,0.4) 100%)',
-        backdropFilter: isHomePage ? 'none' : 'blur(10px)',
-      }}
+      data-page={isHomePage ? 'home' : 'inner'}
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo} style={{ color: textColor }}>
