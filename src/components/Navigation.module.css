@@ -5,11 +5,11 @@
   right: 0;
   z-index: 1000;
   padding: 2em 0;
-  background: transparent !important;
+  background: transparent;
 }
 
 .header[data-page="inner"] {
-  background: linear-gradient(180deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.8) 50%, rgba(248,250,252,0.4) 100%) !important;
+  background: linear-gradient(180deg, rgba(248,250,252,0.95) 0%, rgba(248,250,252,0.8) 50%, rgba(248,250,252,0.4) 100%);
   backdrop-filter: blur(10px);
 }
 
