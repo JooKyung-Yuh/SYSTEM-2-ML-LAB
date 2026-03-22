@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "db:seed": "tsx prisma/seed.ts",
+    "db:change-password": "tsx prisma/change-password.ts",
     "postinstall": "prisma generate",
     "analyze": "ANALYZE=true npm run build"
   },
