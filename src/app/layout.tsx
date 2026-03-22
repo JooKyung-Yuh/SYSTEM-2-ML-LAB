@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import { Analytics } from '@vercel/analytics/next';
@@ -7,16 +7,11 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { siteConfig } from '@/lib/config';
 import Script from 'next/script';
 
-
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lato = Lato({
+  weight: ['300', '400', '700'],
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: 'swap',
+  variable: '--font-lato',
 });
 
 export const metadata: Metadata = {
@@ -100,19 +95,14 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="System 2 ML Lab" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=optional"
-          rel="stylesheet"
-        />
+        {/* Lato font loaded via next/font in layout component - no CDN needed */}
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${lato.variable} ${lato.className}`}
       >
         {/* Microsoft Clarity tracking */}
         <Script id="clarity-script" strategy="afterInteractive">
