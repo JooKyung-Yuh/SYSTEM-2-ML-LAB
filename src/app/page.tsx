@@ -4,7 +4,7 @@ import { OrganizationStructuredData, WebsiteStructuredData } from '@/components/
 import { Metadata } from 'next';
 import { siteConfig, getImageUrl } from '@/lib/config';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 export const metadata: Metadata = {
   title: 'System 2 ML Lab',

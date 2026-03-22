@@ -11,7 +11,7 @@ import styles from './courses.module.css';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 function parseTopics(topics: string | null | undefined): string[] {
   if (!topics) return [];

@@ -17,10 +17,10 @@ const lato = Lato({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `System 2 ML Lab | Korea University AI Research`,
+    default: `System 2 ML Lab | 고려대학교 AI 연구실`,
     template: `%s | System 2 ML Lab`
   },
-  description: siteConfig.description,
+  description: `${siteConfig.description} 고려대학교 전기공학부 이해범 교수 연구실. 시스템2 딥러닝, 대규모 언어모델 추론, 메타러닝 연구.`,
   keywords: siteConfig.keywords,
   authors: [{
     name: siteConfig.organization.director.name,

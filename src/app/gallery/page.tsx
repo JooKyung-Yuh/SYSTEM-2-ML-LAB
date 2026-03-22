@@ -12,7 +12,7 @@ import styles from './gallery.module.css';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 interface GalleryItemData {
   id: string;

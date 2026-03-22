@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: { url: '/people' },
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 interface Person {
   id: string;

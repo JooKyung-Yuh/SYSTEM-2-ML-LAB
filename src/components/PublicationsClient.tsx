@@ -148,13 +148,24 @@ export default function PublicationsClient({ publications }: Props) {
               const pubTopics = parseTopics(pub.topics);
               return (
                 <div key={pub.id} className={styles.publicationCard}>
-                  <h3 className={styles.publicationTitle}>{pub.title}</h3>
+                  <h3 className={styles.publicationTitle}>
+                    {pub.title}
+                    {pub.url && (
+                      <a href={pub.url} target="_blank" rel="noopener noreferrer" className={styles.link}> [Paper]</a>
+                    )}
+                    {pub.pdfUrl && (
+                      <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer" className={styles.link}> [PDF]</a>
+                    )}
+                    {pub.codeUrl && (
+                      <a href={pub.codeUrl} target="_blank" rel="noopener noreferrer" className={styles.link}> [Code]</a>
+                    )}
+                  </h3>
                   <p className={styles.authors}>{pub.authors}</p>
                   <p className={styles.venue}>
-                    <strong>{pub.venue} {pub.year}</strong>
-                    {pub.type?.includes('Spotlight') && <em> (Spotlight)</em>}
-                    {pub.type?.includes('Oral') && <em> (Oral)</em>}
-                    {pub.type === 'Preprint' && <em> (Preprint)</em>}
+                    <em>{pub.venue} {pub.year}</em>
+                    {pub.type?.includes('Spotlight') && <strong> (Spotlight)</strong>}
+                    {pub.type?.includes('Oral') && <strong> (Oral)</strong>}
+                    {pub.type === 'Preprint' && <span> (Preprint)</span>}
                   </p>
                   {pubTopics.length > 0 && (
                     <div className={styles.topicTags}>
@@ -164,17 +175,6 @@ export default function PublicationsClient({ publications }: Props) {
                     </div>
                   )}
                   {pub.abstract && <p className={styles.abstract}>{pub.abstract}</p>}
-                  <div className={styles.linkContainer}>
-                    {pub.url && (
-                      <a href={pub.url} target="_blank" rel="noopener noreferrer" className={styles.link}>Paper</a>
-                    )}
-                    {pub.pdfUrl && (
-                      <a href={pub.pdfUrl} target="_blank" rel="noopener noreferrer" className={styles.link}>PDF</a>
-                    )}
-                    {pub.codeUrl && (
-                      <a href={pub.codeUrl} target="_blank" rel="noopener noreferrer" className={styles.codeLink}>Code</a>
-                    )}
-                  </div>
                 </div>
               );
             })}

@@ -13,8 +13,7 @@ import SafeHTML from '@/components/SafeHTML';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 
-// Force dynamic rendering - no caching
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 interface PageSection {
   id: string;

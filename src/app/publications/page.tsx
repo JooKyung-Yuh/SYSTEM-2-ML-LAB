@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 import styles from './publications.module.css';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60; // revalidate every 60 seconds
 
 // Hardcoded fallback data (used when DB is empty)
 const fallbackPublications = [

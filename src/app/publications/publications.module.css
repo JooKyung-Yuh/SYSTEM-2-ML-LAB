@@ -214,9 +214,8 @@
 
 .venue {
   font-size: clamp(0.85rem, 1.7vw, 0.95rem);
-  color: #0066cc;
-  font-style: italic;
-  margin-bottom: 0.75rem;
+  color: #333;
+  margin-bottom: 0.25rem;
 }
 
 .abstract {
@@ -230,41 +229,23 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .link {
   font-size: clamp(0.8rem, 1.5vw, 0.875rem);
+  font-weight: 400;
   color: #0066cc;
   text-decoration: none;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid #0066cc;
-  border-radius: 4px;
-  transition: all 0.2s;
-  white-space: nowrap;
-  display: inline-block;
+  transition: color 0.2s;
 }
 
 .link:hover {
-  background: #0066cc;
-  color: #fff;
+  color: #e5474b;
 }
 
 .codeLink {
-  font-size: clamp(0.8rem, 1.5vw, 0.875rem);
-  color: #28a745;
-  text-decoration: none;
-  padding: 0.3rem 0.75rem;
-  border: 1px solid #28a745;
-  border-radius: 4px;
-  transition: all 0.2s;
-  white-space: nowrap;
-  display: inline-block;
-}
-
-.codeLink:hover {
-  background: #28a745;
-  color: #fff;
+  composes: link;
 }
 
 /* Join Us Section */
