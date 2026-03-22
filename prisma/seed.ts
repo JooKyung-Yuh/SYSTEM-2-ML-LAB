@@ -15,17 +15,25 @@ async function main() {
     },
   });
 
-  // Create admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
-  const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@mllab.korea.ac.kr' },
-    update: {},
-    create: {
-      email: 'admin@mllab.korea.ac.kr',
-      password: hashedPassword,
-      role: 'admin',
-    },
-  });
+  // Create admin user - uses environment variables for security
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@mllab.korea.ac.kr';
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    console.warn('WARNING: ADMIN_PASSWORD env var not set. Skipping admin user creation.');
+    console.warn('Set ADMIN_PASSWORD to create/update the admin user.');
+  } else {
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: { password: hashedPassword },
+      create: {
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'admin',
+      },
+    });
+    console.log(`Admin user created/updated: ${adminEmail}`);
+  }
 
   // Create news items from existing data
   const newsItems = [

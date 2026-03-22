@@ -75,7 +75,7 @@ export default async function About() {
         {/* Dynamic Sections */}
         <div>
           {pageData?.sections && pageData.sections.length > 0 ? (
-            pageData.sections.map((section) => {
+            pageData.sections.filter(s => s.title && s.content).map((section) => {
               // Determine layout class
               const getLayoutClass = (layout: string) => {
                 switch (layout) {

@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     yandex: siteConfig.verification.yandex || undefined,
   },
   alternates: {
-    canonical: siteConfig.url,
+    canonical: '/',
   },
   category: 'Research',
 };
