@@ -5,16 +5,6 @@
   right: 0;
   z-index: 1000;
   padding: 2em 0;
-  transition: background 0.3s;
-}
-
-.headerHome {
-  background: transparent;
-}
-
-.headerInner {
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.8) 50%, rgba(248, 250, 252, 0.4) 100%);
-  backdrop-filter: blur(10px);
 }
 
 .container {
