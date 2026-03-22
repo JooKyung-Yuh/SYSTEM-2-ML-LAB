@@ -1,0 +1,140 @@
+/* Owl Carousel Base Styles - global CSS (not CSS Modules) */
+.owl-carousel {
+  display: none;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.owl-carousel.owl-loaded {
+  display: block;
+}
+
+.owl-carousel .owl-stage {
+  position: relative;
+  -ms-touch-action: pan-Y;
+  touch-action: manipulation;
+  -moz-backface-visibility: hidden;
+}
+
+.owl-carousel .owl-stage:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.owl-carousel .owl-stage-outer {
+  position: relative;
+  overflow: visible;
+  -webkit-transform: translate3d(0px, 0px, 0px);
+  padding: 10px 0;
+}
+
+.owl-carousel .owl-item {
+  position: relative;
+  min-height: 1px;
+  float: left;
+  -webkit-backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Custom Navigation Styles */
+.owl-theme .owl-nav {
+  margin-top: 10px;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  position: absolute;
+  top: 10px;
+  bottom: 3rem;
+  width: calc(100% + 100px);
+  left: -50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.owl-theme .owl-nav [class*='owl-'] {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 50% !important;
+  width: 50px !important;
+  height: 50px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-size: 18px !important;
+  transition: all 0.3s ease !important;
+  pointer-events: auto !important;
+  margin: 0 20px !important;
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+.owl-theme .owl-nav [class*='owl-'] i {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+.owl-theme .owl-nav [class*='owl-']:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+  text-decoration: none;
+  transform: scale(1.1);
+}
+
+.owl-theme .owl-nav .disabled {
+  opacity: 0.5 !important;
+  cursor: default !important;
+}
+
+.owl-carousel .owl-nav button.owl-prev,
+.owl-carousel .owl-nav button.owl-next {
+  background: none;
+  color: inherit;
+  border: none;
+  font: inherit;
+}
+
+/* Dots/Status Bar */
+.owl-theme .owl-dots {
+  text-align: center !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  padding: 0 !important;
+}
+
+.owl-theme .owl-dots .owl-dot {
+  display: inline-block !important;
+  margin: 0 0.5rem !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+.owl-theme .owl-dots .owl-dot.active {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
+  transform: scale(1.2) !important;
+}
+
+.owl-theme .owl-dots .owl-dot:hover {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  transform: scale(1.1) !important;
+}
+
+.owl-theme .owl-dots .owl-dot span {
+  display: none !important;
+}

@@ -30,14 +30,18 @@ async function main() {
 
   // ========== Admin User ==========
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@mllab.korea.ac.kr';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
-  await prisma.user.upsert({
-    where: { email: adminEmail },
-    update: { password: hashedPassword },
-    create: { email: adminEmail, password: hashedPassword, role: 'admin' },
-  });
-  console.log(`Admin user: ${adminEmail}`);
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    console.warn('ADMIN_PASSWORD not set — skipping admin user. Set it in .env to create/update.');
+  } else {
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: { password: hashedPassword },
+      create: { email: adminEmail, password: hashedPassword, role: 'admin' },
+    });
+    console.log(`Admin user: ${adminEmail}`);
+  }
 
   // ========== News Items ==========
   const newsItems = [
@@ -136,21 +140,18 @@ async function main() {
   // ========== Gallery: skip fake data, leave empty for admin to fill ==========
   console.log('Gallery: skipped (add real photos via admin panel)');
 
-  // ========== Pages ==========
-  const pages = [
-    { slug: 'about', title: 'About Us', content: 'About the System 2 ML Lab at Korea University' },
-  ];
+  // ========== Pages & About Sections (only on --force, skip on default to preserve CMS edits) ==========
+  await prisma.page.upsert({
+    where: { slug: 'about' },
+    update: {},
+    create: { slug: 'about', title: 'About Us', content: 'About the System 2 ML Lab at Korea University' },
+  });
 
-  for (const page of pages) {
-    await prisma.page.upsert({
-      where: { slug: page.slug },
-      update: {},
-      create: page,
-    });
+  if (!isForce) {
+    console.log('About sections: skipped (use --force to reset)');
   }
 
-  // ========== About Sections ==========
-  const aboutPage = await prisma.page.findUnique({ where: { slug: 'about' } });
+  const aboutPage = isForce ? await prisma.page.findUnique({ where: { slug: 'about' } }) : null;
   if (aboutPage) {
     const aboutSections = [
       {

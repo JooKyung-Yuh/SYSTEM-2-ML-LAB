@@ -42,7 +42,6 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     alternateLocale: ['ko_KR'],
-    url: siteConfig.url,
     siteName: siteConfig.name,
     title: `${siteConfig.shortName} | AI Research at ${siteConfig.organization.affiliation}`,
     description: `Leading research in System 2 deep learning, LLM reasoning, and meta-learning. ${siteConfig.organization.department}.`,

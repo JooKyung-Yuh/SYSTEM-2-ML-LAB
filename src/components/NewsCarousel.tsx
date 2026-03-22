@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import type { NewsItem as DataNewsItem } from '@/data/news';
 import styles from './NewsCarousel.module.css';
+import './owl-carousel.css';
 
 // Minimal typings for jQuery + OwlCarousel to avoid using `any`
 type OwlCarouselOptions = Record<string, unknown>;

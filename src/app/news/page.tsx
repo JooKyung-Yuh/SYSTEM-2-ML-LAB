@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma';
 export const metadata: Metadata = {
   title: 'News & Updates',
   description: 'Latest news, announcements, and achievements from System 2 ML Lab at Korea University.',
+  alternates: { canonical: '/news' },
+  openGraph: { url: '/news' },
 };
 import styles from './news.module.css';
 import Footer from '@/components/Footer';

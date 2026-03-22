@@ -4,6 +4,8 @@ import prisma from '@/lib/prisma';
 export const metadata: Metadata = {
   title: 'Gallery',
   description: 'Photos and highlights from System 2 ML Lab - conferences, events, and lab life.',
+  alternates: { canonical: '/gallery' },
+  openGraph: { url: '/gallery' },
 };
 import GalleryClient from '@/components/GalleryClient';
 import styles from './gallery.module.css';

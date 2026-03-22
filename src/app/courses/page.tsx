@@ -4,42 +4,14 @@ import prisma from '@/lib/prisma';
 export const metadata: Metadata = {
   title: 'Courses',
   description: 'Graduate and undergraduate courses offered by System 2 ML Lab at Korea University.',
+  alternates: { canonical: '/courses' },
+  openGraph: { url: '/courses' },
 };
 import styles from './courses.module.css';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
 
 export const dynamic = 'force-dynamic';
-
-const fallbackCourses = [
-  {
-    id: 'fb-1', code: 'ELEC501', title: "Advanced Machine Learning", level: "Graduate",
-    semester: "Fall", year: 2024, credits: 3, instructor: "Prof. Hae Beom Lee",
-    schedule: "Tue/Thu 2:00-3:30 PM",
-    description: "Advanced topics in machine learning including meta-learning, Bayesian inference, and optimization techniques. Focus on theoretical foundations and practical implementations.",
-    prerequisites: "Linear Algebra, Probability Theory, Basic Machine Learning",
-    topics: '["Meta-Learning and Few-Shot Learning","Bayesian Deep Learning","Hyperparameter Optimization","AutoML Techniques","Neural Architecture Search","Uncertainty Quantification"]',
-    syllabus: null, published: true, order: 0,
-  },
-  {
-    id: 'fb-2', code: 'ELEC502', title: "Deep Learning Systems", level: "Graduate",
-    semester: "Spring", year: 2025, credits: 3, instructor: "Prof. Hae Beom Lee",
-    schedule: "Mon/Wed 3:30-5:00 PM",
-    description: "System 2 deep learning approaches with emphasis on reasoning, planning, and deliberate thinking in neural networks. Covers recent advances in large language models.",
-    prerequisites: "Deep Learning, Neural Networks",
-    topics: '["System 2 vs System 1 Thinking","Large Language Model Reasoning","Neural Scaling Laws","Generative Flow Networks","Energy-Based Models","Amortized Inference"]',
-    syllabus: null, published: true, order: 1,
-  },
-  {
-    id: 'fb-3', code: 'ELEC590', title: "Research Seminar in AI", level: "Graduate Seminar",
-    semester: "Fall", year: 2024, credits: 2, instructor: "Prof. Hae Beom Lee",
-    schedule: "Fri 2:00-4:00 PM",
-    description: "Weekly seminar series covering cutting-edge research in artificial intelligence, machine learning, and optimization. Students present recent papers and discuss research directions.",
-    prerequisites: "Advanced Machine Learning or equivalent",
-    topics: '["Recent Papers in Top-Tier Conferences","Research Methodology","Paper Presentation Skills","Critical Analysis of Research","Grant Writing and Proposal Development","Academic Career Development"]',
-    syllabus: null, published: true, order: 2,
-  },
-];
 
 function parseTopics(topics: string | null | undefined): string[] {
   if (!topics) return [];
@@ -74,9 +46,9 @@ export default async function CoursesPage() {
       where: { published: true },
       orderBy: [{ year: 'desc' }, { order: 'asc' }],
     });
-    courses = dbCourses.length > 0 ? dbCourses : fallbackCourses;
+    courses = dbCourses;
   } catch {
-    courses = fallbackCourses;
+    courses = [];
   }
 
   // Group by year+semester
@@ -103,6 +75,12 @@ export default async function CoursesPage() {
             Comprehensive curriculum covering fundamental to advanced topics in artificial intelligence and machine learning.
           </p>
         </header>
+
+        {courses.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#999' }}>
+            <p style={{ fontSize: '1.1rem' }}>Course information coming soon.</p>
+          </div>
+        )}
 
         {sortedKeys.map((key) => (
           <section key={key} style={{ marginBottom: '3rem' }}>

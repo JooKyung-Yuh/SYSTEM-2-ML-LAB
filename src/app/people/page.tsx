@@ -7,6 +7,8 @@ import styles from './people.module.css';
 export const metadata: Metadata = {
   title: 'People',
   description: 'Meet the researchers, faculty, and students at System 2 ML Lab, Korea University.',
+  alternates: { canonical: '/people' },
+  openGraph: { url: '/people' },
 };
 
 export const dynamic = 'force-dynamic';
