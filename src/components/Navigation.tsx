@@ -12,7 +12,12 @@ const Navigation = () => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Small delay for smooth entrance
+    // Preload both logos so switching is instant
+    const white = new window.Image();
+    white.src = '/images/ku_logo_white.png';
+    const black = new window.Image();
+    black.src = '/images/ku_logo_black.png';
+
     const timer = setTimeout(() => setIsReady(true), 200);
     return () => clearTimeout(timer);
   }, []);
@@ -48,26 +53,15 @@ const Navigation = () => {
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo} style={{ color: textColor, transition: 'color 0.3s' }}>
-          <span className={styles.logoImageWrapper}>
-            <Image
-              className={styles.logoImage}
-              src="/images/ku_logo_white.png"
-              alt="KU Logo"
-              width={42}
-              height={42}
-              unoptimized
-              style={{ opacity: confirmedInner ? 0 : 1, transition: 'opacity 0.15s' }}
-            />
-            <Image
-              className={`${styles.logoImage} ${styles.logoImageOverlay}`}
-              src="/images/ku_logo_black.png"
-              alt=""
-              width={42}
-              height={42}
-              unoptimized
-              style={{ opacity: confirmedInner ? 1 : 0, transition: 'opacity 0.15s' }}
-            />
-          </span>
+          <Image
+            className={styles.logoImage}
+            src={confirmedInner ? '/images/ku_logo_black.png' : '/images/ku_logo_white.png'}
+            alt="KU Logo"
+            width={42}
+            height={42}
+            unoptimized
+            priority
+          />
           <div className={styles.logoText}>
             <div className={styles.labName} style={{ color: textColor, transition: 'color 0.3s' }}>
               SYSTEM 2 ML LAB
