@@ -103,3 +103,9 @@
     padding: 1.5rem 0;
   }
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding-top: 5rem;
+  }
+}

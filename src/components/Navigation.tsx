@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import styles from './Navigation.module.css';
 
 const Navigation = () => {
@@ -12,12 +11,6 @@ const Navigation = () => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    // Preload both logos so switching is instant
-    const white = new window.Image();
-    white.src = '/images/ku_logo_white.png';
-    const black = new window.Image();
-    black.src = '/images/ku_logo_black.png';
-
     const timer = setTimeout(() => setIsReady(true), 200);
     return () => clearTimeout(timer);
   }, []);
@@ -53,15 +46,20 @@ const Navigation = () => {
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo} style={{ color: textColor, transition: 'color 0.3s' }}>
-          <Image
-            className={styles.logoImage}
-            src={confirmedInner ? '/images/ku_logo_black.png' : '/images/ku_logo_white.png'}
-            alt="KU Logo"
-            width={42}
-            height={42}
-            unoptimized
-            priority
-          />
+          <span className={styles.logoWrap}>
+            <img
+              src="/images/ku_logo_white.png"
+              alt="KU Logo"
+              className={styles.logoImg}
+              style={{ visibility: confirmedInner ? 'hidden' : 'visible' }}
+            />
+            <img
+              src="/images/ku_logo_black.png"
+              alt=""
+              className={`${styles.logoImg} ${styles.logoImgAlt}`}
+              style={{ visibility: confirmedInner ? 'visible' : 'hidden' }}
+            />
+          </span>
           <div className={styles.logoText}>
             <div className={styles.labName} style={{ color: textColor, transition: 'color 0.3s' }}>
               SYSTEM 2 ML LAB

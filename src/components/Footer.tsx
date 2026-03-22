@@ -20,7 +20,7 @@ const Footer = () => {
           </p>
         </div>
         <div className={styles.footerBottom}>
-          <p>© 2025 KU System 2 ML Lab. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} KU System 2 ML Lab. All rights reserved.</p>
         </div>
       </div>
     </footer>
