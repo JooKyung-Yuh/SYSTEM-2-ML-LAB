@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import styles from '@/app/gallery/gallery.module.css';
 
 interface GalleryItem {
@@ -49,13 +50,13 @@ export default function GalleryClient({ galleryItems }: Props) {
         {filteredItems.map((item) => (
           <article key={item.id} className={styles.galleryItem}>
             <div className={styles.imageWrapper}>
-              <img
+              <Image
                 src={item.imageUrl}
                 alt={item.title}
-                style={{
-                  width: '100%', height: '100%', objectFit: 'cover',
-                  position: 'absolute', top: 0, left: 0
-                }}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                style={{ objectFit: 'cover' }}
+                unoptimized
               />
             </div>
             <div className={styles.itemContent}>

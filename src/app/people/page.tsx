@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import prisma from '@/lib/prisma';
 import Footer from '@/components/Footer';
 import JoinUs from '@/components/JoinUs';
@@ -81,10 +82,13 @@ export default async function People() {
                 <div key={person.id} className={styles.personCard}>
                   <div className={styles.personImageWrapper}>
                     {person.image ? (
-                      <img
+                      <Image
                         src={person.image}
                         alt={person.name}
+                        width={150}
+                        height={150}
                         className={styles.personImage}
+                        unoptimized
                       />
                     ) : (
                       <div className={styles.personPlaceholder}>
