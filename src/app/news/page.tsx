@@ -7,6 +7,7 @@ export const metadata: Metadata = {
 };
 import styles from './news.module.css';
 import Footer from '@/components/Footer';
+import JoinUs from '@/components/JoinUs';
 
 export const dynamic = 'force-dynamic';
 
@@ -81,6 +82,8 @@ export default async function NewsPage() {
             <p style={{ fontSize: '1.1rem' }}>No news yet. Check back soon!</p>
           </div>
         )}
+
+        <JoinUs />
       </div>
       <Footer />
     </div>
