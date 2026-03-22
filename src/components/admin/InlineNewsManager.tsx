@@ -213,6 +213,9 @@ export default function InlineNewsManager() {
       links: []
     };
 
+    // 롤백용 스냅샷 저장
+    const snapshotItems = [...newsItems];
+
     // 낙관적 업데이트: 즉시 UI에 반영
     const optimisticItems = [...newsItems];
     if (afterIndex === undefined || afterIndex === newsItems.length - 1) {
@@ -290,8 +293,8 @@ export default function InlineNewsManager() {
     })
     .catch(error => {
       console.error('Failed to create news item:', error);
-      // 실패시 롤백
-      setNewsItems(newsItems);
+      // 실패시 롤백 (스냅샷 사용)
+      setNewsItems(snapshotItems);
       setEditingId(null);
       setEditingData({});
       setOriginalData({});

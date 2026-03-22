@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { showToast } from '@/lib/toast';
 import styles from './SettingsManager.module.css';
 
 interface SiteSettings {
@@ -32,7 +32,7 @@ export default function SettingsManager() {
       setSettings(data);
     } catch (error) {
       console.error('Error fetching settings:', error);
-      toast.error('Failed to load settings');
+      showToast.error('Failed to load settings');
     } finally {
       setLoading(false);
     }
@@ -60,10 +60,10 @@ export default function SettingsManager() {
 
       const updatedSettings = await response.json();
       setSettings(updatedSettings);
-      toast.success('Settings updated successfully');
+      showToast.success('Settings updated successfully');
     } catch (error) {
       console.error('Error updating settings:', error);
-      toast.error('Failed to update settings');
+      showToast.error('Failed to update settings');
     } finally {
       setSaving(false);
     }

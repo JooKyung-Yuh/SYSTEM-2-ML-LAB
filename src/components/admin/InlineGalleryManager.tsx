@@ -186,6 +186,7 @@ export default function InlineGalleryManager() {
       published: true
     };
 
+    const snapshotItems = [...galleryItems];
     const optimisticItems = [...galleryItems, optimisticItem];
     setGalleryItems(optimisticItems);
     const itemData = { ...optimisticItem };
@@ -232,7 +233,7 @@ export default function InlineGalleryManager() {
     })
     .catch(error => {
       console.error('Failed to create gallery item:', error);
-      setGalleryItems(galleryItems);
+      setGalleryItems(snapshotItems);
       setEditingId(null);
       setEditingData({});
       setOriginalData({});

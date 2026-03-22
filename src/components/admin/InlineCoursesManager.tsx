@@ -178,6 +178,7 @@ export default function InlineCoursesManager() {
       order: newOrder
     };
 
+    const snapshotItems = [...courses];
     const optimisticItems = [optimisticItem, ...courses];
     setCourses(optimisticItems);
     const itemData = { ...optimisticItem };
@@ -224,7 +225,7 @@ export default function InlineCoursesManager() {
     })
     .catch(error => {
       console.error('Failed to create course:', error);
-      setCourses(courses);
+      setCourses(snapshotItems);
       setEditingId(null);
       setEditingData({});
       setOriginalData({});

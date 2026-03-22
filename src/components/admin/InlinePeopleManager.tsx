@@ -216,6 +216,7 @@ export default function InlinePeopleManager() {
       published: true
     };
 
+    const snapshotItems = [...people];
     const optimisticItems = [...people];
     if (afterIndex === undefined) {
       optimisticItems.push(optimisticItem);
@@ -296,7 +297,7 @@ export default function InlinePeopleManager() {
     })
     .catch(error => {
       console.error('Failed to create person:', error);
-      setPeople(people);
+      setPeople(snapshotItems);
       setEditingId(null);
       setEditingData({});
       setOriginalData({});

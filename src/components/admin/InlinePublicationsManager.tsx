@@ -176,6 +176,7 @@ export default function InlinePublicationsManager() {
       published: true
     };
 
+    const snapshotItems = [...publications];
     const optimisticItems = [optimisticItem, ...publications];
     setPublications(optimisticItems);
     const itemData = { ...optimisticItem };
@@ -232,7 +233,7 @@ export default function InlinePublicationsManager() {
     })
     .catch(error => {
       console.error('Failed to create publication:', error);
-      setPublications(publications);
+      setPublications(snapshotItems);
       setEditingId(null);
       setEditingData({});
       setOriginalData({});
