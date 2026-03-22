@@ -15,13 +15,13 @@ export const updateSettingsSchema = z.object({
 // People validation schemas
 export const createPersonSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
-  title: z.string().optional().or(z.literal('')),
+  title: z.string().optional().or(z.literal('')).nullable(),
   category: z.string().min(1, 'Category is required').max(100, 'Category is too long'),
-  email: z.string().email('Invalid email format').optional().or(z.literal('')),
-  phone: z.string().max(50, 'Phone is too long').optional().or(z.literal('')),
-  website: z.string().url('Invalid URL format').optional().or(z.literal('')),
-  image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')),
-  bio: z.string().optional().or(z.literal('')),
+  email: z.string().email('Invalid email format').optional().or(z.literal('')).nullable(),
+  phone: z.string().max(50, 'Phone is too long').optional().or(z.literal('')).nullable(),
+  website: z.string().url('Invalid URL format').optional().or(z.literal('')).nullable(),
+  image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')).nullable(),
+  bio: z.string().optional().or(z.literal('')).nullable(),
   order: z.number().int().min(0).optional(),
   published: z.boolean().optional(),
 });

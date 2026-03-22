@@ -34,10 +34,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
+    // Clean empty strings to null for unique fields
+    const data = { ...validation.data };
+    if (data.email === '' || data.email === null) data.email = undefined;
+    if (data.website === '') data.website = null;
+
     const person = await prisma.person.create({
       data: {
-        ...validation.data,
-        order: validation.data.order ?? 0,
+        ...data,
+        order: data.order ?? 0,
       }
     });
 

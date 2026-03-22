@@ -2,7 +2,7 @@
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 16px 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Georgia', serif;
 }
 
@@ -20,7 +20,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #0066cc;
+  border-top: 3px solid #111;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -38,10 +38,10 @@
 }
 
 .header h1 {
-  font-size: 2rem;
+  font-size: 16px;
   font-weight: 400;
   color: #222;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2px;
   font-family: Georgia, serif;
 }
 
@@ -100,7 +100,7 @@
 .galleryPreviewItem {
   position: relative;
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: all 0.3s;
@@ -151,14 +151,14 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: #222;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2px;
 }
 
 .galleryDescription {
   font-size: 0.95rem;
   color: #666;
   line-height: 1.5;
-  margin-bottom: 0.75rem;
+  margin-bottom: 2px;
 }
 
 .galleryCategory {
@@ -184,19 +184,19 @@
   position: relative;
   background: #ffffff;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   transition: all 0.2s;
 }
 
 .galleryItem:hover {
-  border-color: #0066cc;
+  border-color: #111;
   box-shadow: 0 4px 12px rgba(0, 102, 204, 0.1);
 }
 
 .galleryItem.editing {
-  border-color: #0066cc;
-  box-shadow: 0 8px 24px rgba(0, 102, 204, 0.15);
+  border-color: #111;
+  
   z-index: 999;
 }
 
@@ -277,7 +277,7 @@
 
 .galleryCard .galleryTitle {
   padding: 1rem 1rem 0.5rem;
-  font-size: 1rem;
+  font-size: 13px;
   font-weight: 600;
   color: #222;
   cursor: pointer;
@@ -285,7 +285,7 @@
 }
 
 .galleryCard .galleryTitle:hover {
-  color: #0066cc;
+  color: #111;
 }
 
 .galleryCard .galleryDescription {
@@ -340,7 +340,7 @@
 
 .uploadBtn {
   padding: 0.5rem 1rem;
-  background: #0066cc;
+  background: #111;
   color: white;
   border: none;
   border-radius: 4px;
@@ -351,7 +351,7 @@
 }
 
 .uploadBtn:hover {
-  background: #0052a3;
+  background: #333;
 }
 
 .editImageUrl {
@@ -375,7 +375,7 @@
 
 .editTitle {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 13px;
 }
 
 .editDescription {
@@ -399,14 +399,14 @@
   padding: 3rem;
   background: #f8f9fa;
   border: 2px dashed #dee2e6;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .addNewBtn:hover {
   background: #e9ecef;
-  border-color: #0066cc;
+  border-color: #111;
 }
 
 .addNewContent {
@@ -418,13 +418,13 @@
 }
 
 .addIcon {
-  font-size: 2rem;
+  font-size: 16px;
   font-weight: 300;
 }
 
 .addNewContent span {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 /* Responsive */

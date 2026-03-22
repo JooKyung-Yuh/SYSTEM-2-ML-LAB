@@ -22,29 +22,29 @@
   position: sticky;
   top: 0;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 16px 20px;
   z-index: 100;
 }
 
 .header h1 {
   color: #222;
-  font-size: 1.75rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  font-family: 'Georgia', serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  
 }
 
 .header p {
   color: #666;
-  font-size: 1rem;
+  font-size: 13px;
   margin: 0;
 }
 
 .peopleGrid {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 16px 20px;
 }
 
 /* Category Section */
@@ -54,11 +54,11 @@
 
 .categoryTitle {
   font-size: 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #222;
   margin-bottom: 2rem;
-  font-family: 'Georgia', serif;
-  border-bottom: 2px solid #0066cc;
+  
+  border-bottom: 2px solid #111;
   padding-bottom: 0.5rem;
 }
 
@@ -67,7 +67,7 @@
   position: relative;
   margin-bottom: 2rem;
   transition: all 0.2s ease;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 1rem;
   border: 2px solid transparent;
 }
@@ -99,7 +99,7 @@
   width: 24px;
   height: 24px;
   border-radius: 4px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   background: #ffffff;
   color: #4a5568;
   font-size: 12px;
@@ -108,7 +108,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
 }
 
 .editBtn {
@@ -154,27 +154,27 @@
 /* Person Card */
 .personCard {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
   padding: 1.5rem;
   display: flex;
   gap: 2rem;
   align-items: flex-start;
   transition: all 0.15s ease;
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
 }
 
 .personCard:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-color: #cbd5e0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border-color: #d1d5db;
 }
 
 .editing .personCard {
   background: #ffffff;
   border: 2px solid #4a5568;
   cursor: default;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  
 }
 
 /* Person Image */
@@ -186,20 +186,20 @@
   width: 150px;
   height: 150px;
   object-fit: cover;
-  border-radius: 8px;
-  border: 2px solid #e2e8f0;
+  border-radius: 4px;
+  border: 2px solid #e5e7eb;
 }
 
 .personImagePlaceholder {
   width: 150px;
   height: 150px;
   background-color: #f7fafc;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 16px;
   font-weight: bold;
   color: #a0aec0;
 }
@@ -222,11 +222,11 @@
 }
 
 .personName:hover {
-  color: #0066cc;
+  color: #111;
 }
 
 .personTitle {
-  font-size: 1rem;
+  font-size: 13px;
   color: #666;
   margin: 0;
   cursor: pointer;
@@ -234,7 +234,7 @@
 }
 
 .personTitle:hover {
-  color: #0066cc;
+  color: #111;
 }
 
 .personContacts {
@@ -246,7 +246,7 @@
 
 .personEmail,
 .personWebsite {
-  color: #0066cc;
+  color: #111;
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -262,7 +262,7 @@
 }
 
 .personBio {
-  font-size: 1rem;
+  font-size: 13px;
   color: #333;
   margin: 0;
   cursor: pointer;
@@ -271,7 +271,7 @@
 }
 
 .personBio:hover {
-  color: #0066cc;
+  color: #111;
 }
 
 /* Edit Inputs */
@@ -284,11 +284,11 @@
 .editCategory,
 .editBio {
   background: #ffffff;
-  border: 2px solid #cbd5e0;
+  border: 2px solid #d1d5db;
   border-radius: 4px;
   color: #333;
   padding: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2px;
   font-family: inherit;
 }
 
@@ -298,11 +298,11 @@
 }
 
 .editTitle {
-  font-size: 1rem;
+  font-size: 13px;
 }
 
 .editBio {
-  font-size: 1rem;
+  font-size: 13px;
   line-height: 1.6;
   resize: vertical;
   min-height: 80px;
@@ -342,15 +342,15 @@
 
 .addBtn {
   background: #f7fafc;
-  border: 1px solid #cbd5e0;
+  border: 1px solid #d1d5db;
   color: #4a5568;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 3px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
 }
 
 .addBtn:hover {
@@ -363,17 +363,17 @@
   display: flex;
   justify-content: center;
   margin-top: 2rem;
-  padding: 2rem;
+  padding: 16px 20px;
 }
 
 .addNewBtn {
   background: #f7fafc;
-  border: 2px dashed #cbd5e0;
-  border-radius: 8px;
-  padding: 3rem 2rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 4px;
+  padding: 16px 24px;
   cursor: pointer;
   transition: all 0.15s ease;
-  min-width: 300px;
+  min-width: 200px;
 }
 
 .addNewBtn:hover {
@@ -390,14 +390,14 @@
 }
 
 .addIcon {
-  font-size: 3rem;
+  font-size: 20px;
   font-weight: 300;
-  color: #cbd5e0;
+  color: #d1d5db;
 }
 
 .addNewContent span {
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   color: #666;
 }
 
@@ -413,10 +413,10 @@
 }
 
 .spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid #e2e8f0;
-  border-top: 4px solid #4a5568;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #4a5568;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -498,7 +498,7 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #e2e8f0;
+  border: 3px solid #e5e7eb;
 }
 
 .imageUploadLabel {
@@ -513,18 +513,18 @@
 .uploadButtonText {
   display: inline-block;
   padding: 0.625rem 1.25rem;
-  background: #0066cc;
+  background: #111;
   color: #ffffff;
-  border-radius: 6px;
+  border-radius: 3px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
   border: none;
   cursor: pointer;
 }
 
 .uploadButtonText:hover {
-  background: #0052a3;
+  background: #333;
   transform: translateY(-1px);
 }
 
@@ -538,7 +538,7 @@
   background: #ffffff;
   color: #e53e3e;
   border: 1px solid #fc8181;
-  border-radius: 6px;
+  border-radius: 3px;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;

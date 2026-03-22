@@ -206,7 +206,7 @@ export default function InlinePeopleManager() {
       id: optimisticId,
       name: 'New Team Member',
       title: 'Position Title',
-      email: 'email@example.com',
+      email: null,
       phone: null,
       website: null,
       image: null,
