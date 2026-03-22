@@ -1,0 +1,166 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 2em 0;
+  transition: background 0.3s;
+}
+
+.headerHome {
+  background: transparent;
+}
+
+.headerInner {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.8) 50%, rgba(248, 250, 252, 0.4) 100%);
+  backdrop-filter: blur(10px);
+}
+
+.container {
+  max-width: 80em;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImage {
+  width: clamp(32px, 5vw, 42px);
+  height: clamp(32px, 5vw, 42px);
+  object-fit: contain;
+  margin-right: 12px;
+}
+
+.logoText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.labName {
+  font-size: clamp(18px, 2.5vw, 24px);
+  font-weight: 600;
+  line-height: 1.1;
+  font-family: Arial, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.university {
+  font-size: clamp(11px, 1.5vw, 13px);
+  margin-top: 1px;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* Nav desktop */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+}
+
+.navLink {
+  text-decoration: none;
+  font-size: 0.9em;
+  font-weight: 400;
+  padding: 0.5em 1em;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+  border: none;
+}
+
+.navLink:hover {
+  color: #e5474b !important;
+}
+
+.navLinkCurrent {
+  color: #e5474b !important;
+}
+
+.navLinkHome {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.navLinkInner {
+  border: 1px solid rgba(31, 41, 55, 0.35);
+}
+
+/* Mobile toggle */
+.mobileToggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.mobileToggle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile menu */
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  z-index: 1000;
+}
+
+.mobileMenuHome {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.mobileMenuInner {
+  background: rgba(248, 250, 252, 0.95);
+}
+
+.mobileLink {
+  display: block;
+  text-decoration: none;
+  font-size: 1.1em;
+  font-weight: 400;
+  padding: 1em 0;
+  transition: color 0.2s ease;
+}
+
+.mobileLink:hover {
+  color: #e5474b !important;
+}
+
+.mobileLinkBorderLight {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobileLinkBorderDark {
+  border-bottom: 1px solid rgba(31, 41, 55, 0.1);
+}
+
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .mobileToggle {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobileMenu {
+    display: none;
+  }
+}
