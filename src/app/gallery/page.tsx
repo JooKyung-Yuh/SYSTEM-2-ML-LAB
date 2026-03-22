@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Gallery',
   description: 'Photos and highlights from System 2 ML Lab - conferences, events, and lab life.',
   alternates: { canonical: '/gallery' },
-  openGraph: { images: ['/images/og-image.jpg'], url: '/gallery' },
+  openGraph: { images: [{ url: '/api/og?title=Gallery', width: 1200, height: 630 }], url: '/gallery' },
 };
 import GalleryClient from '@/components/GalleryClient';
 import styles from './gallery.module.css';

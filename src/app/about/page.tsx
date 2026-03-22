@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about System 2 ML Lab at Korea University - our mission, research philosophy, and team led by Prof. Hae Beom Lee.',
   alternates: { canonical: '/about' },
-  openGraph: { images: ['/images/og-image.jpg'], url: '/about' },
+  openGraph: { images: [{ url: '/api/og?title=About%20Us', width: 1200, height: 630 }], url: '/about' },
 };
 import styles from './about.module.css';
 import ResearchAreasGrid from '@/components/ResearchAreasGrid';

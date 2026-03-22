@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Publications',
   description: 'Research publications from System 2 ML Lab - papers on meta-learning, LLM reasoning, Bayesian inference, and more.',
   alternates: { canonical: '/publications' },
-  openGraph: { images: ['/images/og-image.jpg'], url: '/publications' },
+  openGraph: { images: [{ url: '/api/og?title=Publications', width: 1200, height: 630 }], url: '/publications' },
 };
 import PublicationsClient from '@/components/PublicationsClient';
 import Footer from '@/components/Footer';

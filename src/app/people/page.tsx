@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'People',
   description: 'Meet the researchers, faculty, and students at System 2 ML Lab, Korea University.',
   alternates: { canonical: '/people' },
-  openGraph: { images: ['/images/og-image.jpg'], url: '/people' },
+  openGraph: { images: [{ url: '/api/og?title=People', width: 1200, height: 630 }], url: '/people' },
 };
 
 export const revalidate = 60; // revalidate every 60 seconds

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'News & Updates',
   description: 'Latest news, announcements, and achievements from System 2 ML Lab at Korea University.',
   alternates: { canonical: '/news' },
-  openGraph: { images: ['/images/og-image.jpg'], url: '/news' },
+  openGraph: { images: [{ url: '/api/og?title=News%20%26%20Updates', width: 1200, height: 630 }], url: '/news' },
 };
 import styles from './news.module.css';
 import Footer from '@/components/Footer';

@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description: `Leading research in System 2 deep learning, LLM reasoning, and meta-learning. ${siteConfig.organization.department}.`,
     images: [
       {
-        url: siteConfig.images.ogImage,
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: siteConfig.name,
