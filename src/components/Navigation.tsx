@@ -45,14 +45,26 @@ const Navigation = () => {
     >
       <div className={styles.container}>
         <Link href="/" className={styles.logo} style={{ color: textColor }}>
-          <Image
-            className={styles.logoImage}
-            src={isHomePage ? '/images/ku_logo_white.png' : '/images/ku_logo_black.png'}
-            alt="KU Logo"
-            width={42}
-            height={42}
-            unoptimized
-          />
+          <span className={styles.logoImageWrapper}>
+            <Image
+              className={styles.logoImage}
+              src="/images/ku_logo_white.png"
+              alt="KU Logo"
+              width={42}
+              height={42}
+              unoptimized
+              style={{ opacity: isHomePage ? 1 : 0 }}
+            />
+            <Image
+              className={`${styles.logoImage} ${styles.logoImageOverlay}`}
+              src="/images/ku_logo_black.png"
+              alt=""
+              width={42}
+              height={42}
+              unoptimized
+              style={{ opacity: isHomePage ? 0 : 1 }}
+            />
+          </span>
           <div className={styles.logoText}>
             <div className={styles.labName} style={{ color: textColor }}>
               SYSTEM 2 ML LAB
