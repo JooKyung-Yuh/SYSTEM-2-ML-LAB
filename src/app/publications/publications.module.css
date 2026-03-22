@@ -228,18 +228,21 @@
 
 .linkContainer {
   display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .link {
-  font-size: clamp(0.85rem, 1.7vw, 0.95rem);
+  font-size: clamp(0.8rem, 1.5vw, 0.875rem);
   color: #0066cc;
   text-decoration: none;
-  padding: 0.35rem 0.85rem;
+  padding: 0.3rem 0.75rem;
   border: 1px solid #0066cc;
   border-radius: 4px;
   transition: all 0.2s;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .link:hover {
@@ -248,13 +251,15 @@
 }
 
 .codeLink {
-  font-size: clamp(0.85rem, 1.7vw, 0.95rem);
+  font-size: clamp(0.8rem, 1.5vw, 0.875rem);
   color: #28a745;
   text-decoration: none;
-  padding: 0.35rem 0.85rem;
+  padding: 0.3rem 0.75rem;
   border: 1px solid #28a745;
   border-radius: 4px;
   transition: all 0.2s;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .codeLink:hover {
