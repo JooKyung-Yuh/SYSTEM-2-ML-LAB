@@ -12,7 +12,7 @@ const Navigation = () => {
 
   if (pathname?.startsWith('/admin')) return null;
 
-  const isHomePage = pathname === '/';
+  const isHomePage = !pathname || pathname === '/';
   const colorWhite = '#ffffff';
   const colorDark = '#1f2937';
   const textColor = isHomePage ? colorWhite : colorDark;
