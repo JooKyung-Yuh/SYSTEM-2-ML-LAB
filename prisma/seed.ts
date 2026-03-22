@@ -2,9 +2,24 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
+const isForce = process.argv.includes('--force');
 
 async function main() {
-  console.log('Starting seed...');
+  console.log(`Starting seed... (mode: ${isForce ? 'FORCE - will delete existing data first' : 'default - upsert only'})`);
+
+  // --force: 기존 데이터 전부 삭제 후 새로 넣기
+  if (isForce) {
+    console.log('Deleting existing data...');
+    await prisma.newsLink.deleteMany();
+    await prisma.newsItem.deleteMany();
+    await prisma.section.deleteMany();
+    await prisma.page.deleteMany();
+    await prisma.person.deleteMany();
+    await prisma.publication.deleteMany();
+    await prisma.course.deleteMany();
+    await prisma.galleryItem.deleteMany();
+    console.log('All content data deleted.');
+  }
 
   // ========== Site Settings ==========
   await prisma.siteSettings.upsert({
