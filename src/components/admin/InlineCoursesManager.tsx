@@ -14,6 +14,9 @@ interface Course {
   instructor: string;
   credits: number | null;
   syllabus: string | null;
+  schedule: string | null;
+  prerequisites: string | null;
+  topics: string | null;
   published: boolean;
   order: number;
 }
@@ -168,6 +171,9 @@ export default function InlineCoursesManager() {
       instructor: 'Instructor Name',
       credits: 3,
       syllabus: null,
+      schedule: null,
+      prerequisites: null,
+      topics: null,
       published: true,
       order: newOrder
     };
@@ -419,12 +425,33 @@ export default function InlineCoursesManager() {
                         placeholder="Year"
                       />
                     </div>
+                    <input
+                      type="text"
+                      value={editingData.schedule || ''}
+                      onChange={(e) => setEditingData({ ...editingData, schedule: e.target.value })}
+                      className={styles.editInstructor}
+                      placeholder="Schedule (e.g., Tue/Thu 2:00-3:30 PM)"
+                    />
                     <textarea
                       value={editingData.description || ''}
                       onChange={(e) => setEditingData({ ...editingData, description: e.target.value })}
                       className={styles.editDescription}
                       placeholder="Course Description"
                       rows={3}
+                    />
+                    <input
+                      type="text"
+                      value={editingData.prerequisites || ''}
+                      onChange={(e) => setEditingData({ ...editingData, prerequisites: e.target.value })}
+                      className={styles.editInstructor}
+                      placeholder="Prerequisites (optional)"
+                    />
+                    <input
+                      type="text"
+                      value={editingData.topics || ''}
+                      onChange={(e) => setEditingData({ ...editingData, topics: e.target.value })}
+                      className={styles.editInstructor}
+                      placeholder='Topics JSON (e.g., ["Topic 1","Topic 2"])'
                     />
                     <input
                       type="url"

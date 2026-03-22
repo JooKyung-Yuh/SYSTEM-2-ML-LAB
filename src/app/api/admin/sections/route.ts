@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { createSectionSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,17 +22,14 @@ export async function POST(request: NextRequest) {
   try {
     await requireAuth(request);
 
-    const data = await request.json();
-    const { title, content, order, pageId, layout } = data;
+    const body = await request.json();
+    const validation = validateRequest(createSectionSchema, body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     const section = await prisma.section.create({
-      data: {
-        title,
-        content,
-        order: order ?? 0,
-        layout: layout ?? 'full-width',
-        pageId
-      }
+      data: validation.data
     });
 
     return NextResponse.json(section);

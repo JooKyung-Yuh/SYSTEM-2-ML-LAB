@@ -12,6 +12,10 @@ interface Publication {
   year: number;
   url: string | null;
   pdfUrl: string | null;
+  codeUrl: string | null;
+  abstract: string | null;
+  topics: string | null;
+  type: string | null;
   category: string;
   order: number;
   published: boolean;
@@ -163,6 +167,10 @@ export default function InlinePublicationsManager() {
       year: currentYear,
       url: null,
       pdfUrl: null,
+      codeUrl: null,
+      abstract: null,
+      topics: null,
+      type: 'Conference',
       category: 'conference',
       order: newOrder,
       published: true
@@ -308,6 +316,11 @@ export default function InlinePublicationsManager() {
                             PDF
                           </a></>
                         )}
+                        {pub.codeUrl && (
+                          <> · <a href={pub.codeUrl} target="_blank" rel="noopener noreferrer" className={styles.pubLink}>
+                            Code
+                          </a></>
+                        )}
                       </p>
                     </div>
                   </div>
@@ -418,8 +431,31 @@ export default function InlinePublicationsManager() {
                         <option value="conference">Conference</option>
                         <option value="journal">Journal</option>
                         <option value="workshop">Workshop</option>
+                        <option value="preprint">Preprint</option>
                       </select>
+                      <input
+                        type="text"
+                        value={editingData.type || ''}
+                        onChange={(e) => setEditingData({ ...editingData, type: e.target.value })}
+                        className={styles.editVenue}
+                        placeholder="Type (e.g., Conference (Spotlight))"
+                      />
                     </div>
+                    <textarea
+                      value={editingData.abstract || ''}
+                      onChange={(e) => setEditingData({ ...editingData, abstract: e.target.value })}
+                      className={styles.editAuthors}
+                      placeholder="Abstract (optional)"
+                      rows={3}
+                      style={{ resize: 'vertical' }}
+                    />
+                    <input
+                      type="text"
+                      value={editingData.topics || ''}
+                      onChange={(e) => setEditingData({ ...editingData, topics: e.target.value })}
+                      className={styles.editUrl}
+                      placeholder='Topics JSON (e.g., ["Meta-Learning","AutoML"])'
+                    />
                     <input
                       type="url"
                       value={editingData.url || ''}
@@ -433,6 +469,13 @@ export default function InlinePublicationsManager() {
                       onChange={(e) => setEditingData({ ...editingData, pdfUrl: e.target.value })}
                       className={styles.editPdfUrl}
                       placeholder="PDF URL (optional)"
+                    />
+                    <input
+                      type="url"
+                      value={editingData.codeUrl || ''}
+                      onChange={(e) => setEditingData({ ...editingData, codeUrl: e.target.value })}
+                      className={styles.editPdfUrl}
+                      placeholder="Code URL (optional)"
                     />
                   </>
                 ) : (

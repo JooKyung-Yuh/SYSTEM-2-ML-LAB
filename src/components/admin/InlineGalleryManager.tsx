@@ -10,6 +10,7 @@ interface GalleryItem {
   description: string | null;
   imageUrl: string;
   category: string | null;
+  date: string | null;
   order: number;
   published: boolean;
 }
@@ -158,12 +159,13 @@ export default function InlineGalleryManager() {
       if (response.ok) {
         const data = await response.json();
         setEditingData({ ...editingData, imageUrl: data.url });
+        showToast.success('Image uploaded');
       } else {
-        alert('Image upload failed');
+        showToast.error('Image upload failed');
       }
     } catch (error) {
       console.error('Failed to upload image:', error);
-      alert('Image upload failed');
+      showToast.error('Image upload failed');
     } finally {
       setUploadingImage(false);
     }
@@ -179,6 +181,7 @@ export default function InlineGalleryManager() {
       description: 'Click to edit description',
       imageUrl: 'https://via.placeholder.com/600x400?text=Upload+Image',
       category: 'lab-life',
+      date: null,
       order: newOrder,
       published: true
     };
@@ -406,6 +409,13 @@ export default function InlineGalleryManager() {
                       className={styles.editDescription}
                       placeholder="Description"
                       rows={3}
+                    />
+                    <input
+                      type="text"
+                      value={editingData.date || ''}
+                      onChange={(e) => setEditingData({ ...editingData, date: e.target.value })}
+                      className={styles.editTitle}
+                      placeholder="Date (e.g., March 2025)"
                     />
                     <select
                       value={editingData.category || 'lab-life'}
