@@ -137,14 +137,26 @@ export default function InlineAboutEditor() {
     setEditingData({});
   };
 
-  const handleAddSection = async () => {
+  const handleAddSection = async (afterIndex?: number) => {
     if (!pageData || adding) return;
 
     setAdding(true);
+    const sections = pageData.sections || [];
+
+    // Calculate order: insert after the given index, or at the end
+    let newOrder: number;
+    if (afterIndex !== undefined && afterIndex < sections.length) {
+      const currentOrder = sections[afterIndex]?.order || 0;
+      const nextOrder = sections[afterIndex + 1]?.order ?? currentOrder + 2;
+      newOrder = currentOrder + (nextOrder - currentOrder) / 2;
+    } else {
+      newOrder = (sections[sections.length - 1]?.order || 0) + 1;
+    }
+
     const newSection = {
       title: 'New Section',
       content: '<p>섹션 내용을 입력하세요...</p>',
-      order: (pageData.sections?.length || 0),
+      order: newOrder,
       layout: 'full-width',
       pageId: pageData.id
     };
@@ -158,13 +170,8 @@ export default function InlineAboutEditor() {
 
       if (response.ok) {
         const newData = await response.json();
-
-        // Optimistically update UI
-        setPageData({
-          ...pageData,
-          sections: [...(pageData.sections || []), newData]
-        });
-
+        const updatedSections = [...sections, newData].sort((a, b) => a.order - b.order);
+        setPageData({ ...pageData, sections: updatedSections });
         setEditingId(newData.id);
         setEditingType('section');
         setEditingData({ ...newData });
@@ -177,6 +184,42 @@ export default function InlineAboutEditor() {
       showToast.error(toastMessages.pages.error);
     } finally {
       setAdding(false);
+    }
+  };
+
+  const handleMoveSection = async (sectionId: string, direction: 'up' | 'down') => {
+    if (!pageData) return;
+    const sections = [...(pageData.sections || [])].sort((a, b) => a.order - b.order);
+    const idx = sections.findIndex(s => s.id === sectionId);
+    if (idx === -1) return;
+    if (direction === 'up' && idx === 0) return;
+    if (direction === 'down' && idx === sections.length - 1) return;
+
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    const tempOrder = sections[idx].order;
+    sections[idx].order = sections[swapIdx].order;
+    sections[swapIdx].order = tempOrder;
+
+    // Optimistic UI update
+    sections.sort((a, b) => a.order - b.order);
+    setPageData({ ...pageData, sections });
+
+    // Save both
+    try {
+      await Promise.all([
+        fetch(`/api/admin/sections/${sections[idx].id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order: sections[idx].order }),
+        }),
+        fetch(`/api/admin/sections/${sections[swapIdx].id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order: sections[swapIdx].order }),
+        }),
+      ]);
+    } catch {
+      fetchPageData(); // rollback on error
     }
   };
 
@@ -327,6 +370,24 @@ export default function InlineAboutEditor() {
                     </>
                   ) : (
                     <>
+                      {index > 0 && (
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => handleMoveSection(section.id, 'up')}
+                          title="Move up"
+                        >
+                          ↑
+                        </button>
+                      )}
+                      {index < (pageData?.sections?.length || 0) - 1 && (
+                        <button
+                          className={styles.editBtn}
+                          onClick={() => handleMoveSection(section.id, 'down')}
+                          title="Move down"
+                        >
+                          ↓
+                        </button>
+                      )}
                       <button
                         className={styles.editBtn}
                         onClick={() => handleEdit(section.id, 'section', section)}
@@ -512,10 +573,10 @@ export default function InlineAboutEditor() {
               </section>
 
               {/* Add Section Button (between sections) */}
-              {hoveredId === section.id && index < pageData.sections.length - 1 && (
+              {hoveredId === section.id && !editingId && (
                 <div className={styles.addBetween}>
-                  <button className={styles.addBtn} onClick={handleAddSection}>
-                    + Add Section
+                  <button className={styles.addBtn} onClick={() => handleAddSection(index)}>
+                    + Insert Below
                   </button>
                 </div>
               )}
@@ -526,7 +587,7 @@ export default function InlineAboutEditor() {
           <div className={styles.addNewContainer}>
             <button
               className={styles.addNewBtn}
-              onClick={handleAddSection}
+              onClick={() => handleAddSection()}
               disabled={adding}
             >
               <div className={styles.addNewContent}>
