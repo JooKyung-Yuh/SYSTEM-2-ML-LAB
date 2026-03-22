@@ -17,14 +17,16 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const newsItems = await prisma.newsItem.findMany({
-    include: {
-      links: true,
-    },
-    orderBy: {
-      order: 'asc',
-    },
-  });
+  const [newsItems, siteSettings] = await Promise.all([
+    prisma.newsItem.findMany({
+      include: { links: true },
+      orderBy: { order: 'asc' },
+    }),
+    prisma.siteSettings.findFirst().catch(() => null),
+  ]);
+
+  const showNewsCarousel = siteSettings?.showNewsCarousel ?? false;
+  const showRecruitmentBanner = siteSettings?.showRecruitmentBanner ?? true;
 
   return (
     <>
@@ -48,7 +50,11 @@ export default async function Home() {
         }}
       />
       <WebsiteStructuredData />
-      <HomeClient newsItems={newsItems} />
+      <HomeClient
+        newsItems={newsItems}
+        showNewsCarousel={showNewsCarousel}
+        showRecruitmentBanner={showRecruitmentBanner}
+      />
     </>
   );
 }

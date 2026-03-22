@@ -10,24 +10,14 @@ interface RecruitmentBannerProps {
 export default function RecruitmentBanner({ isLoaded }: RecruitmentBannerProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleClick = () => {
-    window.location.href = 'mailto:haebeomlee@korea.ac.kr';
-  };
-
   return (
-    <div
+    <a
+      href="mailto:haebeomlee@korea.ac.kr"
       className={`${styles.banner} ${isLoaded ? styles.loaded : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          handleClick();
-        }
-      }}
       aria-label="Join our team - Contact us about open positions"
+      style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
     >
       <div className={styles.content}>
         <span className={styles.icon}>🎓</span>
@@ -42,6 +32,6 @@ export default function RecruitmentBanner({ isLoaded }: RecruitmentBannerProps) 
           →
         </span>
       </div>
-    </div>
+    </a>
   );
 }

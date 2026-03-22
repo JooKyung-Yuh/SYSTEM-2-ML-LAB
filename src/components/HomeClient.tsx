@@ -24,34 +24,15 @@ interface NewsItem {
 
 interface HomeClientProps {
   newsItems: NewsItem[];
+  showNewsCarousel: boolean;
+  showRecruitmentBanner: boolean;
 }
 
-export default function HomeClient({ newsItems }: HomeClientProps) {
+export default function HomeClient({ newsItems, showNewsCarousel, showRecruitmentBanner }: HomeClientProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [showNewsCarousel, setShowNewsCarousel] = useState(false);
-  const [showRecruitmentBanner, setShowRecruitmentBanner] = useState(false);
 
   useEffect(() => {
-    // Fetch site settings
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/settings');
-        if (response.ok) {
-          const data = await response.json();
-          setShowNewsCarousel(data.showNewsCarousel);
-          setShowRecruitmentBanner(data.showRecruitmentBanner);
-        }
-      } catch (error) {
-        console.error('Failed to fetch settings:', error);
-        // Default to hiding carousel, showing recruitment banner
-        setShowNewsCarousel(false);
-        setShowRecruitmentBanner(true);
-      }
-    };
-
-    fetchSettings();
-
     // Check if mobile screen
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);

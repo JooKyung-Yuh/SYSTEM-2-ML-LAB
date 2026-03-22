@@ -1,5 +1,39 @@
+interface ResearchArea {
+  title: string;
+  description: string;
+  details: string;
+  projects: string[];
+  image: string;
+}
+
+const ResearchAreaCard = ({ area, index }: { area: ResearchArea, index: number }) => (
+  <div className={`flex flex-col lg:flex-row gap-8 mb-16 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
+    <div className="lg:w-1/2">
+      <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4 lg:mb-0">
+        <span className="text-gray-500 text-6xl">🔬</span>
+      </div>
+    </div>
+    <div className="lg:w-1/2">
+      <h3 className="text-2xl font-bold text-gray-900 mb-4">{area.title}</h3>
+      <p className="text-gray-700 mb-4">{area.description}</p>
+      <p className="text-gray-600 mb-6">{area.details}</p>
+      <div>
+        <h4 className="font-semibold text-gray-900 mb-3">Current Projects:</h4>
+        <ul className="space-y-2">
+          {area.projects.map((project: string, projectIndex: number) => (
+            <li key={projectIndex} className="flex items-center text-gray-700">
+              <span className="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
+              {project}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+);
+
 export default function Research() {
-  const researchAreas = [
+  const researchAreas: ResearchArea[] = [
     {
       title: "Large Language Model Reasoning",
       description: "Advancing reasoning capabilities in large language models for complex problem solving and deliberate thinking.",
@@ -85,40 +119,6 @@ export default function Research() {
       image: "/research-transfer.jpg"
     }
   ];
-
-  interface ResearchArea {
-    title: string;
-    description: string;
-    details: string;
-    projects: string[];
-    image: string;
-  }
-
-  const ResearchAreaCard = ({ area, index }: { area: ResearchArea, index: number }) => (
-    <div className={`flex flex-col lg:flex-row gap-8 mb-16 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-      <div className="lg:w-1/2">
-        <div className="h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-4 lg:mb-0">
-          <span className="text-gray-500 text-6xl">🔬</span>
-        </div>
-      </div>
-      <div className="lg:w-1/2">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">{area.title}</h3>
-        <p className="text-gray-700 mb-4">{area.description}</p>
-        <p className="text-gray-600 mb-6">{area.details}</p>
-        <div>
-          <h4 className="font-semibold text-gray-900 mb-3">Current Projects:</h4>
-          <ul className="space-y-2">
-            {area.projects.map((project: string, projectIndex: number) => (
-              <li key={projectIndex} className="flex items-center text-gray-700">
-                <span className="w-2 h-2 bg-blue-600 rounded-full mr-3"></span>
-                {project}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
     <div className="min-h-screen py-16">
