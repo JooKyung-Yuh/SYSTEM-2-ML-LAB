@@ -50,12 +50,16 @@ const Navigation = () => {
             <img
               src="/images/ku_logo_white.png"
               alt="KU Logo"
+              width={42}
+              height={42}
               className={styles.logoImg}
               style={{ visibility: confirmedInner ? 'hidden' : 'visible' }}
             />
             <img
               src="/images/ku_logo_black.png"
               alt=""
+              width={42}
+              height={42}
               className={`${styles.logoImg} ${styles.logoImgAlt}`}
               style={{ visibility: confirmedInner ? 'visible' : 'hidden' }}
             />

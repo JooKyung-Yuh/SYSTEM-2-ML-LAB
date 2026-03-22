@@ -1,178 +1,181 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import type { NewsItem as DataNewsItem } from '@/data/news';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import styles from './NewsCarousel.module.css';
-import './owl-carousel.css';
 
-// Minimal typings for jQuery + OwlCarousel to avoid using `any`
-type OwlCarouselOptions = Record<string, unknown>;
-type OwlCarouselFn = (options?: OwlCarouselOptions | string) => void;
-type JQueryInstance = {
-  owlCarousel: OwlCarouselFn;
-};
-type JQueryLike = (el: Element | null) => JQueryInstance;
+interface NewsLink { id: string; text: string; url: string; }
+interface NewsItem { id: string; date: string; title: string; description: string; links?: NewsLink[]; }
+interface NewsCarouselProps { newsItems: NewsItem[]; }
 
-declare global {
-  interface Window {
-    $?: JQueryLike & { fn?: { owlCarousel?: OwlCarouselFn } };
-  }
+function useItemsPerView() {
+  const [count, setCount] = useState(4);
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth;
+      if (w < 600) setCount(1);
+      else if (w < 900) setCount(2);
+      else if (w < 1200) setCount(3);
+      else setCount(4);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  return count;
 }
 
-interface NewsCarouselProps {
-  newsItems: DataNewsItem[];
+function NewsCard({ item }: { item: NewsItem }) {
+  return (
+    <div className={styles.slideEntryBg}>
+      <div className={styles.slideEntry}>
+        <div className={styles.newsDate}>{item.date}</div>
+        <h4 className={styles.newsTitle}>{item.title}</h4>
+        <p className={styles.newsDescription}>
+          {item.description}
+          {item.links && item.links.length > 0 && (
+            <>
+              {' ('}
+              {item.links.map((link, index) => (
+                <span key={link.id || index}>
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" className={styles.newsLink}>
+                    {link.text}
+                  </a>
+                  {index < item.links!.length - 1 && ', '}
+                </span>
+              ))}
+              {')'}
+            </>
+          )}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
-  const carouselRef = useRef<HTMLDivElement>(null);
+  const itemsPerView = useItemsPerView();
+  const total = newsItems.length;
+  if (total === 0) return null;
 
+  const isScrollable = total > itemsPerView;
+  const gap = 20;
+  const cloneCount = isScrollable ? itemsPerView : 0;
+
+  const slides = isScrollable
+    ? [...newsItems.slice(-cloneCount), ...newsItems, ...newsItems.slice(0, cloneCount)]
+    : newsItems;
+
+  const [index, setIndex] = useState(cloneCount);
+  const [isHovered, setIsHovered] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isLocked = useRef(false); // locked during ANY animation or jump
+
+  const slideWidthCalc = `calc((100% - ${gap * (itemsPerView - 1)}px) / ${itemsPerView})`;
+
+  // Move track to a position (with or without animation)
+  const moveTo = useCallback((pos: number, animated: boolean) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.style.transition = animated ? 'transform 0.5s ease' : 'none';
+    track.style.transform = `translateX(calc(-${pos} * (${slideWidthCalc} + ${gap}px)))`;
+  }, [slideWidthCalc, gap]);
+
+  // Go to next/prev with animation
+  const goTo = useCallback((newIndex: number) => {
+    if (isLocked.current) return;
+    isLocked.current = true; // lock during animation
+    setIndex(newIndex);
+    moveTo(newIndex, true);
+  }, [moveTo]);
+
+  const next = useCallback(() => goTo(index + 1), [index, goTo]);
+  const prev = useCallback(() => goTo(index - 1), [index, goTo]);
+
+  // Handle wrap-around after animation completes
+  const handleTransitionEnd = useCallback((e: React.TransitionEvent) => {
+    if (e.propertyName !== 'transform') return;
+
+    const realStart = cloneCount;
+    const realEnd = cloneCount + total - 1;
+
+    if (index > realEnd) {
+      // Past end → silent jump to real start
+      const jumpTo = realStart + (index - realEnd - 1);
+      setIndex(jumpTo);
+      moveTo(jumpTo, false);
+      trackRef.current?.offsetHeight; // eslint-disable-line - force reflow
+      requestAnimationFrame(() => { isLocked.current = false; });
+    } else if (index < realStart) {
+      // Before start → silent jump to real end
+      const jumpTo = realEnd + (index - realStart + 1);
+      setIndex(jumpTo);
+      moveTo(jumpTo, false);
+      trackRef.current?.offsetHeight; // eslint-disable-line
+      requestAnimationFrame(() => { isLocked.current = false; });
+    } else {
+      // Normal slide, just unlock
+      isLocked.current = false;
+    }
+  }, [index, cloneCount, total, moveTo]);
+
+  // Set initial position on mount
   useEffect(() => {
-    const node = carouselRef.current;
-    const loadScript = (src: string) => {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-      });
-    };
+    moveTo(cloneCount, false);
+  }, [cloneCount, moveTo]);
 
-    const loadCSS = (href: string) => {
-      return new Promise<void>((resolve) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href;
-        link.onload = () => resolve();
-        document.head.appendChild(link);
-      });
-    };
+  // Autoplay
+  useEffect(() => {
+    if (isHovered || !isScrollable) return;
+    const timer = setInterval(() => {
+      if (!isLocked.current) goTo(index + 1);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isHovered, isScrollable, index, goTo]);
 
-    const initCarousel = async () => {
-      try {
-        // Load FontAwesome CSS
-        await loadCSS('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-        // Load jQuery
-        if (!window.$) {
-          await loadScript('/jquery.min.js');
-        }
-
-        // Load Owl Carousel
-        if (!window.$?.fn || !window.$.fn.owlCarousel) {
-          await loadScript('/owl.carousel.min.js');
-        }
-
-        // Load Owl Carousel CSS
-        await loadCSS('/owl.carousel.min.css');
-        await loadCSS('/owl.theme.default.min.css');
-
-        // Wait a bit for everything to load and DOM to be ready
-        const initTimer = setTimeout(() => {
-          if (node && window.$ && window.$.fn?.owlCarousel) {
-            // Ensure the container is visible before initializing
-            requestAnimationFrame(() => {
-              window.$!(node).owlCarousel({
-                loop: true,
-                margin: 20,
-                autoplay: true,
-                autoplayTimeout: 5000,
-                autoplayHoverPause: true,
-                nav: true,
-                dots: true,
-                smartSpeed: 300,
-                fluidSpeed: true,
-                slideBy: 1,
-                dotsEach: 1,
-                navText: [
-                  '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
-                  '<i class="fa fa-chevron-right" aria-hidden="true"></i>'
-                ],
-                responsive: {
-                  0: {
-                    items: 1,
-                    margin: 10,
-                    slideBy: 1
-                  },
-                  600: {
-                    items: 2,
-                    margin: 15,
-                    slideBy: 1
-                  },
-                  900: {
-                    items: 3,
-                    margin: 20,
-                    slideBy: 1
-                  },
-                  1200: {
-                    items: 4,
-                    margin: 20,
-                    slideBy: 1
-                  }
-                }
-              });
-            });
-          }
-        }, 200);
-
-        return () => clearTimeout(initTimer);
-      } catch (error) {
-        console.error('Error loading carousel:', error);
-      }
-    };
-
-    initCarousel();
-
-    return () => {
-      if (node && window.$ && window.$.fn?.owlCarousel) {
-        window.$!(node).owlCarousel('destroy');
-      }
-    };
-  }, []);
+  // Dot index mapped to real items (0..total-1)
+  const dotIndex = ((index - cloneCount) % total + total) % total;
 
   return (
-    <div className={styles.newsCarouselContainer}>
-      <div
-        ref={carouselRef}
-        className={`owl-carousel owl-theme ${styles.newsCarousel}`}
-      >
-        {newsItems.map((item) => (
-          <div key={item.id} className={styles.item}>
-            <div className={styles.slideEntryBg}>
-              <div className={styles.slideEntry}>
-                <div className={styles.newsDate}>{item.date}</div>
-                <h4 className={styles.newsTitle}>{item.title}</h4>
-                <p className={styles.newsDescription}>
-                  {item.description}
-                  {(() => {
-                    const links = item.links ?? [];
-                    if (links.length === 0) return null;
-                    return (
-                      <>
-                        {' ('}
-                        {links.map((link, index) => (
-                          <span key={index}>
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className={styles.newsLink}
-                            >
-                              {link.text}
-                            </a>
-                            {index < links.length - 1 && ', '}
-                          </span>
-                        ))}
-                        {')'}
-                      </>
-                    );
-                  })()}
-                </p>
-              </div>
+    <div
+      className={styles.newsCarouselContainer}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className={styles.viewport}>
+        <div
+          ref={trackRef}
+          className={styles.track}
+          style={{ gap: `${gap}px` }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {slides.map((item, i) => (
+            <div
+              key={`slide-${i}`}
+              className={styles.slide}
+              style={{ minWidth: slideWidthCalc, maxWidth: slideWidthCalc }}
+            >
+              <NewsCard item={item} />
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {isScrollable && (
+        <>
+          <button className={styles.navPrev} onClick={prev} aria-label="Previous">‹</button>
+          <button className={styles.navNext} onClick={next} aria-label="Next">›</button>
+          <div className={styles.dots}>
+            {Array.from({ length: total }, (_, i) => (
+              <button
+                key={i}
+                className={`${styles.dot} ${i === dotIndex ? styles.dotActive : ''}`}
+                onClick={() => goTo(cloneCount + i)}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
