@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
@@ -25,9 +25,9 @@ export async function PUT(
     });
 
     return NextResponse.json(galleryItem);
-  } catch (error) {
-    console.error('Error updating gallery item:', error);
-    return NextResponse.json({ error: 'Failed to update gallery item' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to update gallery item');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -43,8 +43,8 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting gallery item:', error);
-    return NextResponse.json({ error: 'Failed to delete gallery item' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to delete gallery item');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

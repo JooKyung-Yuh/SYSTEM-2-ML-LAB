@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { rateLimiters, getClientIdentifier } from '@/lib/ratelimit';
 import { validateFileUpload, generateSafeFilename } from '@/lib/fileValidation';
 

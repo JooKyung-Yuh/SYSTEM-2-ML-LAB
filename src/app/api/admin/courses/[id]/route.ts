@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { updateCourseSchema, validateRequest } from '@/lib/validation';
 
 export async function PUT(
@@ -25,9 +25,9 @@ export async function PUT(
     });
 
     return NextResponse.json(course);
-  } catch (error) {
-    console.error('Error updating course:', error);
-    return NextResponse.json({ error: 'Failed to update course' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to update course');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -44,8 +44,8 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting course:', error);
-    return NextResponse.json({ error: 'Failed to delete course' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to delete course');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { createNewsSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -17,12 +17,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(newsItems);
-  } catch (error) {
-    console.error('Failed to fetch news items:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch news items' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch news items');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -58,11 +55,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(newsItem);
-  } catch (error) {
-    console.error('Failed to create news item:', error);
-    return NextResponse.json(
-      { error: 'Failed to create news item' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create news item');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

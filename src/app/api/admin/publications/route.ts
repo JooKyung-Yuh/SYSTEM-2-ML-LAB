@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { createPublicationSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(publications);
-  } catch (error) {
-    console.error('Error fetching publications:', error);
-    return NextResponse.json({ error: 'Failed to fetch publications' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch publications');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -39,8 +39,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(publication);
-  } catch (error) {
-    console.error('Error creating publication:', error);
-    return NextResponse.json({ error: 'Failed to create publication' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create publication');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

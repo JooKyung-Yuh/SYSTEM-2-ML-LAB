@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { createCourseSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -17,9 +17,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(courses);
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-    return NextResponse.json({ error: 'Failed to fetch courses' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch courses');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(course);
-  } catch (error) {
-    console.error('Error creating course:', error);
-    return NextResponse.json({ error: 'Failed to create course' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create course');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

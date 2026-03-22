@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(galleryItems);
-  } catch (error) {
-    console.error('Error fetching gallery items:', error);
-    return NextResponse.json({ error: 'Failed to fetch gallery items' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch gallery items');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(galleryItem);
-  } catch (error) {
-    console.error('Error creating gallery item:', error);
-    return NextResponse.json({ error: 'Failed to create gallery item' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create gallery item');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

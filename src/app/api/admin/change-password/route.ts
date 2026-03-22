@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ message: 'Password changed successfully' });
-  } catch (error) {
-    console.error('Error changing password:', error);
-    return NextResponse.json({ error: 'Failed to change password' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to change password');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

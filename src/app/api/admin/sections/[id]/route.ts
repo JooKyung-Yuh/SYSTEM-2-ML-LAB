@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 
 export async function PUT(
   request: NextRequest,
@@ -24,9 +24,9 @@ export async function PUT(
     });
 
     return NextResponse.json(section);
-  } catch (error) {
-    console.error('Error updating section:', error);
-    return NextResponse.json({ error: 'Failed to update section' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to update section');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -43,8 +43,8 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting section:', error);
-    return NextResponse.json({ error: 'Failed to delete section' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to delete section');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

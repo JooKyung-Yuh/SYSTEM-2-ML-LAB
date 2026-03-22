@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { updateSettingsSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -24,12 +24,9 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(settings);
-  } catch (error) {
-    console.error('Error fetching settings:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch settings' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch settings');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -63,7 +60,7 @@ export async function PATCH(request: NextRequest) {
     });
 
     return NextResponse.json(settings);
-  } catch (error) {
+  } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error updating settings:', {
       error: errorMessage,

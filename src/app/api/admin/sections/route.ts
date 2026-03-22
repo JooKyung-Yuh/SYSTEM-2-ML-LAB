@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { createSectionSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(sections);
-  } catch (error) {
-    console.error('Error fetching sections:', error);
-    return NextResponse.json({ error: 'Failed to fetch sections' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch sections');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -33,8 +33,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(section);
-  } catch (error) {
-    console.error('Error creating section:', error);
-    return NextResponse.json({ error: 'Failed to create section' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create section');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

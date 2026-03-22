@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 import { createPersonSchema, validateRequest } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(people);
-  } catch (error) {
-    console.error('Error fetching people:', error);
-    return NextResponse.json({ error: 'Failed to fetch people' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch people');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(person);
-  } catch (error) {
-    console.error('Error creating person:', error);
-    return NextResponse.json({ error: 'Failed to create person' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create person');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }

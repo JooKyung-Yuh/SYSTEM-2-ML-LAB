@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { requireAuth } from '@/lib/auth';
+import { requireAuth, handleApiError } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(pages);
-  } catch (error) {
-    console.error('Error fetching pages:', error);
-    return NextResponse.json({ error: 'Failed to fetch pages' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to fetch pages');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
 
@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(page);
-  } catch (error) {
-    console.error('Error creating page:', error);
-    return NextResponse.json({ error: 'Failed to create page' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = handleApiError(error, 'Failed to create page');
+    return NextResponse.json({ error: err.error }, { status: err.status });
   }
 }
