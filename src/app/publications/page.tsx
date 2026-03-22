@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Publications',
   description: 'Research publications from System 2 ML Lab - papers on meta-learning, LLM reasoning, Bayesian inference, and more.',
   alternates: { canonical: '/publications' },
-  openGraph: { url: '/publications' },
+  openGraph: { images: ['/images/og-image.jpg'], url: '/publications' },
 };
 import PublicationsClient from '@/components/PublicationsClient';
 import Footer from '@/components/Footer';
@@ -85,21 +85,21 @@ const fallbackPublications = [
     authors: "Seong Jin Park, Seungju Han, Ji-won Baek, Insoo Kim, Juhwan Song, Hae Beom Lee, Jae-Joon Han, Sung Ju Hwang",
     venue: "ICML", year: 2020, type: "Conference", topics: '["Meta-Learning","Data Augmentation"]',
     abstract: "We propose Meta Variance Transfer, a method that learns to augment data by transferring variance information from related tasks.",
-    url: "https://proceedings.icml.cc/static/paper_files/icml/2020/2222-Paper.pdf", pdfUrl: null, codeUrl: null, category: "conference", order: 2, published: true,
+    url: "https://arxiv.org/abs/2003.04042", pdfUrl: null, codeUrl: null, category: "conference", order: 2, published: true,
   },
   {
     id: 'fb-11', title: "Learning to Balance: Bayesian Meta-Learning for Imbalanced and Out-of-distribution Tasks",
     authors: "Hae Beom Lee*, Hayeon Lee*, Donghyun Na*, Saehoon Kim, Minseop Park, Eunho Yang, Sung Ju Hwang (*equal contribution)",
     venue: "ICLR", year: 2020, type: "Conference (Oral)", topics: '["Meta-Learning","Bayesian Inference","Imbalanced Learning"]',
     abstract: "We propose a Bayesian meta-learning framework that learns to balance between tasks with imbalanced class distributions and out-of-distribution samples.",
-    url: "https://openreview.net/pdf?id=rkeZIJBYvr", pdfUrl: null, codeUrl: "https://github.com/haebeom-lee/l2b", category: "conference", order: 3, published: true,
+    url: "https://arxiv.org/abs/1910.10612", pdfUrl: null, codeUrl: "https://github.com/haebeom-lee/l2b", category: "conference", order: 3, published: true,
   },
   {
     id: 'fb-12', title: "Meta Dropout: Learning to Perturb Latent Features for Generalization",
     authors: "Hae Beom Lee, Taewook Nam, Eunho Yang, Sung Ju Hwang",
     venue: "ICLR", year: 2020, type: "Conference", topics: '["Meta-Learning","Regularization"]',
     abstract: "We introduce Meta Dropout, a method that meta-learns optimal perturbation patterns for latent features to improve model generalization.",
-    url: "https://openreview.net/pdf?id=BJgd81SYwr", pdfUrl: null, codeUrl: "https://github.com/haebeom-lee/metadrop", category: "conference", order: 4, published: true,
+    url: "https://arxiv.org/abs/1905.12914", pdfUrl: null, codeUrl: "https://github.com/haebeom-lee/metadrop", category: "conference", order: 4, published: true,
   },
   {
     id: 'fb-13', title: "DropMax: Adaptive Variational Softmax",

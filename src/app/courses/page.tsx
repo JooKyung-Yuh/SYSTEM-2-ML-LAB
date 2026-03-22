@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Courses',
   description: 'Graduate and undergraduate courses offered by System 2 ML Lab at Korea University.',
   alternates: { canonical: '/courses' },
-  openGraph: { url: '/courses' },
+  openGraph: { images: ['/images/og-image.jpg'], url: '/courses' },
 };
 import styles from './courses.module.css';
 import Footer from '@/components/Footer';
