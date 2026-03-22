@@ -77,76 +77,55 @@ export default async function CoursesPage() {
         </header>
 
         {courses.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#999' }}>
-            <p style={{ fontSize: '1.1rem' }}>Course information coming soon.</p>
-          </div>
+          <p className={styles.emptyState}>Course information coming soon.</p>
         )}
 
         {sortedKeys.map((key) => (
-          <section key={key} style={{ marginBottom: '3rem' }}>
-            <h2 style={{
-              fontSize: '1.5rem', fontWeight: 500, color: '#222',
-              marginBottom: '2rem', fontFamily: 'Georgia, serif'
-            }}>
-              {key}
-            </h2>
+          <section key={key} className={styles.yearSection}>
+            <h2 className={styles.yearTitle}>{key}</h2>
 
             {grouped[key].map((course, index) => {
               const courseTopics = parseTopics(course.topics);
               return (
-                <div key={course.id} style={{
-                  marginBottom: '2.5rem', paddingBottom: '2rem',
-                  borderBottom: index < grouped[key].length - 1 ? '1px solid #eee' : 'none'
-                }}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <div style={{
-                      display: 'flex', alignItems: 'baseline', justifyContent: 'space-between',
-                      flexWrap: 'wrap', gap: '1rem', marginBottom: '0.5rem'
-                    }}>
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#222', margin: 0, flex: 1 }}>
-                        {course.code}: {course.title}
-                      </h3>
-                      {course.credits && (
-                        <span style={{ fontSize: '0.9rem', color: '#666', fontWeight: 500 }}>
-                          {course.credits} Credits
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: '1rem', color: '#666', marginBottom: '0.5rem' }}>
-                      <strong>Instructor:</strong> {course.instructor}
-                      {course.schedule && <><strong> | Schedule:</strong> {course.schedule}</>}
-                    </div>
+                <div key={course.id} className={styles.courseItem}
+                  style={{ borderBottom: index < grouped[key].length - 1 ? '1px solid #eee' : 'none' }}>
+                  <div className={styles.courseItemHeader}>
+                    <h3 className={styles.courseItemTitle}>
+                      {course.code}: {course.title}
+                    </h3>
+                    {course.credits && (
+                      <span className={styles.courseCredits}>{course.credits} Credits</span>
+                    )}
+                  </div>
+                  <div className={styles.courseInstructor}>
+                    <strong>Instructor:</strong> {course.instructor}
+                    {course.schedule && <><strong> | Schedule:</strong> {course.schedule}</>}
                   </div>
 
                   {course.description && (
-                    <p style={{ fontSize: '1rem', color: '#333', marginBottom: '1rem' }}>
-                      {course.description}
-                    </p>
+                    <p className={styles.courseDescription}>{course.description}</p>
                   )}
 
                   {course.prerequisites && (
-                    <div style={{ marginBottom: '1rem' }}>
-                      <strong style={{ fontSize: '0.95rem', color: '#222' }}>Prerequisites:</strong>
-                      <span style={{ fontSize: '0.95rem', color: '#666', marginLeft: '0.5rem' }}>
-                        {course.prerequisites}
-                      </span>
+                    <div className={styles.coursePrereqs}>
+                      <span className={styles.coursePrereqsLabel}>Prerequisites:</span>
+                      <span className={styles.coursePrereqsValue}>{course.prerequisites}</span>
                     </div>
                   )}
 
                   {courseTopics.length > 0 && (
                     <div>
-                      <strong style={{ fontSize: '0.95rem', color: '#222' }}>Topics Covered:</strong>
+                      <span className={styles.coursePrereqsLabel}>Topics Covered:</span>
                       <ul className={styles.topicsList}>
                         {courseTopics.map((topic, topicIndex) => (
-                          <li key={topicIndex} style={{ marginBottom: '0.25rem' }}>{topic}</li>
+                          <li key={topicIndex}>{topic}</li>
                         ))}
                       </ul>
                     </div>
                   )}
 
                   {course.syllabus && (
-                    <a href={course.syllabus} target="_blank" rel="noopener noreferrer"
-                      style={{ color: '#0066cc', textDecoration: 'underline', fontSize: '0.95rem' }}>
+                    <a href={course.syllabus} target="_blank" rel="noopener noreferrer" className={styles.syllabusLink}>
                       View Syllabus
                     </a>
                   )}
