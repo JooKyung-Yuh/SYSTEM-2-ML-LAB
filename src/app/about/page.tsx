@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+import { getShowRecruitment } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -53,7 +54,10 @@ async function getAboutPageData(): Promise<PageData | null> {
 }
 
 export default async function About() {
-  const pageData = await getAboutPageData();
+  const [pageData, showRecruitment] = await Promise.all([
+    getAboutPageData(),
+    getShowRecruitment(),
+  ]);
 
   return (
     <div className={styles.container}>
@@ -256,7 +260,7 @@ export default async function About() {
                 </div>
               </section>
 
-              <JoinUs />
+              <JoinUs show={showRecruitment} />
             </>
           )}
         </div>

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+import { getShowRecruitment } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'Publications',
@@ -157,11 +158,13 @@ export default async function PublicationsPage() {
     publications = fallbackPublications;
   }
 
+  const showRecruitment = await getShowRecruitment();
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <PublicationsClient publications={publications} />
-        <JoinUs />
+        <JoinUs show={showRecruitment} />
       </div>
       <Footer />
     </div>

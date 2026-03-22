@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+import { getShowRecruitment } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'News & Updates',
@@ -39,6 +40,8 @@ export default async function NewsPage() {
   } catch {
     newsItems = [];
   }
+
+  const showRecruitment = await getShowRecruitment();
 
   return (
     <div className={styles.container}>
@@ -85,7 +88,7 @@ export default async function NewsPage() {
           </div>
         )}
 
-        <JoinUs />
+        <JoinUs show={showRecruitment} />
       </div>
       <Footer />
     </div>

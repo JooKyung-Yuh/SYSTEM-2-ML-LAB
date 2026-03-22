@@ -1,6 +1,12 @@
 import styles from './JoinUs.module.css';
 
-const JoinUs = () => {
+interface JoinUsProps {
+  show?: boolean; // default true
+}
+
+const JoinUs = ({ show = true }: JoinUsProps) => {
+  if (!show) return null;
+
   return (
     <section className={styles.joinSection}>
       <h2 className={styles.joinTitle}>

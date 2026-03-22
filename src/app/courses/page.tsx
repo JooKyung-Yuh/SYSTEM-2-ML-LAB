@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import prisma from '@/lib/prisma';
+import { getShowRecruitment } from '@/lib/settings';
 
 export const metadata: Metadata = {
   title: 'Courses',
@@ -50,6 +51,8 @@ export default async function CoursesPage() {
   } catch {
     courses = [];
   }
+
+  const showRecruitment = await getShowRecruitment();
 
   // Group by year+semester
   const grouped = courses.reduce((acc, course) => {
@@ -135,7 +138,7 @@ export default async function CoursesPage() {
           </section>
         ))}
 
-        <JoinUs />
+        <JoinUs show={showRecruitment} />
       </div>
       <Footer />
     </div>
