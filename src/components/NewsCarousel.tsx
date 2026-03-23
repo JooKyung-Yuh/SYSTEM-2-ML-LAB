@@ -55,7 +55,6 @@ function NewsCard({ item }: { item: NewsItem }) {
 export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
   const itemsPerView = useItemsPerView();
   const total = newsItems.length;
-  if (total === 0) return null;
 
   const isScrollable = total > itemsPerView;
   const gap = 20;
@@ -68,7 +67,7 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
   const [index, setIndex] = useState(cloneCount);
   const [isHovered, setIsHovered] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
-  const isLocked = useRef(false); // locked during ANY animation or jump
+  const isLocked = useRef(false);
 
   const slideWidthCalc = `calc((100% - ${gap * (itemsPerView - 1)}px) / ${itemsPerView})`;
 
@@ -103,14 +102,14 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
       const jumpTo = realStart + (index - realEnd - 1);
       setIndex(jumpTo);
       moveTo(jumpTo, false);
-      trackRef.current?.offsetHeight; // eslint-disable-line - force reflow
+      void trackRef.current?.offsetHeight; // force reflow
       requestAnimationFrame(() => { isLocked.current = false; });
     } else if (index < realStart) {
       // Before start → silent jump to real end
       const jumpTo = realEnd + (index - realStart + 1);
       setIndex(jumpTo);
       moveTo(jumpTo, false);
-      trackRef.current?.offsetHeight; // eslint-disable-line
+      void trackRef.current?.offsetHeight; // force reflow
       requestAnimationFrame(() => { isLocked.current = false; });
     } else {
       // Normal slide, just unlock
@@ -131,6 +130,8 @@ export default function NewsCarousel({ newsItems }: NewsCarouselProps) {
     }, 5000);
     return () => clearInterval(timer);
   }, [isHovered, isScrollable, index, goTo]);
+
+  if (total === 0) return null;
 
   // Dot index mapped to real items (0..total-1)
   const dotIndex = ((index - cloneCount) % total + total) % total;
