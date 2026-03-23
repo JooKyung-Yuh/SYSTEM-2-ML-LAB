@@ -24,6 +24,11 @@ interface Person {
   image: string | null;
   bio: string | null;
   category: string;
+  education: string | null;
+  researchArea: string | null;
+  googleScholar: string | null;
+  startYear: number | null;
+  endYear: number | null;
   order: number;
   published: boolean;
 }
@@ -49,11 +54,15 @@ export default async function People() {
     return acc;
   }, {} as Record<string, Person[]>);
 
-  const categoryOrder = ["faculty", "student", "alumni"];
+  const categoryOrder = ["faculty", "postdoc", "phd", "ms_phd", "ms", "intern", "alumni"];
   const categoryLabels: Record<string, string> = {
     faculty: "Faculty",
-    student: "Students",
-    alumni: "Alumni"
+    postdoc: "Postdoctoral Researchers",
+    phd: "Ph.D. Students",
+    ms_phd: "M.S./Ph.D. Students",
+    ms: "M.S. Students",
+    intern: "Undergraduate Interns",
+    alumni: "Alumni",
   };
 
   return (
@@ -102,6 +111,17 @@ export default async function People() {
                     {person.title && (
                       <p className={styles.personTitle}>{person.title}</p>
                     )}
+                    {person.education && (
+                      <p className={styles.personTitle}>{person.education}</p>
+                    )}
+                    {person.researchArea && (
+                      <p className={styles.personResearch}>{person.researchArea}</p>
+                    )}
+                    {person.startYear && (
+                      <p className={styles.personTitle}>
+                        {person.startYear}{person.endYear ? ` - ${person.endYear}` : ' - Present'}
+                      </p>
+                    )}
 
                     <div className={styles.personContacts}>
                       {person.email && (
@@ -109,12 +129,14 @@ export default async function People() {
                           {person.email}
                         </a>
                       )}
-                      {person.phone && (
-                        <span className={styles.personPhone}>{person.phone}</span>
-                      )}
                       {person.website && (
                         <a href={person.website} target="_blank" rel="noopener noreferrer" className={styles.personLink}>
                           Website
+                        </a>
+                      )}
+                      {person.googleScholar && (
+                        <a href={person.googleScholar} target="_blank" rel="noopener noreferrer" className={styles.personLink}>
+                          Google Scholar
                         </a>
                       )}
                     </div>

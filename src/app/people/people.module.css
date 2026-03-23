@@ -115,6 +115,13 @@
   margin-right: 1rem;
 }
 
+.personResearch {
+  font-size: 0.9rem;
+  color: #0066cc;
+  margin-bottom: 0.25rem;
+  font-style: italic;
+}
+
 .personBio {
   font-size: 1rem;
   color: #333;

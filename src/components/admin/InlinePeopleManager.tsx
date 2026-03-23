@@ -14,6 +14,11 @@ interface Person {
   image: string | null;
   bio: string | null;
   category: string;
+  education: string | null;
+  researchArea: string | null;
+  googleScholar: string | null;
+  startYear: number | null;
+  endYear: number | null;
   order: number;
   published: boolean;
 }
@@ -205,12 +210,17 @@ export default function InlinePeopleManager() {
     const optimisticItem = {
       id: optimisticId,
       name: 'New Team Member',
-      title: 'Position Title',
+      title: null,
       email: null,
       phone: null,
       website: null,
       image: null,
-      bio: 'Click to edit bio',
+      bio: null,
+      education: null,
+      researchArea: null,
+      googleScholar: null,
+      startYear: null,
+      endYear: null,
       category: newCategory,
       order: newOrder,
       published: true
@@ -313,11 +323,15 @@ export default function InlinePeopleManager() {
     return acc;
   }, {} as Record<string, Person[]>);
 
-  const categoryOrder = ["faculty", "student", "alumni"];
+  const categoryOrder = ["faculty", "postdoc", "phd", "ms_phd", "ms", "intern", "alumni"];
   const categoryLabels: Record<string, string> = {
     faculty: "Faculty",
-    student: "Students",
-    alumni: "Alumni"
+    postdoc: "Postdoctoral Researchers",
+    phd: "Ph.D. Students",
+    ms_phd: "M.S./Ph.D. Students",
+    ms: "M.S. Students",
+    intern: "Undergraduate Interns",
+    alumni: "Alumni",
   };
 
   if (loading) {
@@ -494,15 +508,60 @@ export default function InlinePeopleManager() {
                             className={styles.editCategory}
                           >
                             <option value="faculty">Faculty</option>
-                            <option value="student">Student</option>
+                            <option value="postdoc">Postdoc</option>
+                            <option value="phd">Ph.D. Student</option>
+                            <option value="ms_phd">M.S./Ph.D. Student</option>
+                            <option value="ms">M.S. Student</option>
+                            <option value="intern">Undergraduate Intern</option>
                             <option value="alumni">Alumni</option>
                           </select>
+                          <input
+                            type="text"
+                            value={editingData.education || ''}
+                            onChange={(e) => setEditingData({ ...editingData, education: e.target.value })}
+                            className={styles.editEmail}
+                            placeholder="Education (e.g., B.S. Korea University)"
+                          />
+                          <input
+                            type="text"
+                            value={editingData.researchArea || ''}
+                            onChange={(e) => setEditingData({ ...editingData, researchArea: e.target.value })}
+                            className={styles.editEmail}
+                            placeholder="Research Area (e.g., Meta-Learning, LLM Reasoning)"
+                          />
+                          <input
+                            type="url"
+                            value={editingData.googleScholar || ''}
+                            onChange={(e) => setEditingData({ ...editingData, googleScholar: e.target.value })}
+                            className={styles.editWebsite}
+                            placeholder="Google Scholar URL"
+                          />
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <input
+                              type="number"
+                              value={editingData.startYear || ''}
+                              onChange={(e) => setEditingData({ ...editingData, startYear: e.target.value ? parseInt(e.target.value) : null })}
+                              className={styles.editPhone}
+                              placeholder="Start Year"
+                              min={2000}
+                              max={2100}
+                            />
+                            <input
+                              type="number"
+                              value={editingData.endYear || ''}
+                              onChange={(e) => setEditingData({ ...editingData, endYear: e.target.value ? parseInt(e.target.value) : null })}
+                              className={styles.editPhone}
+                              placeholder="End Year (alumni)"
+                              min={2000}
+                              max={2100}
+                            />
+                          </div>
                           <textarea
                             value={editingData.bio || ''}
                             onChange={(e) => setEditingData({ ...editingData, bio: e.target.value })}
                             className={styles.editBio}
-                            placeholder="Bio"
-                            rows={4}
+                            placeholder="Bio (optional)"
+                            rows={3}
                           />
                         </>
                       ) : (

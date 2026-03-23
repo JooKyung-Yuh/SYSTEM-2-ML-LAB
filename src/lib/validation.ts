@@ -22,6 +22,11 @@ export const createPersonSchema = z.object({
   website: z.string().url('Invalid URL format').optional().or(z.literal('')).nullable(),
   image: z.string().max(500, 'Image URL is too long').optional().or(z.literal('')).nullable(),
   bio: z.string().optional().or(z.literal('')).nullable(),
+  education: z.string().optional().or(z.literal('')).nullable(),
+  researchArea: z.string().optional().or(z.literal('')).nullable(),
+  googleScholar: z.string().optional().or(z.literal('')).nullable(),
+  startYear: z.number().int().min(2000).max(2100).optional().nullable(),
+  endYear: z.number().int().min(2000).max(2100).optional().nullable(),
   order: z.number().int().min(0).optional(),
   published: z.boolean().optional(),
 });
