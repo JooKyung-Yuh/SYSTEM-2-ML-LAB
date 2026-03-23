@@ -107,44 +107,49 @@ export default async function People() {
                   </div>
 
                   <div className={styles.personContent}>
-                    <h3 className={styles.personName}>{person.name}</h3>
+                    {/* Name + Year */}
+                    <h3 className={styles.personName}>
+                      {person.name}
+                      {person.startYear && (
+                        <span className={styles.personYear}>
+                          {person.startYear}{person.endYear ? `–${person.endYear}` : '–'}
+                        </span>
+                      )}
+                    </h3>
+
+                    {/* Title */}
                     {person.title && (
                       <p className={styles.personTitle}>{person.title}</p>
                     )}
+
+                    {/* Education */}
                     {person.education && (
-                      <div className={styles.personTitle}>
-                        {person.education.split('\n').map((line, i) => (
-                          <div key={i}>{line}</div>
+                      <div className={styles.personEducation}>
+                        {person.education.split('\n').filter(l => l.trim()).map((line, i) => (
+                          <span key={i} className={styles.educationItem}>{line.trim()}</span>
                         ))}
                       </div>
                     )}
+
+                    {/* Research Area */}
                     {person.researchArea && (
                       <p className={styles.personResearch}>{person.researchArea}</p>
                     )}
-                    {person.startYear && (
-                      <p className={styles.personTitle}>
-                        {person.startYear}{person.endYear ? ` - ${person.endYear}` : ' - Present'}
-                      </p>
-                    )}
 
+                    {/* Links */}
                     <div className={styles.personContacts}>
                       {person.email && (
-                        <a href={`mailto:${person.email}`} className={styles.personLink}>
-                          {person.email}
-                        </a>
+                        <a href={`mailto:${person.email}`} className={styles.personLink}>Email</a>
                       )}
                       {person.website && (
-                        <a href={person.website} target="_blank" rel="noopener noreferrer" className={styles.personLink}>
-                          Website
-                        </a>
+                        <a href={person.website} target="_blank" rel="noopener noreferrer" className={styles.personLink}>Website</a>
                       )}
                       {person.googleScholar && (
-                        <a href={person.googleScholar} target="_blank" rel="noopener noreferrer" className={styles.personLink}>
-                          Google Scholar
-                        </a>
+                        <a href={person.googleScholar} target="_blank" rel="noopener noreferrer" className={styles.personLink}>Scholar</a>
                       )}
                     </div>
 
+                    {/* Bio */}
                     {person.bio && (
                       <p className={styles.personBio}>{person.bio}</p>
                     )}
