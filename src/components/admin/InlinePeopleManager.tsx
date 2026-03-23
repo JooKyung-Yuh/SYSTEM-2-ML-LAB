@@ -98,10 +98,12 @@ export default function InlinePeopleManager() {
 
     setSaving(true);
     try {
+      // Strip non-updatable fields before sending
+      const { id: _id, createdAt: _c, updatedAt: _u, ...updateData } = editingData as Record<string, unknown>;
       const response = await fetch(`/api/admin/people/${editingId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editingData)
+        body: JSON.stringify(updateData)
       });
 
       if (response.ok) {

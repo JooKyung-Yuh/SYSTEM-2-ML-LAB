@@ -19,9 +19,15 @@ export async function PUT(
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
 
+    // Clean empty strings to null for unique/url fields
+    const data = { ...validation.data };
+    if (data.email === '' || data.email === null) data.email = undefined;
+    if (data.website === '') data.website = null;
+    if (data.googleScholar === '') data.googleScholar = null;
+
     const person = await prisma.person.update({
       where: { id },
-      data: validation.data
+      data,
     });
 
     return NextResponse.json(person);
