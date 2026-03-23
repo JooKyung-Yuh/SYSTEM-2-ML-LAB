@@ -24,6 +24,11 @@
   --font-size-caption: clamp(0.8rem, 1.5vw, 0.875rem);      /* 12.8-14px */
 }
 
+/* Always show scrollbar to prevent layout shift between pages */
+html {
+  overflow-y: scroll;
+}
+
 /* Header: hidden by default, JS fade-in prevents white flash */
 header[role="banner"] {
   opacity: 0;
