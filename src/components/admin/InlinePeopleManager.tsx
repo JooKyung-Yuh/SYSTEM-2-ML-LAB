@@ -265,6 +265,11 @@ export default function InlinePeopleManager() {
         website: optimisticItem.website,
         image: optimisticItem.image,
         bio: optimisticItem.bio,
+        education: optimisticItem.education,
+        researchArea: optimisticItem.researchArea,
+        googleScholar: optimisticItem.googleScholar,
+        startYear: optimisticItem.startYear,
+        endYear: optimisticItem.endYear,
         category: optimisticItem.category,
         order: optimisticItem.order,
         published: optimisticItem.published
