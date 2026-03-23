@@ -49,18 +49,8 @@ export default function DashboardPage() {
 
     fetchUserInfo();
 
-    // Silent token refresh every 25 minutes (token expires in 30)
-    const refreshInterval = setInterval(async () => {
-      try {
-        await fetch('/api/auth/refresh', { method: 'POST', credentials: 'include' });
-      } catch {
-        // Refresh failed — user will be redirected on next API call
-      }
-    }, 25 * 60 * 1000);
-
     return () => {
       document.body.classList.remove('admin-page');
-      clearInterval(refreshInterval);
     };
   }, []);
 
