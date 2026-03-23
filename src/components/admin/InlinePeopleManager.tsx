@@ -522,12 +522,12 @@ export default function InlinePeopleManager() {
                             <option value="intern">Undergraduate Intern</option>
                             <option value="alumni">Alumni</option>
                           </select>
-                          <input
-                            type="text"
+                          <textarea
                             value={editingData.education || ''}
                             onChange={(e) => setEditingData({ ...editingData, education: e.target.value })}
-                            className={styles.editEmail}
-                            placeholder="Education (e.g., B.S. Korea University)"
+                            className={styles.editBio}
+                            placeholder={"Education (한 줄에 하나씩)\ne.g.\nB.S. Computer Science, Korea University\nM.S. Computer Science, Korea University"}
+                            rows={3}
                           />
                           <input
                             type="text"

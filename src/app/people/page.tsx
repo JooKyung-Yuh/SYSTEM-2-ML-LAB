@@ -112,7 +112,11 @@ export default async function People() {
                       <p className={styles.personTitle}>{person.title}</p>
                     )}
                     {person.education && (
-                      <p className={styles.personTitle}>{person.education}</p>
+                      <div className={styles.personTitle}>
+                        {person.education.split('\n').map((line, i) => (
+                          <div key={i}>{line}</div>
+                        ))}
+                      </div>
                     )}
                     {person.researchArea && (
                       <p className={styles.personResearch}>{person.researchArea}</p>
