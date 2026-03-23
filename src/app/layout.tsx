@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [siteConfig.images.twitterImage],
+    images: ['/api/og'],
     creator: siteConfig.social.twitter,
   },
   robots: {

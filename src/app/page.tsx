@@ -12,7 +12,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.name,
     description: 'Leading AI research lab focusing on System 2 reasoning, LLM, and meta-learning.',
-    images: [siteConfig.images.ogImage],
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.name,
+    description: 'Leading AI research lab focusing on System 2 reasoning, LLM, and meta-learning.',
+    images: ['/api/og'],
   },
 };
 
